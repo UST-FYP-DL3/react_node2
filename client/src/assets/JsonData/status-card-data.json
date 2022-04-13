@@ -1,0 +1,22 @@
+[
+    {
+        "icon": "bx bx-money-withdraw",
+        "count": "$600",
+        "title": "Total Profit"
+    },
+    {
+        "icon": "bx bx-candles",
+        "count": "$50",
+        "title": "Daily Profit"
+    },
+    {
+        "icon": "bx bx-stats",
+        "count": "$3701",
+        "title": "Total Assets"
+    },
+    {
+        "icon": "bx bx-dollar-circle",
+        "count": "$1711",
+        "title": "Cash"
+    }
+]
