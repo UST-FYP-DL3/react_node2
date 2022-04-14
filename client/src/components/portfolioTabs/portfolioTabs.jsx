@@ -2,6 +2,10 @@ import React, {useEffect, useState} from 'react'
 import{ useRef } from "react"
 import { useAuth } from "../../contexts/AuthContext"
 
+// tutorial
+// https://www.youtube.com/watch?v=WkREeDy2WQ4; https://mui.com/material-ui/react-tabs/
+// https://www.youtube.com/watch?v=mhjbACbSeSU; https://mui.com/material-ui/react-tabs/
+
 //export function useAuth() {
 //  return useContext(AuthContext)
 //}
@@ -16,23 +20,20 @@ import Axios from 'axios'
 
 import './portfolioTabs.css'
 
-/*
-const portfolioTabs = () => {
-
-    return (
-        <div>
-            
-            
-        </div>
-    )
-}
-
-export default portfolioTabs
-*/
-
 
 function Tabs() {
     const { currentUser } = useAuth()
+
+    const [userHoldings, setUserHoldings] = useState([]);
+
+    const getHoldings = () => {
+        Axios.get("http://localhost:3001/holdings").then(
+            (response) => {
+                console.log(response.data)
+                setUserHoldings(response.data) // response has a propert call data
+            }
+        ); // get request, response contains everything send from the backend
+    };
 
     const [toggleState, setToggleState] = useState(1);
   
@@ -57,8 +58,20 @@ function Tabs() {
             <div className={toggleState === 1 ? "content  active-content" : "content"}>
                 <h3>Your Portfolio</h3>
                 <p>
+                    <button onClick={getHoldings}>Show Holdings</button>
+                    {userHoldings.map((value, key) => {
+                        return <div>
+                            {value.userID}
+                            <hr />
+                            {value.stock}
+                            <hr />
+                            {value.buyPrice}
+                            <hr />
+                            {value.cost}
+                            <hr />
+                        </div>
+                    })}
                     <hr />
-                    {currentUser && currentUser.uid}
                 </p>
             </div>
           <div className={toggleState === 2 ? "content  active-content" : "content"}>
