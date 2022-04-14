@@ -1,5 +1,5 @@
-
 import React, {useEffect, useState} from 'react'
+import { useAuth } from "../contexts/AuthContext"
 
 import { Link } from 'react-router-dom'
 
@@ -101,14 +101,18 @@ const renderCusomerBody = (item, index) => (
 
 const Dashboard = () => {
 
+    const { currentUser } = useAuth()
+
     const themeReducer = useSelector(state => state.ThemeReducer.mode)
 
+    const userID = currentUser.uid
     const [name, setName] = useState('') // pass the empty string
     const [age, setAge] = useState(0) // pass the initial value
     const [wage, setWage] = useState(0) // pass the initial value
 
     const addUser = () => {
         Axios.post("http://localhost:3001/create", {
+          userID: userID,
           name: name,
           age: age,
           wage: wage,
@@ -156,8 +160,8 @@ const Dashboard = () => {
                 </div>               
                 <div className="col-7">
                     <div className="card full-height">
-                        {/* chart */}
-                        <Chart
+                    <Chart
+                            
                             options={themeReducer === 'theme-mode-dark' ? {
                                 ...chartOptions.options,
                                 theme: { mode: 'dark'}
@@ -165,6 +169,7 @@ const Dashboard = () => {
                                 ...chartOptions.options,
                                 theme: { mode: 'light'}
                             }}
+                            
                             series={chartOptions.series}
                             type='line'
                             height='100%'
@@ -243,4 +248,4 @@ export default Dashboard
                         </div>
                     </div>
                 </div>
-*/                
+*/ 

@@ -18,5 +18,10 @@
         "display_name": "setting",
         "route": "/setting",
         "icon": "bx bx-cog"
+    },
+    {
+        "display_name": "Portfolio",
+        "route": "/portfolio",
+        "icon": "bx bx-cog"
     }
 ]

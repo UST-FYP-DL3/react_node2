@@ -2,7 +2,7 @@ import React from 'react'
 
 const SidebarItem = props => {
 
-    const active = props.active ? 'active' : ''
+    // const active = props.active ? 'active' : ''
 
     return (
         <div className="sidebar__item">

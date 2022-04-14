@@ -17,11 +17,12 @@ const db = mysql.createConnection({
 })
 
 app.post('/create', (req, res) => { // request and response, res => send sth to the front
+    const userID = req.body.userID
     const name = req.body.name
     const age = req.body.age
     const wage = req.body.wage
-
-    db.query('INSERT INTO user (name, age, wage) VALUES (?,?,?)', [name, age, wage], (err, result) => {
+    
+    db.query('INSERT INTO userinfo (userID, name, age, wage) VALUES (?,?,?,?)', [userID, name, age, wage], (err, result) => {
         if (err) {
             console.log(err)
         }
@@ -32,7 +33,7 @@ app.post('/create', (req, res) => { // request and response, res => send sth to 
 })  // app.post or app.get, put or delete
 
 app.get('/user', (req, res) => { // standard for creating express when using request
-    db.query('SELECT * FROM user', (err, result) => {
+    db.query('SELECT * FROM userinfo', (err, result) => {
         if (err) {
             console.log(err)
         }

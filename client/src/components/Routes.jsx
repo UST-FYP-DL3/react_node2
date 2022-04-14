@@ -6,7 +6,7 @@ import Dashboard from '../pages/Dashboard'
 import Analytics from '../pages/Analytics'
 import Stocks from '../pages/Stocks'
 import Setting from '../pages/Setting'
-
+import Portfolio from '../pages/Portfolio'
 
 const Routes = () => {
     return (
@@ -16,6 +16,7 @@ const Routes = () => {
             <Route path='/analytics' component={Analytics}/>
             <Route path='/stocks' component={Stocks}/>
             <Route path='/setting' component={Setting}/>
+            <Route path='/portfolio' component={Portfolio}/>
         </Switch>
     )
 }
