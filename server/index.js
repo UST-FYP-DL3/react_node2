@@ -68,7 +68,7 @@ app.post('/holdings', (req, res) => { // standard for creating express when usin
     })
 });
 
-app.post('/addaholding', (req, res) => { // request and response, res => send sth to the front
+app.post('/addAholding', (req, res) => { // request and response, res => send sth to the front
     const userID = req.body.userID
     const stock = req.body.stock
     const buyPrice = req.body.buyPrice
@@ -89,14 +89,14 @@ app.post('/addaholding', (req, res) => { // request and response, res => send st
     });
 })  // app.post or app.get, put or delete
 
-app.put('/updateholdings', (req, res) => {
+app.put('/updateAholding', (req, res) => {
     const userID = req.body.userID
     const stock = req.body.stock
     const buyPrice = req.body.buyPrice
     const quantity = req.body.quantity
     const cost = req.body.buyPrice*req.body.quantity
 
-    const sql = 'UPDATE SET userholdings buyPrice = ? quantity = ? cost = ? cost = ? WHERE userID = ? and stock = ?'
+    const sql = 'UPDATE  userholdings SET buyPrice = ?, quantity = ?, cost = ? WHERE userID = ? and stock = ?'
 
     db.query(sql, [buyPrice, quantity, cost, userID, stock]), 
     (err, res) => {
@@ -107,7 +107,6 @@ app.put('/updateholdings', (req, res) => {
             res.send(res)
         }
     }
-
 }) // update the database
 
 // app.delete() // delete the data in the database

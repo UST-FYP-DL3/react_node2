@@ -28,15 +28,31 @@ const Setting = () => {
     const [buyPrice, setBuyPrice] = useState(0) // pass the initial value
     const [quantity, setQuantity] = useState(0) // pass the initial value  
 
-    const addaHolding = () => {
-        Axios.post("http://localhost:3001/addaholding", {
+    const addAholding = () => {
+        Axios.post("http://localhost:3001/addAholding", {
           userID: userID,
           stock: stock,
           buyPrice: buyPrice,
           quantity: quantity,
           cost: buyPrice*quantity
         }).then(() => {
-            console.log("success addaholdings") // make good use of the userList without click, not applicable in this situation with ... destrcutor
+            console.log("success addAholdings") // make good use of the userList without click, not applicable in this situation with ... destrcutor
+        });
+    };
+
+    const [stockChange, setStockChange] = useState('') // pass the empty string
+    const [buyPriceChange, setBuyPriceChange] = useState(0) // pass the initial value
+    const [quantityChange, setQuantityChange] = useState(0) // pass the initial value
+    
+    const updadeAholding = () => {
+        Axios.put("http://localhost:3001/updateAholding", {
+          userID: userID,
+          stock: stockChange,
+          buyPrice: buyPriceChange,
+          quantity: quantityChange,
+          cost: buyPriceChange*quantityChange
+        }).then(() => {
+            console.log("success updateAholdings") // make good use of the userList without click, not applicable in this situation with ... destrcutor
         });
     };
 
@@ -79,13 +95,27 @@ const Setting = () => {
                         <input type='number' onChange={(event)=>{setQuantity(event.target.value)}} />
                     </div>
                     <div>
-                        <button onClick={addaHolding}>Add a holding</button>
+                        <button onClick={addAholding}>Add a holding</button>
                     </div>
                 </div>
 
                 <div>
                     <h2>Test: update the holdings</h2>
-                        
+                    <div>
+                        <label>Stock: </label>
+                        <input type='text' placeholder=' symbol' onChange={(event)=>{setStockChange(event.target.value)}} />
+                    </div>
+                    <div>
+                        <label>Price: </label>
+                        <input type='number' onChange={(event)=>{setBuyPriceChange(event.target.value)}} />
+                    </div>
+                    <div>
+                        <label>Quantity: </label>
+                        <input type='number' onChange={(event)=>{setQuantityChange(event.target.value)}} />
+                    </div>
+                    <div>
+                        <button onClick={updadeAholding}>Update a holding</button>
+                    </div>    
                 </div>                 
             </div>                 
         </div>
