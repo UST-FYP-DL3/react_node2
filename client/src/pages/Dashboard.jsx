@@ -117,7 +117,7 @@ const Dashboard = () => {
           age: age,
           wage: wage,
         }).then(() => {
-            console.log("success")
+            console.log("success") // make good use of the userList without click, not applicable in this situation with ... destrcutor
         });
       };
     

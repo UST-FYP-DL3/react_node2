@@ -85,10 +85,10 @@ const Analytics = () => {
                     <button onClick={getUser}>Show User</button>
                     {userList.map((value, key) => {
                         return <div>
-                            {value.userID}
-                            {value.name}
-                            {value.age}
-                            {value.wage}
+                            {value.userID}<tr />
+                            {value.name}<tr />
+                            {value.age}<tr />
+                            {value.wage}<tr />
                         </div>
                     })}
                 </div>

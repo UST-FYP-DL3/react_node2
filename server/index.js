@@ -47,12 +47,17 @@ app.get('/user', (req, res) => { // standard for creating express when using req
     })
 });
 
-userID = 'ZtGPo16e7rdc3lt0m4xGAK8PsB03'
+// userID = 'ZtGPo16e7rdc3lt0m4xGAK8PsB03'
 
 // get the holdings for PortfolioTabs
 
-app.get('/holdings', (req, res) => { // standard for creating express when using request
-    db.query("SELECT * FROM fypsystem.userholdings where userID = 'ZtGPo16e7rdc3lt0m4xGAK8PsB03'", (err, result) => {
+// original is get, now change to post as need to get the uerID
+app.post('/holdings', (req, res) => { // standard for creating express when using request
+    const userID = req.body.userID
+    // console.log(userID)
+
+    db.query("SELECT * FROM fypsystem.userholdings where userID = ? and holdingNow = 1", [userID], 
+    (err, result) => {
         if (err) {
             console.log(err)
         }
@@ -61,6 +66,28 @@ app.get('/holdings', (req, res) => { // standard for creating express when using
         }
     })
 });
+
+app.put('/update', (req, res) => {
+    const userID = req.body.userID
+    const stock = req.body.stock
+    const buyPrice = req.body.buyPrice
+    const quantity = req.body.quantity
+    const cost = req.body.buyPrice*req.body.quantity
+
+    db.query('UPDATE SET userholdings buyPrice = ? quantity = ? cost = ? cost = ? WHERE userID = ? and stock = ?', 
+    [buyPrice, quantity, cost, userID, stock]), 
+    (err, res) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            res.send(res)
+        }
+    }
+
+}) // update the database
+
+// app.delete() // delete the data in the database
 
 
 app.listen(3001, 

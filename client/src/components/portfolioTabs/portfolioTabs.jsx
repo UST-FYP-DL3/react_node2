@@ -27,21 +27,24 @@ function Tabs() {
     const [userHoldings, setUserHoldings] = useState([]);
 
     const getHoldings = () => {
-        Axios.get("http://localhost:3001/holdings").then(
+        // console.log(currentUser.uid)
+        Axios.post("http://localhost:3001/holdings", {userID: currentUser.uid}).then(
             (response) => {
+                // console.log(currentUser.uid)
                 console.log(response.data)
                 setUserHoldings(response.data) // response has a propert call data
             }
         ); // get request, response contains everything send from the backend
     };
+      //, {userID: currentUser.uid} // , {userID: 'ZtGPo16e7rdc3lt0m4xGAK8PsB03'}
+
+    const [holdingData, setholdingData] = useState([]);
 
     const [toggleState, setToggleState] = useState(1);
   
     const toggleTab = (index) => {
       setToggleState(index);
     };
-
-    const testNumber = 1 + 1
   
     return (
       <div>
@@ -57,35 +60,29 @@ function Tabs() {
         <div className="content-tabs">
             <div className={toggleState === 1 ? "content  active-content" : "content"}>
                 <h3>Your Portfolio</h3>
+                {currentUser.uid}
                 <p>
-                    <button onClick={getHoldings}>Show Holdings</button>
-                    {userHoldings.map((value, key) => {
-                        return <div>
-                            {value.userID}
-                            <hr />
-                            {value.stock}
-                            <hr />
-                            {value.buyPrice}
-                            <hr />
-                            {value.cost}
-                            <hr />
-                        </div>
-                    })}
-                    <hr />
+                  <button onClick={getHoldings}>Show Holdings</button>
+                  {userHoldings.map((value, key) => {
+                      return <div>
+                        {value.holdingsID}
+                        <hr />
+                        {value.userID}
+                        <hr />
+                        {value.stock}
+                        <hr />
+                        {value.buyPrice}
+                        <hr />
+                        {value.cost}
+                        <hr />
+                      </div>
+                  })}
+                  <hr />
                 </p>
             </div>
           <div className={toggleState === 2 ? "content  active-content" : "content"}>
                 <h3>Prediction for Next Week</h3>
-                <p>
-                {testNumber}
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-                It has survived not only five centuries, but also the leap into electronic 
-                typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets 
-                containing Lorem Ipsum passages, 
-                and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                </p>
+                <hr />
           </div>
         </div>
       </div>
