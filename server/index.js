@@ -96,7 +96,7 @@ app.put('/updateAholding', (req, res) => {
     const quantity = req.body.quantity
     const cost = req.body.buyPrice*req.body.quantity
 
-    const sql = 'UPDATE  userholdings SET buyPrice = ?, quantity = ?, cost = ? WHERE userID = ? and stock = ?'
+    const sql = 'UPDATE userholdings SET buyPrice = ?, quantity = ?, cost = ? WHERE userID = ? and stock = ?'
 
     db.query(sql, [buyPrice, quantity, cost, userID, stock]), 
     (err, res) => {

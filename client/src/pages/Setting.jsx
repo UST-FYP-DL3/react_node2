@@ -40,17 +40,17 @@ const Setting = () => {
         });
     };
 
-    const [stockChange, setStockChange] = useState('') // pass the empty string
-    const [buyPriceChange, setBuyPriceChange] = useState(0) // pass the initial value
-    const [quantityChange, setQuantityChange] = useState(0) // pass the initial value
+    const [stockUpdate, setStockUpdate] = useState('') // pass the empty string
+    const [buyPriceUpdate, setBuyPriceUpdate] = useState(0) // pass the initial value
+    const [quantityUpdate, setQuantityUpdate] = useState(0) // pass the initial value
     
-    const updadeAholding = () => {
+    const updateAholding = () => {
         Axios.put("http://localhost:3001/updateAholding", {
           userID: userID,
-          stock: stockChange,
-          buyPrice: buyPriceChange,
-          quantity: quantityChange,
-          cost: buyPriceChange*quantityChange
+          stock: stockUpdate,
+          buyPrice: buyPriceUpdate,
+          quantity: quantityUpdate,
+          cost: buyPriceUpdate*quantityUpdate
         }).then(() => {
             console.log("success updateAholdings") // make good use of the userList without click, not applicable in this situation with ... destrcutor
         });
@@ -59,7 +59,7 @@ const Setting = () => {
     return (
         <div>
             <h2>Setting</h2>
-            <p>Later change change into a pop up window or migrate to another page</p>
+            <p>Later change into a pop up window or migrate to another page</p>
             <div className='row'>
                 <div>
                     <h2>Change the account</h2>
@@ -103,23 +103,27 @@ const Setting = () => {
                     <h2>Test: update the holdings</h2>
                     <div>
                         <label>Stock: </label>
-                        <input type='text' placeholder=' symbol' onChange={(event)=>{setStockChange(event.target.value)}} />
+                        <input type='text' placeholder=' symbol' onChange={(event)=>{setStockUpdate(event.target.value)}} />
                     </div>
                     <div>
                         <label>Price: </label>
-                        <input type='number' onChange={(event)=>{setBuyPriceChange(event.target.value)}} />
+                        <input type='number' onChange={(event)=>{setBuyPriceUpdate(event.target.value)}} />
                     </div>
                     <div>
                         <label>Quantity: </label>
-                        <input type='number' onChange={(event)=>{setQuantityChange(event.target.value)}} />
+                        <input type='number' onChange={(event)=>{setQuantityUpdate(event.target.value)}} />
                     </div>
                     <div>
-                        <button onClick={updadeAholding}>Update a holding</button>
+                        <button onClick={updateAholding}>Update a holding</button> 
                     </div>    
                 </div>                 
             </div>                 
         </div>
     )
 }
+
+// onclick={()=>{updadeAholding(val.id)}} // id to identify each update function where we need to use 
+// the update function but for different <div> </div> which containes different content
+// https://www.youtube.com/watch?v=AohARsUlwQk 14:27
 
 export default Setting

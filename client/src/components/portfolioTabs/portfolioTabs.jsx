@@ -65,16 +65,11 @@ function Tabs() {
                   <button onClick={getHoldings}>Show Holdings</button>
                   {userHoldings.map((value, key) => {
                       return <div>
-                        {value.holdingsID}
                         <hr />
-                        {value.userID}
-                        <hr />
-                        {value.stock}
-                        <hr />
-                        {value.buyPrice}
-                        <hr />
-                        {value.cost}
-                        <hr />
+                        Stock: {value.stock} <tr />
+                        Buying Price: {value.buyPrice} <tr />
+                        Holding Quantity: {value.quantity} <tr />
+                        Cost: {value.cost} <tr />
                       </div>
                   })}
                   <hr />
