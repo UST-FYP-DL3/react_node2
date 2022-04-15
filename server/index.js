@@ -24,9 +24,11 @@ app.post('/create', (req, res) => { // request and response, res => send sth to 
     const name = req.body.name
     const age = req.body.age
     const wage = req.body.wage
-    const product = req.body.age*req.body.wage
+    // const product = req.body.age*req.body.wage
+
+    const sql = 'INSERT INTO userinfo (userID, name, age, wage) VALUES (?,?,?,?)'
     
-    db.query('INSERT INTO userinfo (userID, name, age, wage, product) VALUES (?,?,?,?,?)', [userID, name, age, wage, product], (err, result) => {
+    db.query(sql, [userID, name, age, wage], (err, result) => {
         if (err) {
             console.log(err)
         }
@@ -47,16 +49,15 @@ app.get('/user', (req, res) => { // standard for creating express when using req
     })
 });
 
-// userID = 'ZtGPo16e7rdc3lt0m4xGAK8PsB03'
-
 // get the holdings for PortfolioTabs
-
 // original is get, now change to post as need to get the uerID
 app.post('/holdings', (req, res) => { // standard for creating express when using request
     const userID = req.body.userID
     // console.log(userID)
+    
+    const sql = "SELECT * FROM fypsystem.userholdings where userID = ? and holdingNow = 1"
 
-    db.query("SELECT * FROM fypsystem.userholdings where userID = ? and holdingNow = 1", [userID], 
+    db.query(sql, [userID], 
     (err, result) => {
         if (err) {
             console.log(err)
@@ -67,15 +68,37 @@ app.post('/holdings', (req, res) => { // standard for creating express when usin
     })
 });
 
-app.put('/update', (req, res) => {
+app.post('/addaholding', (req, res) => { // request and response, res => send sth to the front
+    const userID = req.body.userID
+    const stock = req.body.stock
+    const buyPrice = req.body.buyPrice
+    const quantity = req.body.quantity
+    const cost = req.body.buyPrice*req.body.quantity
+    const holdingNow = 1
+    // const product = req.body.age*req.body.wage
+
+    const sql = 'INSERT INTO userholdings (userID, stock, buyPrice, quantity, cost, holdingNow) VALUES (?,?,?,?,?,?)'
+    
+    db.query(sql, [userID, stock, buyPrice, quantity, cost, holdingNow], (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            res.send("Values Inserted")
+        }
+    });
+})  // app.post or app.get, put or delete
+
+app.put('/updateholdings', (req, res) => {
     const userID = req.body.userID
     const stock = req.body.stock
     const buyPrice = req.body.buyPrice
     const quantity = req.body.quantity
     const cost = req.body.buyPrice*req.body.quantity
 
-    db.query('UPDATE SET userholdings buyPrice = ? quantity = ? cost = ? cost = ? WHERE userID = ? and stock = ?', 
-    [buyPrice, quantity, cost, userID, stock]), 
+    const sql = 'UPDATE SET userholdings buyPrice = ? quantity = ? cost = ? cost = ? WHERE userID = ? and stock = ?'
+
+    db.query(sql, [buyPrice, quantity, cost, userID, stock]), 
     (err, res) => {
         if (err) {
             console.log(err)

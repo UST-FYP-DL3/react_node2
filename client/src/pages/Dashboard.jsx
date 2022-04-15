@@ -198,7 +198,7 @@ const Dashboard = () => {
                     <div className='card__header'>
                             <h3>Temp</h3>
                     </div>
-                    <div className='Information'>
+                    <div>
                         <div>
                             <label>Name: </label>
                             <input type='text' onChange={(event)=>{setName(event.target.value)}} />
@@ -211,7 +211,7 @@ const Dashboard = () => {
                             <label>Wage (year): </label>
                             <input type='number' onChange={(event)=>{setWage(event.target.value)}} />
                         </div>
-                        <button onClick={addUser}>Submit</button>
+                        <button onClick={addUser}>Add User</button>
                     </div>
                 </div>
                 
