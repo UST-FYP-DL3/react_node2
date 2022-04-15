@@ -23,12 +23,13 @@ import './portfolioTabs.css'
 
 function Tabs() {
     const { currentUser } = useAuth()
+    // const userID = currentUser.uid // ZtGPo16e7rdc3lt0m4xGAK8PsB03
 
-    const [userHoldings, setUserHoldings] = useState([]);
+    const [userHoldings, setUserHoldings] = useState([]); // this is a list
 
-    const getHoldings = () => {
+    const getHoldings = (userID) => {
         // console.log(currentUser.uid)
-        Axios.post("http://localhost:3001/holdings", {userID: currentUser.uid}).then(
+        Axios.get(`http://localhost:3001/holdings${userID}`).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
             (response) => {
                 // console.log(currentUser.uid)
                 console.log(response.data)
@@ -38,7 +39,7 @@ function Tabs() {
     };
       //, {userID: currentUser.uid} // , {userID: 'ZtGPo16e7rdc3lt0m4xGAK8PsB03'}
 
-    const [holdingData, setholdingData] = useState([]);
+    // const [holdingData, setholdingData] = useState([]);
 
     const [toggleState, setToggleState] = useState(1);
   
@@ -62,7 +63,7 @@ function Tabs() {
                 <h3>Your Portfolio</h3>
                 {currentUser.uid}
                 <p>
-                  <button onClick={getHoldings}>Show Holdings</button>
+                  <button onClick={() => {getHoldings(currentUser.uid)}}>Show Holdings</button>
                   {userHoldings.map((value, key) => {
                       return <div>
                         <hr />
@@ -86,6 +87,12 @@ function Tabs() {
   
 export default Tabs;
 
+// https://www.youtube.com/watch?v=re3OIOr9dJI 1:11:48
+// ...userList in then() of Axios.get ... is destructor for add
+// https://www.youtube.com/watch?v=AohARsUlwQk 19:08, userList, use map for update
+
+
+// <button onClick={getHoldings}>Show Holdings</button>
 
 /*
 // import React from 'react';

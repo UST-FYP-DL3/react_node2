@@ -15,10 +15,10 @@ const Setting = () => {
 
     const addUser = () => {
         Axios.post("http://localhost:3001/create", {
-          userID: userID,
-          name: name,
-          age: age,
-          wage: wage,
+            userID: userID,
+            name: name,
+            age: age,
+            wage: wage,
         }).then(() => {
             console.log("success") // make good use of the userList without click, not applicable in this situation with ... destrcutor
         });
@@ -30,11 +30,11 @@ const Setting = () => {
 
     const addAholding = () => {
         Axios.post("http://localhost:3001/addAholding", {
-          userID: userID,
-          stock: stock,
-          buyPrice: buyPrice,
-          quantity: quantity,
-          cost: buyPrice*quantity
+            userID: userID,
+            stock: stock,
+            buyPrice: buyPrice,
+            quantity: quantity,
+            cost: buyPrice*quantity
         }).then(() => {
             console.log("success addAholdings") // make good use of the userList without click, not applicable in this situation with ... destrcutor
         });
@@ -43,18 +43,42 @@ const Setting = () => {
     const [stockUpdate, setStockUpdate] = useState('') // pass the empty string
     const [buyPriceUpdate, setBuyPriceUpdate] = useState(0) // pass the initial value
     const [quantityUpdate, setQuantityUpdate] = useState(0) // pass the initial value
+
+    // const stockHandling = ''
     
-    const updateAholding = () => {
+    const updateAholding = (stockUpdating) => { // updateAholding = () =>
         Axios.put("http://localhost:3001/updateAholding", {
-          userID: userID,
-          stock: stockUpdate,
-          buyPrice: buyPriceUpdate,
-          quantity: quantityUpdate,
-          cost: buyPriceUpdate*quantityUpdate
-        }).then(() => {
+            // tockHandling: stockHandling, // for creating update function for each stock
+            userID: userID,
+            stock: stockUpdate,
+            buyPrice: buyPriceUpdate,
+            quantity: quantityUpdate,
+            cost: buyPriceUpdate*quantityUpdate
+        }).then((response) => {
             console.log("success updateAholdings") // make good use of the userList without click, not applicable in this situation with ... destrcutor
         });
     };
+
+    
+    const [stockDelete, setStockDelete] = useState('')
+
+    // using Axios.post
+    /*
+    // delete (sell all for a stock)
+    const deleteAholding = (stockDeleting) => {
+        Axios.post(`http://localhost:3001/delete/${stockDeleting}`, {
+            userID: userID
+        }).then((response) => {
+            console.log('success deleteAholding')
+        }) // use`
+    }*/
+
+    // using Axios.delete
+    const deleteAholding = (stockDeleting) => {
+        Axios.delete(`http://localhost:3001/delete/${userID}/${stockDeleting}`).then((response) => {
+            console.log('success deleteAholding')
+        }) // use`
+    }
 
     return (
         <div>
@@ -62,7 +86,7 @@ const Setting = () => {
             <p>Later change into a pop up window or migrate to another page</p>
             <div className='row'>
                 <div>
-                    <h2>Change the account</h2>
+                    <h2>Add the account</h2>
                     <div>
                         <label>Name: </label>
                         <input type='text' onChange={(event)=>{setName(event.target.value)}} />
@@ -81,10 +105,10 @@ const Setting = () => {
                 </div>
 
                 <div>
-                    <h2>Test: add a holdings</h2>
+                    <h2>Test: Add (buy) a holdings</h2>
                     <div>
                         <label>Stock: </label>
-                        <input type='text' onChange={(event)=>{setStock(event.target.value)}} />
+                        <input type='text' placeholder=' symbol' onChange={(event)=>{setStock(event.target.value)}} />
                     </div>
                     <div>
                         <label>Price: </label>
@@ -100,7 +124,7 @@ const Setting = () => {
                 </div>
 
                 <div>
-                    <h2>Test: update the holdings</h2>
+                    <h2>Test: update (buy or sell) a holding</h2>
                     <div>
                         <label>Stock: </label>
                         <input type='text' placeholder=' symbol' onChange={(event)=>{setStockUpdate(event.target.value)}} />
@@ -114,16 +138,31 @@ const Setting = () => {
                         <input type='number' onChange={(event)=>{setQuantityUpdate(event.target.value)}} />
                     </div>
                     <div>
-                        <button onClick={updateAholding}>Update a holding</button> 
+                        <button onClick={()=>{updateAholding(stockUpdate)}}>Update a holding</button> 
                     </div>    
+                </div>
+                <div>
+                    <h2>Test: Delete (sell all) a holding</h2>
+                    <div>
+                        <label>Stock: </label>
+                        <input type='text' placeholder=' symbol' onChange={(event)=>{setStockDelete(event.target.value)}} />
+                    </div>
+                    <button onClick={()=>{deleteAholding(stockDelete)}}>Delete</button>                   
                 </div>                 
             </div>                 
         </div>
     )
 }
 
+// <button onClick={addAholding}>Add a holding</button>
+// <button onClick={()=>{addAholding()}}>Add a holding</button>
+// <button onClick={()=>{updateAholding()}}>Update a holding</button>
+// <button onClick={updateAholding}>Update a holding</button>  
+
 // onclick={()=>{updadeAholding(val.id)}} // id to identify each update function where we need to use 
 // the update function but for different <div> </div> which containes different content
 // https://www.youtube.com/watch?v=AohARsUlwQk 14:27
+
+// delete can use .filter
 
 export default Setting
