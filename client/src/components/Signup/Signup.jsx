@@ -5,6 +5,8 @@ import { Link, useHistory } from "react-router-dom"
 
 import { Container } from 'react-bootstrap'
 
+
+
 export default function Signup() {
   const emailRef = useRef()
   const passwordRef = useRef()
@@ -25,7 +27,7 @@ export default function Signup() {
       setError("")
       setLoading(true)
       await signup(emailRef.current.value, passwordRef.current.value)
-      history.push("/")
+      history.push("/preferenceLogin") // should change this to preference
     } catch {
       setError("Failed to create an account")
     }

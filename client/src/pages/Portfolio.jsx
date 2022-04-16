@@ -25,7 +25,7 @@ const Portfolio = () => {
 
     return (
         <div>
-            <h4>Current Date: 2021-11-08</h4>
+            <h6>Current Date: 2021-11-08 [Day 0]</h6>
             <Tabs />
         </div>
     )
