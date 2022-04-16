@@ -162,14 +162,8 @@ const Dashboard = () => {
                     <div className="card full-height">
                     <Chart
                             
-                            options={themeReducer === 'theme-mode-dark' ? {
-                                ...chartOptions.options,
-                                theme: { mode: 'dark'}
-                            } : {
-                                ...chartOptions.options,
-                                theme: { mode: 'light'}
-                            }}
-                            
+
+                            options={chartOptions.options}
                             series={chartOptions.series}
                             type='line'
                             height='100%'

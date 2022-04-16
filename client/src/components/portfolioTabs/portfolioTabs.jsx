@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react'
 import{ useRef } from "react"
 import { useAuth } from "../../contexts/AuthContext"
 
+// import Chart from "react-apexcharts";
+
 // tutorial
 // https://www.youtube.com/watch?v=WkREeDy2WQ4; https://mui.com/material-ui/react-tabs/
 // https://www.youtube.com/watch?v=mhjbACbSeSU; https://mui.com/material-ui/react-tabs/
@@ -25,6 +27,7 @@ function Tabs() {
     const { currentUser } = useAuth()
     const userID = currentUser.uid // ZtGPo16e7rdc3lt0m4xGAK8PsB03
 
+    // userHoldings store all data
     const [userHoldings, setUserHoldings] = useState([]); // this is a list
 
     const getHoldings = (userID) => {
@@ -42,8 +45,7 @@ function Tabs() {
     // const [holdingData, setholdingData] = useState([]);
 
     const [toggleState, setToggleState] = useState(1);
-    
-    
+       
     const toggleTab = (index) => {
       setToggleState(index);
     };
@@ -56,6 +58,24 @@ function Tabs() {
     function tab2ClickwithData(index, userID) {
       toggleTab(index);
       // getHoldings(userID);
+    }
+
+    const holdingsDistributionData = {
+      labels: userHoldings.map( (value, key) => (value.stock) ),
+      dataset: [{
+        label: 'Holdings Distribution',
+        data: userHoldings.map( (value, key) => (value.cost) ),
+      }]
+    };
+
+    const dataChart = {
+      chartOptions: {
+        labels: userHoldings.map( (value, key) => (value.stock) ),
+        chart: {
+          // type: 'dount'
+        }
+      },
+      series: userHoldings.map( (value, key) => (value.cost) ),
     }
   
     return (
@@ -70,28 +90,26 @@ function Tabs() {
         </div>
 
         <div className="content-tabs">
-            <div className={toggleState === 1 ? "content  active-content" : "content"}>
-                <h3>Your Portfolio</h3>
-                {currentUser.uid}
-                <p>
-                  {userHoldings.map((value, key) => {
-                      return <div>
-                        <hr />
-                        Stock: {value.stock} <tr />
-                        Buying Price: {value.buyPrice} <tr />
-                        Holding Quantity: {value.quantity} <tr />
-                        Cost: {value.cost} <tr />
-                      </div>
-                  })}
-                  <hr />
-                </p>
+          <div className={toggleState === 1 ? "content  active-content" : "content"}>
+            <div classname='row'>
+              <div classname='col-6'>
+                <h6>Stock Distributions</h6>
+                <Chart options={dataChart.chartOptions} series={dataChart.series} type='donut' width='25%'/>
+              </div>
             </div>
+            
+          </div>
           <div className={toggleState === 2 ? "content  active-content" : "content"}>
-                <h3>Prediction for Next Week</h3>
-                <hr />
-                
-                <div>
-                    <iframe width="400" height="400" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/1.embed"></iframe>
+                <div className='row'>
+                    <div className='col-4'>
+                      <div className='row'>
+                        <h6>Chart 1:</h6>
+                        <iframe width="300" height="400" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/1.embed"></iframe>
+                      </div>                      
+                    </div>
+                    <div className='col-6'>
+                      <h6>Chart 2:</h6>
+                    </div>                    
                 </div>           
           </div>
         </div>
@@ -174,3 +192,22 @@ export default function BasicTabs() {
   );
 }
 */
+
+
+// the follwoing codes to show all user holdings
+/*
+<p>
+  {userHoldings.map((value, key) => {
+      return <div>
+        <hr />
+        Stock: {value.stock} <tr />
+        Buying Price: {value.buyPrice} <tr />
+        Holding Quantity: {value.quantity} <tr />
+        Cost: {value.cost} <tr />
+      </div>
+  })}
+  <hr />
+</p> 
+*/
+
+// {holdingsDistributionData.dataset[0].data.map( (value, key) => {return <div>{value}</div>} )}

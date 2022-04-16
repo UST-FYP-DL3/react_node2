@@ -1,6 +1,9 @@
 const express = require('express')
 const app = express()
 
+// let {PythonShell} = require('python-shell')
+// const request = require('request')
+
 const mysql = require('mysql')
 
 const cors = require('cors')
@@ -65,6 +68,8 @@ app.get('/holdings:userID', (req, res) => { // standard for creating express whe
             console.log(err)
         }
         else {
+            // console.log( result.map( (value, key) => (value.stock) ) )
+            // console.log( result.map( (value, key) => (value.cost) ) )
             res.send(result) // or res.json or res.send
         }
     })

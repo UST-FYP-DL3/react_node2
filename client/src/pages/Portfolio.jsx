@@ -18,10 +18,27 @@ import statusCards from '../assets/JsonData/status-card-data.json'
 import postImage from '../assets/images/post2.jfif'
 
 import Tabs from "../components/portfolioTabs/portfolioTabs"
+import { useAuth } from "../contexts/AuthContext"
 
 import Axios from 'axios'
 
 const Portfolio = () => {
+
+    const { currentUser } = useAuth()
+    const userID = currentUser.uid // ZtGPo16e7rdc3lt0m4xGAK8PsB03
+
+    const [userHoldings, setUserHoldings] = useState([]);
+
+    const getHoldings = (userID) => {
+        // console.log(currentUser.uid)
+        Axios.get(`http://localhost:3001/holdings${userID}`).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
+            (response) => {
+                // console.log(currentUser.uid)
+                console.log(response.data)
+                setUserHoldings(response.data) // response has a propert call data
+            }
+        ); // get request, response contains everything send from the backend
+    };
 
     return (
         <div>
