@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import{ useRef } from "react"
 import { useAuth } from "../../contexts/AuthContext"
+import { useSelector } from 'react-redux'
+import Axios from 'axios'
+import './portfolioTabs.css'
 
 // import Chart from "react-apexcharts";
 
@@ -14,13 +17,13 @@ import { useAuth } from "../../contexts/AuthContext"
 
 import { Link } from 'react-router-dom'
 
-import Chart from 'react-apexcharts'
+import ReactApexChart from 'react-apexcharts'
 
-import { useSelector } from 'react-redux'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
-import Axios from 'axios'
+import { Pie, Doughnut } from 'react-chartjs-2';
 
-import './portfolioTabs.css'
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 
 function Tabs() {
@@ -52,7 +55,7 @@ function Tabs() {
     
     function tab1ClickwithData(index, userID) {
       toggleTab(index);
-      getHoldings(userID);
+      // getHoldings(userID);
     }
 
     function tab2ClickwithData(index, userID) {
@@ -60,23 +63,80 @@ function Tabs() {
       // getHoldings(userID);
     }
 
-    const holdingsDistributionData = {
-      labels: userHoldings.map( (value, key) => (value.stock) ),
-      dataset: [{
-        label: 'Holdings Distribution',
-        data: userHoldings.map( (value, key) => (value.cost) ),
-      }]
-    };
+    // const holdingsDistributionData = {
+    //   labels: userHoldings.map( (value, key) => (value.stock) ), // labels for data
+    //   dataset: [{
+    //     label: 'Holdings Distribution in terms of cost', // title of the chart
+    //     data: userHoldings.map( (value, key) => (value.cost) ),
+    //     backgroundColor: [
+    //       'rgb(255, 99, 132)',
+    //       'rgb(54, 162, 235)',
+    //       'rgb(255, 205, 86)',
+    //       'rgb(255, 205, 86)',
+    //       'rgb(255, 205, 86)'
+    //     ],
+    //   }]
+    // };
 
-    const dataChart = {
+
+    const dataChart1 = {
       chartOptions: {
         labels: userHoldings.map( (value, key) => (value.stock) ),
         chart: {
-          // type: 'dount'
+          type: 'dount',
+          animations: {
+            enabled: true,
+            easing: 'easeinout',
+            speed: 800,
+            animateGradually: {
+                enabled: true,
+                delay: 150
+            },
+            dynamicAnimation: {
+                enabled: true,
+                speed: 350
+            }
+          }
         }
       },
       series: userHoldings.map( (value, key) => (value.cost) ),
     }
+
+    const dataChart2 = {
+      labels: userHoldings.map( (value, key) => (value.stock) ),
+      datasets: [
+        {
+          label: "Stock Bistribution in terms of Cost",
+          data: userHoldings.map( (value, key) => (value.cost) ),
+          backgroundColor: [
+            "rgba(75,192,192,1)",
+            "#ecf0f1",
+            "#50AF95",
+            "#f3ba2f",
+            "#2a71d0",
+          ],
+          borderColor: "black",
+          borderWidth: 2,
+        },
+      ],
+    };
+    // later setup chart 2 options
+    const optionsChart2 = {
+      maintainAspectRatio: true,
+      responsive: true,
+      scales:{
+      },
+      legend: {
+        labels: {
+          frontsize: 25
+        }
+      }
+    }
+    
+
+    useEffect( () => {
+      getHoldings(userID);
+    }, []);
   
     return (
       <div>
@@ -92,12 +152,15 @@ function Tabs() {
         <div className="content-tabs">
           <div className={toggleState === 1 ? "content  active-content" : "content"}>
             <div classname='row'>
-              <div classname='col-6'>
-                <h6>Stock Distributions</h6>
-                <Chart options={dataChart.chartOptions} series={dataChart.series} type='donut' width='25%'/>
-              </div>
+                <h6>Stock Distributions in terms of Cost</h6>
+                <ReactApexChart options={dataChart1.chartOptions} series={dataChart1.series} type='donut' width='25%'/>        
+                  
+                <div style={{ maxWidth: "35vh" }}>
+                  <h6>Stock Distributions in terms of Cost</h6>
+                  < Pie data={dataChart2} height={200}  />
+                </div>                                                             
+              
             </div>
-            
           </div>
           <div className={toggleState === 2 ? "content  active-content" : "content"}>
                 <div className='row'>
@@ -118,6 +181,8 @@ function Tabs() {
   }
   
 export default Tabs;
+
+//
 
 // https://www.youtube.com/watch?v=re3OIOr9dJI 1:11:48
 // ...userList in then() of Axios.get ... is destructor for add
@@ -211,3 +276,7 @@ export default function BasicTabs() {
 */
 
 // {holdingsDistributionData.dataset[0].data.map( (value, key) => {return <div>{value}</div>} )}
+
+
+// passing the data into another function in another page
+// https://www.youtube.com/watch?v=RF57yDglDfE
