@@ -155,3 +155,5 @@ app.delete('/delete/:userID/:stockDeleting', (req, res) => {
 app.listen(3001, 
     () => {console.log("Hey, server running on port 3001");
 });
+
+// Tutorial: https://github.com/machadop1407/Simple-CRUD-React-Node-MySQL

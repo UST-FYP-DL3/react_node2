@@ -86,7 +86,7 @@ const Setting = () => {
             <p>Later change into a pop up window or migrate to another page</p>
             <div className='row'>
                 <div>
-                    <h2>Add the account</h2>
+                    <h3>Add the account</h3>
                     <div>
                         <label>Name: </label>
                         <input type='text' onChange={(event)=>{setName(event.target.value)}} />
@@ -105,7 +105,7 @@ const Setting = () => {
                 </div>
 
                 <div>
-                    <h2>Test: Add (buy) a holdings</h2>
+                    <h3>Test: Add (buy) a holdings</h3>
                     <div>
                         <label>Stock: </label>
                         <input type='text' placeholder=' symbol' onChange={(event)=>{setStock(event.target.value)}} />
@@ -124,7 +124,7 @@ const Setting = () => {
                 </div>
 
                 <div>
-                    <h2>Test: update (buy or sell) a holding</h2>
+                    <h3>Test: update (buy more or sell) a holding</h3>
                     <div>
                         <label>Stock: </label>
                         <input type='text' placeholder=' symbol' onChange={(event)=>{setStockUpdate(event.target.value)}} />
@@ -142,7 +142,7 @@ const Setting = () => {
                     </div>    
                 </div>
                 <div>
-                    <h2>Test: Delete (sell all) a holding</h2>
+                    <h3>Test: Delete (sell all) a holding</h3>
                     <div>
                         <label>Stock: </label>
                         <input type='text' placeholder=' symbol' onChange={(event)=>{setStockDelete(event.target.value)}} />
@@ -163,6 +163,6 @@ const Setting = () => {
 // the update function but for different <div> </div> which containes different content
 // https://www.youtube.com/watch?v=AohARsUlwQk 14:27
 
-// delete can use .filter
+// delete can use .filter 29:20
 
 export default Setting

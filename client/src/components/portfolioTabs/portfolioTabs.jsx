@@ -23,7 +23,7 @@ import './portfolioTabs.css'
 
 function Tabs() {
     const { currentUser } = useAuth()
-    // const userID = currentUser.uid // ZtGPo16e7rdc3lt0m4xGAK8PsB03
+    const userID = currentUser.uid // ZtGPo16e7rdc3lt0m4xGAK8PsB03
 
     const [userHoldings, setUserHoldings] = useState([]); // this is a list
 
@@ -42,18 +42,29 @@ function Tabs() {
     // const [holdingData, setholdingData] = useState([]);
 
     const [toggleState, setToggleState] = useState(1);
-  
+    
+    
     const toggleTab = (index) => {
       setToggleState(index);
     };
+    
+    function tab1ClickwithData(index, userID) {
+      toggleTab(index);
+      getHoldings(userID);
+    }
+
+    function tab2ClickwithData(index, userID) {
+      toggleTab(index);
+      // getHoldings(userID);
+    }
   
     return (
       <div>
         <div className="bloc-tabs">
-            <button className={toggleState === 1 ? "tabs active-tabs" : "tabs"} onClick={() => toggleTab(1)}>
+            <button className={toggleState === 1 ? "tabs active-tabs" : "tabs"} onClick={() => tab1ClickwithData(1, userID)}>
                 Current (This week)
             </button>
-            <button className={toggleState === 2 ? "tabs active-tabs" : "tabs"} onClick={() => toggleTab(2)}>
+            <button className={toggleState === 2 ? "tabs active-tabs" : "tabs"} onClick={() => tab2ClickwithData(2, userID)}>
                 Recommend (Next Week)
             </button>
         </div>
@@ -63,7 +74,6 @@ function Tabs() {
                 <h3>Your Portfolio</h3>
                 {currentUser.uid}
                 <p>
-                  <button onClick={() => {getHoldings(currentUser.uid)}}>Show Holdings</button>
                   {userHoldings.map((value, key) => {
                       return <div>
                         <hr />
@@ -79,6 +89,10 @@ function Tabs() {
           <div className={toggleState === 2 ? "content  active-content" : "content"}>
                 <h3>Prediction for Next Week</h3>
                 <hr />
+                
+                <div>
+                    <iframe width="400" height="400" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/1.embed"></iframe>
+                </div>           
           </div>
         </div>
       </div>
