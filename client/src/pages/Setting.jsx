@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import{ useRef } from "react"
 import { useAuth } from "../contexts/AuthContext"
-
+import './setting.css';
 import Axios from 'axios'
 
 const Setting = () => {
@@ -12,6 +12,8 @@ const Setting = () => {
     const [name, setName] = useState('') // pass the empty string
     const [age, setAge] = useState(0) // pass the initial value
     const [wage, setWage] = useState(0) // pass the initial value
+    const [capital, setInvestmentCapital] = useState(0) // pass the initial value
+    const [riskLevel, setRiskLevel] = useState(0) // pass the initial value
 
     const addUser = () => {
         Axios.post("http://localhost:3001/create", {
@@ -19,6 +21,8 @@ const Setting = () => {
           name: name,
           age: age,
           wage: wage,
+          capital: capital,
+          riskLevel:riskLevel,
         }).then(() => {
             console.log("success") // make good use of the userList without click, not applicable in this situation with ... destrcutor
         });
@@ -57,12 +61,11 @@ const Setting = () => {
     };
 
     return (
-        <div>
-            <h2>Setting</h2>
-            <p>Later change into a pop up window or migrate to another page</p>
-            <div className='row'>
-                <div>
-                    <h2>Change the account</h2>
+        <div style ={{border: "2px solid grey", borderRadius: "10px",}}>
+            <h2 className='container-div'>Setting</h2>
+            <div className='flex'>
+                <div id ="col1"> 
+                    <h3 id = "accountHeader">User Account Update</h3>
                     <div>
                         <label>Name: </label>
                         <input type='text' onChange={(event)=>{setName(event.target.value)}} />
@@ -72,16 +75,24 @@ const Setting = () => {
                         <input type='number' onChange={(event)=>{setAge(event.target.value)}} />
                     </div>
                     <div>
-                        <label>Wage (year): </label>
+                        <label>Wage (in annual): </label>
                         <input type='number' onChange={(event)=>{setWage(event.target.value)}} />
                     </div>
                     <div>
-                        <button onClick={addUser}>Add User</button>
+                        <label>Investment Capital: </label>
+                        <input type='number' onChange={(event)=>{setInvestmentCapital(event.target.value)}} />
+                    </div>
+                    <div>
+                        <label>Risk Tolearance Level: </label>
+                        <input type='select' onChange={(event)=>{setRiskLevel(event.target.value)}} />
+                    </div>
+                    <div>
+                        <button class = "button-1" role = "button" onClick={addUser}>Add</button>
                     </div>
                 </div>
 
-                <div>
-                    <h2>Test: add a holdings</h2>
+                <div id ="col2">
+                    <h3 id = "holdingHeader">Add holdings</h3>
                     <div>
                         <label>Stock: </label>
                         <input type='text' onChange={(event)=>{setStock(event.target.value)}} />
@@ -95,12 +106,10 @@ const Setting = () => {
                         <input type='number' onChange={(event)=>{setQuantity(event.target.value)}} />
                     </div>
                     <div>
-                        <button onClick={addAholding}>Add a holding</button>
+                        <button class = "button-2" role = "button" onClick={addAholding}>Add</button>
                     </div>
-                </div>
 
-                <div>
-                    <h2>Test: update the holdings</h2>
+                    <h3 id = "holdingHeader">Update holdings</h3>
                     <div>
                         <label>Stock: </label>
                         <input type='text' placeholder=' symbol' onChange={(event)=>{setStockUpdate(event.target.value)}} />
@@ -114,7 +123,7 @@ const Setting = () => {
                         <input type='number' onChange={(event)=>{setQuantityUpdate(event.target.value)}} />
                     </div>
                     <div>
-                        <button onClick={updateAholding}>Update a holding</button> 
+                        <button class = "button-2" role = "button" onClick={updateAholding}>Update</button> 
                     </div>    
                 </div>                 
             </div>                 

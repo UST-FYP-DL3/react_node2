@@ -10,6 +10,7 @@ import Axios from 'axios'
 import Layout from './layout/Layout'
 import Signup from './Signup/Signup'
 import Login from './Login/Login'
+import Preference from './InvestmentPreference/Preference'
 import PrivateRoute from "./PrivateRoute"
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <PrivateRoute exact path="/" component={Layout} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
+          <Route path="/preference" component={Preference} />
         </Switch>              
       </AuthProvider>
     </Router>  
