@@ -145,7 +145,7 @@ function Tabs() {
               // setUserHoldings(response.data) // response has a propert call data
           }
       ); // get request, response contains everything send from the backend
-  };
+    };
 
 
     useEffect( () => {

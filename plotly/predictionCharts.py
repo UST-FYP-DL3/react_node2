@@ -44,13 +44,18 @@ price = stockData['CLOSE']
 
 fig = px.scatter(x=dateRange, y=price)
 
-# save the chart to chart studio
-py.plot(fig, filename=f'StockPriceChart_1', auto_open=False)
-
 print("finish ploting")
 
+# save the chart to chart studio
+py.plot(fig, filename='StockPriceChart_1', auto_open=False)
+
+print("finish chart studio")
+
 # save the chart in html code
-# fig.write_html("plotlytest.html")
+htmlCode = fig.write_html('StockPriceChart_1.html')
+htmlCode
+
+print("finish writing to html")
 
 # test for the dataset
 # sqlStatement = "SELECT * FROM fypsystem.userinfo"
