@@ -159,16 +159,7 @@ const Dashboard = () => {
                     </div>
                 </div>               
                 <div className="col-7">
-                    <div className="card full-height">
-                    <Chart
-                            
 
-                            options={chartOptions.options}
-                            series={chartOptions.series}
-                            type='line'
-                            height='100%'
-                        />
-                    </div>
                 </div>
                 <div className="col-7">
                     <div className='card'>
@@ -243,3 +234,10 @@ export default Dashboard
                     </div>
                 </div>
 */ 
+
+/*<Chart
+    options={chartOptions.options}
+    series={chartOptions.series}
+    type='line'
+    height='100%'
+/>*/

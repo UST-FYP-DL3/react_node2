@@ -133,6 +133,20 @@ function Tabs() {
       }
     }
     
+    // for plot charts
+    const [chart1StockName, setchart1StockName] = useState('')
+
+    const plotChart1 = (chart1StockName) => {
+      // console.log(currentUser.uid)
+      Axios.get(`http://localhost:3001/stockPredChart1${chart1StockName}`).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
+          (response) => {
+              // console.log(currentUser.uid)
+              console.log(response.data)
+              // setUserHoldings(response.data) // response has a propert call data
+          }
+      ); // get request, response contains everything send from the backend
+  };
+
 
     useEffect( () => {
       getHoldings(userID);
@@ -157,21 +171,24 @@ function Tabs() {
                   
                 <div style={{ maxWidth: "35vh" }}>
                   <h6>Stock Distributions in terms of Cost</h6>
-                  < Pie data={dataChart2} height={200}  />
+                  <Pie data={dataChart2} height={200} options={optionsChart2} />
                 </div>                                                             
               
             </div>
           </div>
           <div className={toggleState === 2 ? "content  active-content" : "content"}>
                 <div className='row'>
-                    <div className='col-4'>
+                    <div className='col-12'>
                       <div className='row'>
-                        <h6>Chart 1:</h6>
-                        <iframe width="300" height="400" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/1.embed"></iframe>
+                        <h6>StockPrice Chart 1:</h6>                        
                       </div>                      
                     </div>
-                    <div className='col-6'>
+                    <div className='col-12'>
                       <h6>Chart 2:</h6>
+                      <label>Sotck: </label>
+                      <input type='text' placeholder=' symbol' onChange={(event)=>{setchart1StockName(event.target.value)}} />
+                      <button onClick={() => {plotChart1(chart1StockName)}}>Search</button>
+                      <iframe width="900" height="800" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/8.embed"></iframe>
                     </div>                    
                 </div>           
           </div>
@@ -182,7 +199,7 @@ function Tabs() {
   
 export default Tabs;
 
-//
+// <iframe width="900" height="800" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/8.embed"></iframe>
 
 // https://www.youtube.com/watch?v=re3OIOr9dJI 1:11:48
 // ...userList in then() of Axios.get ... is destructor for add

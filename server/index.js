@@ -1,8 +1,8 @@
 const express = require('express')
 const app = express()
 
-// let {PythonShell} = require('python-shell')
-// const request = require('request')
+let {PythonShell} = require('python-shell')
+const request = require('request')
 
 const mysql = require('mysql')
 
@@ -155,6 +155,41 @@ app.delete('/delete/:userID/:stockDeleting', (req, res) => {
         }
     })
 }) // delete the data in the database
+
+
+app.get('/stockPredChart1:chart1StockName', (req, res) => {
+    console.log(req.params.chart1StockName)
+
+    var options = {
+        mode: 'text',
+        args: [
+            req.params.chart1StockName,
+        ]
+    }
+
+    PythonShell.run('../plotly/predictionCharts.py', options, (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            // res.send(result)
+        }
+    })
+})
+
+// app.post('/plotingChartone', (req, res) => { // request and response, res => send sth to the front
+//     const stockName = req.body.chart1StockName
+//     console.log(stockName)
+
+//     PythonShell.run('../plotly/predictionCharts.py', stockName, (err, result) => {
+//         if (err) {
+//             console.log(err)
+//         }
+//         else {
+//             // res.send(result)
+//         }
+//     })
+// })
 
 
 app.listen(3001, 
