@@ -20,10 +20,14 @@ import math
 from matplotlib import pyplot as plt
 # %matplotlib inline
 
+import chart_studio
 import chart_studio.plotly as py
 import chart_studio.tools as tls
-
 import plotly.express as px
+
+username = 'fyp21dl3'
+api_key = 'ifPhnP8pKg6OiKbHb69z'
+chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
 
 dataPATH = '../data/stockPrice_prediction.csv'
 df = pd.read_csv(dataPATH)
@@ -41,7 +45,7 @@ price = stockData['CLOSE']
 fig = px.scatter(x=dateRange, y=price)
 
 # save the chart to chart studio
-py.plot(fig, filename=f'StockPriceChart_{stockName}', auto_open=False)
+py.plot(fig, filename=f'StockPriceChart_1', auto_open=False)
 
 print("finish ploting")
 

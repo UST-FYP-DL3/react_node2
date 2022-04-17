@@ -188,7 +188,7 @@ function Tabs() {
                       <label>Sotck: </label>
                       <input type='text' placeholder=' symbol' onChange={(event)=>{setchart1StockName(event.target.value)}} />
                       <button onClick={() => {plotChart1(chart1StockName)}}>Search</button>
-                      <iframe width="900" height="800" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/8.embed"></iframe>
+                      <iframe width="900" height="800" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/26.embed"></iframe>
                     </div>                    
                 </div>           
           </div>

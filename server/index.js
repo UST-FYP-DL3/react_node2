@@ -159,7 +159,6 @@ app.delete('/delete/:userID/:stockDeleting', (req, res) => {
 
 app.get('/stockPredChart1:chart1StockName', (req, res) => {
     console.log(req.params.chart1StockName)
-
     var options = {
         mode: 'text',
         args: [

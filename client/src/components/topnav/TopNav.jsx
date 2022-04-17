@@ -74,9 +74,14 @@ const Topnav = () => {
         <div className='topnav'>
             <div className="topnav__search">
                 <input type="text" placeholder='Search here...' />
-                <i className='bx bx-search'></i>
+                <Button>
+                    <i className='bx bx-search'></i>
+                </Button>
             </div>
             <div className="topnav__right">
+                <div className="topnav__right-item">
+                    {/* dropdown here */}
+                </div>
                 <div className="topnav__right-item">
                     {/* dropdown here */}
                     <Dropdown
