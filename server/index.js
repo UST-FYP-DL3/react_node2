@@ -51,8 +51,10 @@ app.get('/user', (req, res) => { // standard for creating express when using req
 
 // get the holdings for PortfolioTabs
 // original is get, now change to post as need to get the uerID
-app.post('/holdings', (req, res) => { // standard for creating express when using request
-    const userID = req.body.userID
+// app.post('/holdings', (req, res) => {...})
+// const userID = req.body.userID
+app.get('/holdings:userID', (req, res) => { // standard for creating express when using request
+    const userID = req.params.userID
     // console.log(userID)
     
     const sql = "SELECT * FROM fypsystem.userholdings where userID = ? and holdingNow = 1"
@@ -89,7 +91,8 @@ app.post('/addAholding', (req, res) => { // request and response, res => send st
     });
 })  // app.post or app.get, put or delete
 
-app.put('/updateAholding', (req, res) => {
+// update the database
+app.put("/updateAholding", (req, res) => {
     const userID = req.body.userID
     const stock = req.body.stock
     const buyPrice = req.body.buyPrice
@@ -98,20 +101,59 @@ app.put('/updateAholding', (req, res) => {
 
     const sql = 'UPDATE userholdings SET buyPrice = ?, quantity = ?, cost = ? WHERE userID = ? and stock = ?'
 
-    db.query(sql, [buyPrice, quantity, cost, userID, stock]), 
-    (err, res) => {
+    db.query(
+      sql,
+      [buyPrice, quantity, cost, userID, stock],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send(result);
+        }
+    });
+});
+  
+/*
+// using app.post
+app.post('/delete/:stockDeleting', (req, res) => {
+    const stockDeleting = req.params.stockDeleting  // .stockDeleting refer to :stockDeleting
+    const userID = req.body.userID
+
+    const sql = 'DELETE FROM userholdings WHERE userID = ? and stock = ?'
+
+    db.query(sql, [userID, stockDeleting], (err, result) => {
         if (err) {
             console.log(err)
         }
         else {
-            res.send(res)
+            res.send(result)
         }
-    }
-}) // update the database
+    })
+}) // delete the data in the database
+*/
 
-// app.delete() // delete the data in the database
+// using app.delete
+app.delete('/delete/:userID/:stockDeleting', (req, res) => {
+    const userID = req.params.userID
+    const stockDeleting = req.params.stockDeleting  // .stockDeleting refer to :stockDeleting
+    console.log(userID)
+    console.log(stockDeleting)
+    
+    const sql = 'DELETE FROM userholdings WHERE userID = ? and stock = ?'
+
+    db.query(sql, [userID, stockDeleting], (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            res.send(result)
+        }
+    })
+}) // delete the data in the database
 
 
 app.listen(3001, 
     () => {console.log("Hey, server running on port 3001");
 });
+
+// Tutorial: https://github.com/machadop1407/Simple-CRUD-React-Node-MySQL

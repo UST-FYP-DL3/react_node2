@@ -7,6 +7,8 @@ import Analytics from '../pages/Analytics'
 import Stocks from '../pages/Stocks'
 import Setting from '../pages/Setting'
 import Portfolio from '../pages/Portfolio'
+// import Preference from './InvestmentPreference/Preference'
+// <Route path="/preferenceLogin" component={Preference} />
 
 const Routes = () => {
     return (
@@ -16,7 +18,7 @@ const Routes = () => {
             <Route path='/analytics' component={Analytics}/>
             <Route path='/stocks' component={Stocks}/>
             <Route path='/setting' component={Setting}/>
-            <Route path='/portfolio' component={Portfolio}/>
+            <Route path='/portfolio' component={Portfolio}/>            
         </Switch>
     )
 }

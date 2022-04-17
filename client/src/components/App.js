@@ -23,7 +23,7 @@ function App() {
           <PrivateRoute exact path="/" component={Layout} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
-          <Route path="/preference" component={Preference} />
+          <PrivateRoute path="/preferenceLogin" component={Preference} />
         </Switch>              
       </AuthProvider>
     </Router>  

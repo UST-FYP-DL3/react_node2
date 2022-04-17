@@ -5,7 +5,7 @@ import { Link, useHistory } from "react-router-dom"
 
 import { Container } from 'react-bootstrap'
 
-export default function Preference() {
+function Preference() {
   const ageRef = useRef()
   const wageRef = useRef()
   const amountRef = useRef()
@@ -72,9 +72,16 @@ export default function Preference() {
                         </Button>
                     </Form>
                     </Card.Body>
+                    <div className="w-100 text-center mt-2">
+                      <Link to='/'>Go to dashboard</Link>
+                    </div>
                 </Card>
             </div>
       </Container>
     </>
   )
 }
+
+export default Preference;
+
+
