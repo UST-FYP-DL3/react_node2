@@ -64,7 +64,7 @@ const Analytics = () => {
 
     return (
         <div>
-            <h2 className="page-header">
+            <h2 className='container-div'>
                 Analytics
             </h2>
             <div className="row">

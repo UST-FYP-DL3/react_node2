@@ -61,68 +61,75 @@ const Setting = () => {
     };
 
     return (
-        <div style ={{border: "2px solid grey", borderRadius: "10px",}}>
+        <div style ={{border: "2px solid lightgrey", borderRadius: "10px",}}>
             <h2 className='container-div'>Setting</h2>
             <div className='flex'>
-                <div id ="col1"> 
+                <div id ="col1" class = "row"> 
                     <h3 id = "accountHeader">User Account Update</h3>
                     <div>
-                        <label>Name: </label>
+                        <label id ="label">Name </label>
                         <input type='text' onChange={(event)=>{setName(event.target.value)}} />
                     </div>
                     <div>
-                        <label>Age: </label>
+                        <label id ="label">Age </label>
                         <input type='number' onChange={(event)=>{setAge(event.target.value)}} />
                     </div>
                     <div>
-                        <label>Wage (in annual): </label>
+                        <label id ="label">Wage (in annual) </label>
                         <input type='number' onChange={(event)=>{setWage(event.target.value)}} />
                     </div>
                     <div>
-                        <label>Investment Capital: </label>
-                        <input type='number' onChange={(event)=>{setInvestmentCapital(event.target.value)}} />
+                        <label id ="label">Investment Capital </label>
+                        <input type='number' placeholder=' in USD' onChange={(event)=>{setInvestmentCapital(event.target.value)}} />
                     </div>
                     <div>
-                        <label>Risk Tolearance Level: </label>
-                        <input type='select' onChange={(event)=>{setRiskLevel(event.target.value)}} />
+                        <label id ="label">Risk Tolearance Level </label>
+                        <input style ={{margin: "0.5vw", fontSize: "16px"}} type="radio" name="riskLevel" value="very high" onChange={(event)=>{setRiskLevel(event.target.value)}}/> Very High
+                        <br></br>
+                        <input style ={{margin: "0.5vw", fontSize:"16px"}} type="radio" name="riskLevel" value="high" onChange={(event)=>{setRiskLevel(event.target.value)}}/> High
+                        <br></br>
+                        <input style ={{margin: "0.5vw", fontSize:"16px"}} type="radio" name="riskLevel" value="medium" onChange={(event)=>{setRiskLevel(event.target.value)}}/> Medium
+                        <br></br>
+                        <input style ={{margin: "0.5vw", fontSize: "16px"}} type="radio" name="riskLevel" value="low" onChange={(event)=>{setRiskLevel(event.target.value)}}/> Low
+                        <br></br>
                     </div>
-                    <div>
+                    <div style ={{margin: "1vh"}}>
                         <button class = "button-1" role = "button" onClick={addUser}>Add</button>
                     </div>
                 </div>
 
-                <div id ="col2">
+                <div id ="col2" class = "row">
                     <h3 id = "holdingHeader">Add holdings</h3>
                     <div>
-                        <label>Stock: </label>
-                        <input type='text' onChange={(event)=>{setStock(event.target.value)}} />
+                        <label id ="label">Stock </label>
+                        <input type='text' placeholder=' enter stock symbol' onChange={(event)=>{setStock(event.target.value)}} />
                     </div>
                     <div>
-                        <label>Price: </label>
+                        <label id ="label">Price </label>
                         <input type='number' onChange={(event)=>{setBuyPrice(event.target.value)}} />
                     </div>
                     <div>
-                        <label>Quantity: </label>
+                        <label id ="label">Quantity </label>
                         <input type='number' onChange={(event)=>{setQuantity(event.target.value)}} />
                     </div>
-                    <div>
+                    <div style ={{margin: "1vh"}}>
                         <button class = "button-2" role = "button" onClick={addAholding}>Add</button>
                     </div>
 
                     <h3 id = "holdingHeader">Update holdings</h3>
                     <div>
-                        <label>Stock: </label>
-                        <input type='text' placeholder=' symbol' onChange={(event)=>{setStockUpdate(event.target.value)}} />
+                        <label id ="label">Stock </label>
+                        <input type='text' placeholder=' enter stock symbol' onChange={(event)=>{setStockUpdate(event.target.value)}} />
                     </div>
                     <div>
-                        <label>Price: </label>
+                        <label id ="label">Price </label>
                         <input type='number' onChange={(event)=>{setBuyPriceUpdate(event.target.value)}} />
                     </div>
                     <div>
-                        <label>Quantity: </label>
+                        <label id ="label">Quantity </label>
                         <input type='number' onChange={(event)=>{setQuantityUpdate(event.target.value)}} />
                     </div>
-                    <div>
+                    <div style ={{margin: "1vh"}}>
                         <button class = "button-2" role = "button" onClick={updateAholding}>Update</button> 
                     </div>    
                 </div>                 
