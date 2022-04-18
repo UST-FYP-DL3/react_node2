@@ -42,10 +42,11 @@ stockData = df[df['Stock']==stockName]
 dateRange = stockData['Date']
 price = stockData['CLOSE']
 
-fig = px.scatter(x=dateRange, y=price)
+fig = px.line(stockData, x="Date", y="CLOSE", labels={"dateRange": "Date", "CLOSE": "Price"})
+fig.add_vline(x='2021-11-08', line_width=2, line_dash="dash", line_color="red")
 
 # save the chart to chart studio
-py.plot(fig, filename=f'StockPriceChart_1', auto_open=False)
+py.plot(fig, filename='StockPriceChart_1', auto_open=False)
 
 print("finish ploting")
 

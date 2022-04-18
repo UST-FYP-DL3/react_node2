@@ -54,6 +54,25 @@ const Stocks = () => {
             <h2 className='container-div'>Stock History</h2>
             <h5>Apple Inc.</h5>
             <span>NasdaqGS: AAPL</span>
+            <div className='row'>
+                <div className='col-8'>
+                    <div className='card full-height'>
+                        <iframe height="600" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/26.embed"></iframe>
+                    </div>
+                </div>
+                <div className='col-4'>
+                    <div className='card full-height'>
+                        <div className='card__header'>
+                            <h3>Indicator</h3>
+                        </div>
+                        <div className='card__body'>
+                            <label>Ind 1: </label>
+                            <label>Ind 2: </label>
+                            <label>Ind 3: </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

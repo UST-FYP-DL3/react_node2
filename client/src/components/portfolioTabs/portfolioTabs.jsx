@@ -7,6 +7,10 @@ import './portfolioTabs.css'
 
 import Table from '../table/Table'
 
+// import portfolioWeek44 from '../../assets/JsonData/PortfolioWeek44.json'
+// import portfolioWeek45 from '../../assets/JsonData/PortfolioWeek45.json'
+// import corrPortfolioWeek45 from '../../assets/JsonData/correlationWeek45.json'
+
 // import Chart from "react-apexcharts";
 
 // tutorial
@@ -87,10 +91,23 @@ function Tabs() {
     // };
 
     // try to label the total value
-    const currCost = {
-      series: userHoldings.map( (value, key) => (value.cost) ),
+    var StockNameWk44 = ["ABMD", "CZR", "DPZ", "DXCM", "EXR", "LDOS", "MKTX", 
+                                "MRNA", "MSCI", "NFLX", "NOC", "NVDA", "ODFL", "POOL", "TMUS"]
+    var StockShareWk44 = [1, 2, 3, 1, 7, 1, 1, 4, 1, 2, 1, 5, 2, 1, 1]
+    var StockPriceWk44 = [359.75, 105.3, 496.67, 637.09, 197.43, 95.82, 390.06, 
+                          244.68, 652.7685, 651.45, 363.27, 308.04, 351.45, 519.7799, 120.86]
+                          // change to 2021-11-05 close price, not yet change
+                          // if change remove this comment
+    var StockValueWk44 = []
+    for (var i = 0; i < StockShareWk44.length; i++) {
+      StockValueWk44[i] = StockShareWk44[i]*StockPriceWk44[i]
+    }
+    var totalValueWk44 = StockValueWk44.reduce( (accumulator, currentValue) => {return accumulator+currentValue} )
+
+    const currValue = {
+      series: StockValueWk44, // StockValueWk44, // userHoldings.map( (value, key) => (value.cost) ),
       chartOptions: {
-        labels: userHoldings.map( (value, key) => (value.stock) ),
+        labels: StockNameWk44,// StockNameWk44, // userHoldings.map( (value, key) => (value.stock) ),
         chart: {
           type: 'dount',
         },
@@ -109,6 +126,64 @@ function Tabs() {
         }, 
       },        
     }
+
+    const currIndustry = {
+      series: [1957, 1233, 1986, 976, 354],
+      chartOptions: {
+        labels: ['Finance', 'FCMG', 'Tech', 'Ind 1', 'Ind 2'],
+        chart: {
+          type: 'dount',
+        },
+        plotOptions: {
+          pie: {
+            dount: {
+              labels: {
+                show: true,
+                total: {
+                show: true,
+                showAlways: true,
+                },
+              },
+            },
+          },
+        }, 
+      },        
+    }
+    
+    var StockNameWk45 = ["ABMD", "CZR", "DPZ", "DXCM", "EXR", "LDOS", "LLY", 
+                                "MKTX", "MRNA", "MSCI", "NFLX", "NVDA", "ODFL", "POOL"]
+    var StockShareWk45 = [1, 2, 3, 1, 7, 2, 1, 1, 4, 1, 1, 5, 3, 1]
+    var StockPricePredWk45 = [364.71560, 107.213300, 501.98077, 627.79380, 195.39474, 96.085526, 263.89730,
+                              393.45030, 244.98958, 659.07855, 220.73108, 655.76930, 291.66815, 348.09146, 519.73720]
+    var StockValuePredWk45 = []
+    for (var i = 0; i < StockShareWk45.length; i++) {
+      StockValuePredWk45[i] = StockShareWk45[i]*StockPricePredWk45[i]
+    }
+    var totalValueWk45 = StockValuePredWk45.reduce( (accumulator, currentValue) => {return accumulator+currentValue} )
+    
+    const predValue = {
+      series: StockValuePredWk45, // userHoldings.map( (value, key) => (value.cost) ),
+      chartOptions: {
+        labels: StockNameWk45, // userHoldings.map( (value, key) => (value.stock) ),
+        chart: {
+          type: 'dount',
+        },
+        plotOptions: {
+          pie: {
+            dount: {
+              labels: {
+                show: true,
+                total: {
+                show: true,
+                showAlways: true,
+                },
+              },
+            },
+          },
+        }, 
+      },        
+    }
+    
 
     // const [sumOfCost, setSumOfCost] = useState(0)
     //  const sumCost = userHoldings.map( (value, key) => (value.cost) ).reduce( (accumulator, currentValue) => {return accumulator + currentValue})
@@ -132,13 +207,16 @@ function Tabs() {
 
     // head for Details
     const detailsTableHead = ['Stock', 'Quantity', 'Buy At', 'Cost', 'Curr Price', 'Value', 'Profit', '% Change']
-    const renderTablerHead = (item, index) => (
+
+    const tradingTableHead = ['Date', 'Stock', 'B / S', 'Quantity', 'Cost', 'P / L']
+
+    const renderTableHead = (item, index) => (
       <th key={index}>{item}</th>
     )
 
     // const detailsTableBody = 
 
-    const renderTablerBody = (item, index) => (
+    const renderTableBody = (item, index) => (
       <tr key={index}>
           <td>{item.stock}</td>
           <td>{item.quantity}</td>
@@ -163,32 +241,32 @@ function Tabs() {
 
           <div className="row">
                 <div className="col-4">
-                    <div className='card'>
-                      <h5>Total Cost: ${sumOfCost.toFixed(2)}</h5>
-                      <Chart options={currCost.chartOptions} series={currCost.series} type='donut' />
+                    <div className='card full-height'>
+                      <h5>Total Value: ${totalValueWk44.toFixed(2)}</h5>
+                      <Chart options={currValue.chartOptions} series={currValue.series} type='donut' />
                     </div>
                 </div>
                 <div className="col-4">
-                  <div className='card'>
-                      <h5>Stock Distributions in terms of Cost</h5>
-                      <Chart options={currCost.chartOptions} series={currCost.series} type='donut' />
+                  <div className='card full-height'>
+                      <h5>Industry Distribution</h5>
+                      <Chart options={currIndustry.chartOptions} series={currIndustry.series} type='donut' />
                   </div>
                 </div>
                 <div className="col-4">
-                  <div className='card'>
-                      <h5>Stock Distributions in terms of Cost</h5>
-                      <Chart options={currCost.chartOptions} series={currCost.series} type='donut' />
+                  <div className='card full-height'>
+                      <h5>Other Stats</h5>
+                      
                   </div>
                 </div>
                 <div className="col-12">
-                  <div className='card'>
+                  <div className='card full-height'>
                     <div className='card__header'>
-                      <h3>Details</h3>
+                      <h3>Trading Record</h3>
                     </div>
                     <Table 
-                      headData={detailsTableHead}
-                      renderHead={(item, index) => renderTablerHead(item, index)}
-                      renderBody={(item, index) => renderTablerBody(item, index)}                    
+                      headData={tradingTableHead}
+                      renderHead={(item, index) => renderTableHead(item, index)}
+                      renderBody={(item, index) => renderTableBody(item, index)}                    
                     />
                     <div>
 
@@ -200,19 +278,43 @@ function Tabs() {
             </div>
           </div>
           <div className={toggleState === 2 ? "content  active-content" : "content"}>
-                <div className='row'>
-                    <div className='col-12'>
-                      <div className='row'>
-                        <h6>StockPrice Chart 1:</h6>                        
-                      </div>                      
-                    </div>
-                    <div className='col-12'>
-                      <h6>Chart 2:</h6>
-                      <label>Sotck: </label>
-                      <input type='text' placeholder=' symbol' onChange={(event)=>{setchart1StockName(event.target.value)}} />
-                      
-                    </div>                    
-                </div>           
+            <div className="row">
+              <div className="col-4">
+                  <div className='card full-height'>
+                    <h5>Total Cost: ${totalValueWk45.toFixed(2)}</h5>
+                    <Chart options={predValue.chartOptions} series={predValue.series} type='donut' />
+                  </div>
+              </div>
+              <div className="col-4">
+                <div className='card full-height'>
+                    {/*<h5>Industry Distribution</h5>
+                    <Chart options={currIndustry.chartOptions} series={currIndustry.series} type='donut' />*/}
+                </div>
+              </div>
+              <div className="col-4">
+                <div className='card full-height'>
+                    <h5>Other Stats</h5>
+                    
+                </div>
+              </div>
+              <div className="col-12">
+                <div className='card full-height'>
+                  <div className='card__header'>
+                    <h3>Trading Record</h3>
+                  </div>
+                  <Table 
+                    headData={tradingTableHead}
+                    renderHead={(item, index) => renderTableHead(item, index)}
+                    renderBody={(item, index) => renderTableBody(item, index)}                    
+                  />
+                  <div>
+
+                  </div>
+
+                </div>
+              </div>          
+                  
+            </div>           
           </div>
         </div>
       </div>
