@@ -211,13 +211,13 @@ function Tabs() {
     const tradingTableHead = ['Date', 'Stock', 'B / S', 'Quantity', 'Cost', 'P / L']
 
     const renderTableHead = (item, index) => (
-      <th key={index}>{item}</th>
+      <th style ={{textAlign: "center"}} key={index}>{item}</th>
     )
 
     // const detailsTableBody = 
 
     const renderTableBody = (item, index) => (
-      <tr key={index}>
+      <tr style ={{textAlign: "center"}} key={index}>
           <td>{item.stock}</td>
           <td>{item.quantity}</td>
           <td>{item.buyPrice}</td>

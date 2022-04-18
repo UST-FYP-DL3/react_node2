@@ -92,11 +92,11 @@ const topCustomers = {
 }
 
 const renderCusomerHead = (item, index) => (
-    <th key={index}>{item}</th>
+    <th style ={{textAlign: "center"}} key={index}>{item}</th>
 )
 
 const renderCusomerBody = (item, index) => (
-    <tr key={index}>
+    <tr style ={{textAlign: "center"}} key={index}>
         <td>{item.stockname}</td>
         <td>{item.unit}</td>
         <td>{item.price}</td>

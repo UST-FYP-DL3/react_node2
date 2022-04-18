@@ -24,10 +24,10 @@ const customerTableHead2 = [
     'wage',
 ]
 
-const renderHead = (item, index) => <th key={index}>{item}</th>
+const renderHead = (item, index) => <th style ={{textAlign: "center"}} key={index}>{item}</th>
 
 const renderBody = (item, index) => (
-    <tr key={index}>
+    <tr style ={{textAlign: "center"}} key={index}>
         <td>{item.id}</td>
         <td>{item.name}</td>
         <td>{item.email}</td>
