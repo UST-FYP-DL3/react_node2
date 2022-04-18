@@ -2,99 +2,139 @@ import React, {useEffect, useState} from 'react'
 import './Stocks.css';
 import { useSelector } from 'react-redux'
 
-import { useAuth } from "../contexts/AuthContext"
-
 import { Link } from 'react-router-dom'
 
 import Chart from 'react-apexcharts'
 
-import StatusCard from '../components/status-card/StatusCard'
-
 import Table from '../components/table/Table'
-
-import Badge from '../components/badge/Badge'
-
-import statusCards from '../assets/JsonData/status-card-data.json'
-
-import Axios from 'axios'
-
-const chartOptions = {
-    series: [{
-        name: 'Price',
-        data: [154.2,157.4,156.3,151.7,147.9,159.6,154.1,164.3,158.9,162.6,163.6,161.8,155.7,161.3,160.7,163.09,165.2]
-    }
-    ],
-    options: {
-        color: ['green'],
-        chart: {
-            background: 'transparent',
-        },
-        dataLabels: {
-            enabled: false
-        },
-        xaxis: {
-            categories: ['23 Oct 2021', '24 Oct 2021', '25 Oct 2021', '26 Oct 2021', '27 Oct 2021', '28 Oct 2021', '29 Oct 2021', '30 Oct 2021', '31 Oct 2021', '01 Nov 2021', '02 Nov 2021', '03 Nov 2021','04 Nov 2021', '05 Nov 2021', '06 Nov 2021', '07 Nov 2021', '08 Nov 2021']
-        },
-        legend: {
-            position: 'top'
-        },
-        grid: {
-            show: false
-        }
-    }
-}
 
 const topIndicator = {
     head: [
-        'ATR',
-        'BB_MA',
-        'EMAVG',
-        'MOM',
-        'RSI'
+        {
+            "item": 'Date',
+            "website": 'https://www.investopedia.com/terms/i/investment_horizon.asp#:~:text=An%20investment%20horizon%20refers%20to%20the%20length%20of,has%20a%20long-term%20investment%20horizon%20and%20is%20risk-averse.'
+        },
+        {
+            "item": 'ATR',
+            "website": 'https://www.investopedia.com/terms/a/atr.asp'
+        },
+        {
+            "item": 'BB_MA',
+            "website": 'https://www.investopedia.com/articles/technical/102201.asp'
+        },
+        {
+            "item": 'EMAVG',
+            "website": 'https://www.investopedia.com/ask/answers/122314/what-exponential-moving-average-ema-formula-and-how-ema-calculated.asp#:~:text=The%20exponential%20moving%20average%20%28EMA%29%20is%20a%20technical,more%20weighting%20or%20importance%20to%20recent%20price%20data.'
+        },
+        {
+            "item": 'MOM',
+            "website": 'https://www.investopedia.com/terms/m/momentum.asp'
+        },
+        {
+            "item": 'RSI',
+            "website": 'https://www.investopedia.com/terms/r/rsi.asp'
+        }
     ],
     body: [
         {
-            "atr": "MSFT",
-            "bb_ma": 10,
-            "emavg": "$323.45",
-            "mom": "$3234.50",
-            "rsi": "0.5%"
+            "date": "10 Nov 21",
+            "atr": 2.513468,
+            "bb_ma": 213.062940,
+            "emavg": 216.478291,
+            "mom": 2.4600,
+            "rsi": 59.948243
         },
         {
-            "atr": "MSFT",
-            "bb_ma": 10,
-            "emavg": "$323.45",
-            "mom": "$3234.50",
-            "rsi": "0.5%"
+            "date": "09 Nov 21",
+            "atr": 2.940202,
+            "bb_ma": 212.384345,
+            "emavg": 216.687436,
+            "mom": 0.6500,
+            "rsi": 61.758888
         },
         {
-            "atr": "MSFT",
-            "bb_ma": 10,
-            "emavg": "$323.45",
-            "mom": "$3234.50",
-            "rsi": "0.5%"
+            "date": "08 Nov 21",
+            "atr": 3.317803,
+            "bb_ma": 211.640785,
+            "emavg": 216.606154,
+            "mom": 3.0200,
+            "rsi": 60.116419
         },
         {
-            "atr": "MSFT",
-            "bb_ma": 10,
-            "emavg": "$323.45",
-            "mom": "$3234.50",
-            "rsi": "0.5%"
+            "date": "05 Nov 21",
+            "atr": 4.006704,
+            "bb_ma": 210.863830,
+            "emavg": 217.064231,
+            "mom": 7.2500,
+            "rsi": 62.014016
         },
     ]
 }
 
 const renderIndicatorHead = (item, index) => (
-    <th key={index}>{item}</th>
+    <th key={index}>
+        {item.item}
+        <a href = {item.website} style ={{color: "blue", marginLeft: "2vh"}} target="_blank" class='bx bxs-info-circle'>
+        </a>
+    </th>
 )
 
 const renderIndicatorBody = (item, index) => (
     <tr key={index}>
-        <td>{item.stockname}</td>
-        <td>{item.unit}</td>
-        <td>{item.price}</td>
-        <td>{item.capital}</td>
-        <td>{item.return}</td>
+        <td>{item.date}</td>
+        <td>{item.atr}</td>
+        <td>{item.bb_ma}</td>
+        <td>{item.emavg}</td>
+        <td>{item.mom}</td>
+        <td>{item.rsi}</td>
+    </tr>
+)
+
+const topRatings = {
+    head: [
+        'Date',
+        'Analyst',
+        'Action',
+        'Rating'
+    ],
+    body: [
+        {
+            "date": "29 Oct 21",
+            "analyst": "Morgan Stanley",
+            "action": "Mantains",
+            "rating": "Overweight"
+        },
+        {
+            "date": "29 Oct 21",
+            "analyst": "Barclays",
+            "action": "Mantains",
+            "rating": "Equal-weight"
+        },
+        {
+            "date": "29 Oct 21",
+            "analyst": "Oppenheimer",
+            "action": "Mantains",
+            "rating": "Outperform"
+        },
+        {
+            "date": "27 Oct 21",
+            "analyst": "Morgan Stanley",
+            "action": "Mantains",
+            "rating": "Overweight"
+        },
+    ]
+}
+
+const renderRatingHead = (item, index) => (
+    <th key={index}>{item}</th>
+)
+
+const renderRatingBody = (item, index) => (
+    <tr key={index}>
+        <td>{item.date}</td>
+        <td>{item.analyst}</td>
+        <td>{item.action}</td>
+        <td>{item.rating}</td>
     </tr>
 )
 
@@ -119,28 +159,17 @@ const Stocks = () => {
                 <p style ={{color: "red",margin: "2vh", marginTop: "0vh", marginBottom: "0vh", fontWeight: "400"}}>151.28 (-0.55%)</p>
                 <p style ={{margin: "2vh", marginTop: "0vh", fontWeight: "400"}}>At close: 2021-11-08  4:00 PM EDT (USD) · Market closed</p> 
             </div>
-            <div>
-                <Chart
-                    options={themeReducer === 'theme-mode-dark' ? {
-                        ...chartOptions.options,
-                        theme: { mode: 'dark'}
-                    } : {
-                        ...chartOptions.options,
-                        theme: { mode: 'light'}
-                    }}
-                    
-                    series={chartOptions.series}
-                    type='line'
-                    height='200%'
-                />
-            </div>
             <div class='col-12'>
                 <iframe width='100%' height="600" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/26.embed"></iframe>
             </div>
             <div className="col-12">
                     <div className='card'>
-                        <div className='card__header'>
-                            <h3>Trading indicators</h3>
+                        <div>
+                            <h3 className='card__header'>Trading indicators</h3>
+                            <h6>Click 
+                                <span style ={{color: "blue", marginLeft: "1vh", marginRight: "1vh"}} class='bx bxs-info-circle'></span>
+                                icon to see the indicator details.
+                            </h6>
                         </div>
                         <div className='card__body'>
                             <Table
@@ -154,7 +183,28 @@ const Stocks = () => {
                             <Link to='/'>View all</Link>
                         </div>
                     </div>
-                </div>
+            </div>
+            <div className="col-12">
+                    <div className='card'>
+                        <div>
+                            <h3 className='card__header'>Analyst Rating</h3>
+                            <h6>Know more about analyst rating: 
+                                <a href="https://www.investopedia.com/financial-edge/0512/understanding-analyst-ratings.aspx" target="_blank" style ={{color: "green", marginLeft: "1vh", marginRight: "1vh"}} class='bx bxs-info-circle'></a>
+                            </h6>
+                        </div>
+                        <div className='card__body'>
+                            <Table
+                                headData={topRatings.head}
+                                renderHead={(item, index) => renderRatingHead(item, index)}
+                                bodyData={topRatings.body}
+                                renderBody={(item, index) => renderRatingBody(item, index)}
+                            />
+                        </div>
+                        <div className='card__footer'>
+                            <Link to='/'>View all</Link>
+                        </div>
+                    </div>
+            </div>
         </div>
     )
 }
@@ -184,4 +234,20 @@ export default Stocks
             </div>
         </div>
     </div>
-</div> */}
+</div> */
+/*           <div>
+                <Chart
+                    options={themeReducer === 'theme-mode-dark' ? {
+                        ...chartOptions.options,
+                        theme: { mode: 'dark'}
+                    } : {
+                        ...chartOptions.options,
+                        theme: { mode: 'light'}
+                    }}
+                    
+                    series={chartOptions.series}
+                    type='line'
+                    height='200%'
+                />
+            </div>
+                */}

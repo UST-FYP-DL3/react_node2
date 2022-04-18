@@ -39,7 +39,7 @@ function Tabs() {
     // userHoldings store all data
     const [userHoldings, setUserHoldings] = useState([]); // this is a list
     const [sumOfCost, setSumOfCost] = useState(0)
-
+    /*
     const getHoldings = (userID) => {
         // console.log(currentUser.uid)
         Axios.get(`http://localhost:3001/holdings${userID}`).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
@@ -50,12 +50,12 @@ function Tabs() {
                 setSumOfCost(response.data.map( (value, key) => (value.cost)).reduce( (accumulator, currentValue) => {return accumulator + currentValue}))
             }
         ); // get request, response contains everything send from the backend
-    };
+    };*/
       //, {userID: currentUser.uid} // , {userID: 'ZtGPo16e7rdc3lt0m4xGAK8PsB03'}
 
-    useEffect( () => {
+    /*useEffect( () => {
       getHoldings(userID);
-    }, []);
+    }, []);*/
 
     // const [holdingData, setholdingData] = useState([]);
 
