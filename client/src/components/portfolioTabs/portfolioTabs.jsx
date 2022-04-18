@@ -12,7 +12,7 @@ import './portfolioTabs.css'
 
 import Table from '../table/Table'
 
-import PortfolioTab2 from './PortfolioTab2'
+// import PortfolioTab2 from './PortfolioTab2'
 
 import corrWeek45Data from '../../assets/JsonData/correlationWeek45.json'
 
@@ -354,30 +354,6 @@ import Box from '@mui/material/Box';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
-  const { currentUser } = useAuth()
-  const userID = currentUser.uid // ZtGPo16e7rdc3lt0m4xGAK8PsB03
-
-  // userHoldings store all data
-  const [userHoldings, setUserHoldings] = useState([]); // this is a list
-  const [sumOfCost, setSumOfCost] = useState(0)
-
-  const getHoldings = (userID) => {
-      // console.log(currentUser.uid)
-      Axios.get(`http://localhost:3001/holdings${userID}`).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
-          (response) => {
-              // console.log(currentUser.uid)
-              console.log(response.data)
-              setUserHoldings(response.data) // response has a propert call data
-              setSumOfCost(response.data.map( (value, key) => (value.cost)).reduce( (accumulator, currentValue) => {return accumulator + currentValue}))
-          }
-      ); // get request, response contains everything send from the backend
-  };
-    //, {userID: currentUser.uid} // , {userID: 'ZtGPo16e7rdc3lt0m4xGAK8PsB03'}
-
-  useEffect( () => {
-    getHoldings(userID);
-  }, []);
-
   return (
     <div
       role="tabpanel"
@@ -414,6 +390,31 @@ export default function BasicTabs() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const { currentUser } = useAuth()
+  const userID = currentUser.uid // ZtGPo16e7rdc3lt0m4xGAK8PsB03
+
+  // userHoldings store all data
+  const [userHoldings, setUserHoldings] = useState([]); // this is a list
+  const [sumOfCost, setSumOfCost] = useState(0)
+
+  const getHoldings = (userID) => {
+      // console.log(currentUser.uid)
+      Axios.get(`http://localhost:3001/holdings${userID}`).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
+          (response) => {
+              // console.log(currentUser.uid)
+              console.log(response.data)
+              setUserHoldings(response.data) // response has a propert call data
+              setSumOfCost(response.data.map( (value, key) => (value.cost)).reduce( (accumulator, currentValue) => {return accumulator + currentValue}))
+          }
+      ); // get request, response contains everything send from the backend
+  };
+    //, {userID: currentUser.uid} // , {userID: 'ZtGPo16e7rdc3lt0m4xGAK8PsB03'}
+
+  useEffect( () => {
+    getHoldings(userID);
+  }, []);
+
 
   var StockNameWk44 = ["ABMD", "CZR", "DPZ", "DXCM", "EXR", "LDOS", "MKTX", 
                               "MRNA", "MSCI", "NFLX", "NOC", "NVDA", "ODFL", "POOL", "TMUS"]
@@ -508,7 +509,7 @@ export default function BasicTabs() {
     },        
   }
 
-  const tradingTableHead = ['Date', 'Stock', 'B / S', 'Quantity', 'Cost', 'P / L']
+  const tradingTableHead = ['Date', 'Stock', 'B / S', 'Quantity', 'Value', 'P / L']
 
   const corrweek45 = {
     head: ["Stock", "NVDA", "NFLX", "DXCM", "ABMD", "CZR", "MSCI", "LDOS", "ODFL", "POOL", "MRNA", "DPZ", "MKTX", "EXR", "LLY"],
