@@ -1,0 +1,15 @@
+.container-div {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 6vh;
+	margin: 0.5vh;
+	color: white;
+	border-radius: "30px";
+	background-image: linear-gradient(
+		to right, #427ceb, #1dad6f);
+}
+
+#subtitle{
+	margin: 1.5vh;
+}

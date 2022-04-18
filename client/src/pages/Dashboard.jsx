@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import ReactDOM from 'react-dom';
 import { useAuth } from "../contexts/AuthContext"
 
 import { Link } from 'react-router-dom'
@@ -8,6 +9,7 @@ import Chart from 'react-apexcharts'
 import { useSelector } from 'react-redux'
 
 import StatusCard from '../components/status-card/StatusCard'
+import IndicatorCard from '../components/status-card/indicatorCard'
 
 import Table from '../components/table/Table'
 
@@ -15,7 +17,10 @@ import Badge from '../components/badge/Badge'
 
 import statusCards from '../assets/JsonData/status-card-data.json'
 
+import indicatorCards from '../assets/JsonData/indicator-card-data.json'
+
 import postImage from '../assets/images/post2.jfif'
+import './dashboard.css';
 import Axios from 'axios'
 
 const chartOptions = {
@@ -56,32 +61,37 @@ const topCustomers = {
         'Stock',
         'Unit',
         'Price',
-        'Capital'
+        'Capital',
+        'Return'
     ],
     body: [
         {
             "stockname": "MSFT",
             "unit": 10,
             "price": "$323.45",
-            "capital": "$3234.50"
+            "capital": "$3234.50",
+            "return": "0.5%"
         },
         {
             "stockname": "AAPL",
             "unit": 23,
             "price": "$165.45",
-            "capital": "$3805.35"
+            "capital": "$3805.35",
+            "return": "0.3%"
         },
         {
             "stockname": "LMT",
             "unit": 6,
             "price": "$380.13",
-            "capital": "$2280.78"
+            "capital": "$2280.78",
+            "return": "1.5%"
         },
         {
             "stockname": "JNJ",
             "unit": 16,
             "price": "$162.45",
-            "capital": "$2599.20"
+            "capital": "$2599.20",
+            "return": "-0.5%"
         },
     ]
 }
@@ -96,8 +106,10 @@ const renderCusomerBody = (item, index) => (
         <td>{item.unit}</td>
         <td>{item.price}</td>
         <td>{item.capital}</td>
+        <td>{item.return}</td>
     </tr>
 )
+
 
 const Dashboard = () => {
 
@@ -120,6 +132,8 @@ const Dashboard = () => {
             console.log("success") // make good use of the userList without click, not applicable in this situation with ... destrcutor
         });
       };
+
+      
     
     /*
     const addUser = () => {
@@ -141,7 +155,8 @@ const Dashboard = () => {
 
     return (
         <div>
-            <h2 className="page-header">Dashboard</h2>
+            <h2 className='container-div'>Account Summary</h2>
+            <h5 id = "subtitle" className="page-header">Portfolio performance in current week</h5>
             <div className="row">
                 <div className="col-5">
                     <div className="row">
@@ -159,7 +174,22 @@ const Dashboard = () => {
                     </div>
                 </div>               
                 <div className="col-7">
-
+                    <div className="card full-height">
+                    <Chart
+                            
+                            options={themeReducer === 'theme-mode-dark' ? {
+                                ...chartOptions.options,
+                                theme: { mode: 'dark'}
+                            } : {
+                                ...chartOptions.options,
+                                theme: { mode: 'light'}
+                            }}
+                            
+                            series={chartOptions.series}
+                            type='line'
+                            height='100%'
+                        />
+                    </div>
                 </div>
                 <div className="col-7">
                     <div className='card'>
@@ -180,23 +210,21 @@ const Dashboard = () => {
                     </div>
                 </div>
                 <div className="col-5">
-                    <div className='card__header'>
-                            <h3>Temp</h3>
-                    </div>
-                    <div>
-                        <div>
-                            <label>Name: </label>
-                            <input type='text' onChange={(event)=>{setName(event.target.value)}} />
-                        </div>
-                        <div>
-                            <label>Age: </label>
-                            <input type='number' onChange={(event)=>{setAge(event.target.value)}} />
-                        </div>
-                        <div>
-                            <label>Wage (year): </label>
-                            <input type='number' onChange={(event)=>{setWage(event.target.value)}} />
-                        </div>
-                        <button onClick={addUser}>Add User</button>
+                            <h3 style={{textAlign: "center"}}>Further readings</h3>
+                            <h5 style={{textAlign: "center"}}>This week's key performance indicators</h5>
+                            
+                            <div style={{  display: "flex", justifyContent: "center"}} className="row">
+                            {
+                            indicatorCards.map((item, index) => (
+                                <div className="col-7" key={index}>
+                                    <IndicatorCard
+                                        icon={item.icon}
+                                        title={item.title}
+                                        link={item.link}
+                                    />
+                                </div>
+                            ))
+                            }
                     </div>
                 </div>
                 
@@ -207,6 +235,7 @@ const Dashboard = () => {
 }
 
 export default Dashboard
+
 
 
 /*
@@ -233,11 +262,24 @@ export default Dashboard
                         </div>
                     </div>
                 </div>
-*/ 
-
-/*<Chart
-    options={chartOptions.options}
-    series={chartOptions.series}
-    type='line'
-    height='100%'
-/>*/
+<div className="col-5">
+                    <div className='card__header'>
+                            <h3>Temp</h3>
+                    </div>
+                    <div>
+                        <div>
+                            <label>Name: </label>
+                            <input type='text' onChange={(event)=>{setName(event.target.value)}} />
+                        </div>
+                        <div>
+                            <label>Age: </label>
+                            <input type='number' onChange={(event)=>{setAge(event.target.value)}} />
+                        </div>
+                        <div>
+                            <label>Wage (year): </label>
+                            <input type='number' onChange={(event)=>{setWage(event.target.value)}} />
+                        </div>
+                        <button onClick={addUser}>Add User</button>
+                    </div>
+                </div>
+*/

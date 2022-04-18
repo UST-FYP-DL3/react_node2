@@ -63,7 +63,7 @@ const Stocks = () => {
                             options={chartOptions.options}
                             series={chartOptions.series}
                             type='line'
-                            height='100%'
+                            height='300px'
                         />
                     </div>
                 </div>
