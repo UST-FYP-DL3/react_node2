@@ -72,7 +72,7 @@ const topIndicator = {
 }
 
 const renderIndicatorHead = (item, index) => (
-    <th key={index}>
+    <th style ={{textAlign: "center"}} key={index}>
         {item.item}
         <a href = {item.website} style ={{color: "blue", marginLeft: "2vh"}} target="_blank" class='bx bxs-info-circle'>
         </a>
@@ -80,7 +80,7 @@ const renderIndicatorHead = (item, index) => (
 )
 
 const renderIndicatorBody = (item, index) => (
-    <tr key={index}>
+    <tr style ={{textAlign: "center"}} key={index}>
         <td>{item.date}</td>
         <td>{item.atr}</td>
         <td>{item.bb_ma}</td>
@@ -126,11 +126,11 @@ const topRatings = {
 }
 
 const renderRatingHead = (item, index) => (
-    <th key={index}>{item}</th>
+    <th style ={{textAlign: "center"}} key={index}>{item}</th>
 )
 
 const renderRatingBody = (item, index) => (
-    <tr key={index}>
+    <tr style ={{textAlign: "center"}} key={index}>
         <td>{item.date}</td>
         <td>{item.analyst}</td>
         <td>{item.action}</td>
@@ -185,25 +185,25 @@ const Stocks = () => {
                     </div>
             </div>
             <div className="col-12">
-                    <div className='card'>
-                        <div>
-                            <h3 className='card__header'>Analyst Rating</h3>
-                            <h6>Know more about analyst rating: 
-                                <a href="https://www.investopedia.com/financial-edge/0512/understanding-analyst-ratings.aspx" target="_blank" style ={{color: "green", marginLeft: "1vh", marginRight: "1vh"}} class='bx bxs-info-circle'></a>
-                            </h6>
-                        </div>
-                        <div className='card__body'>
-                            <Table
-                                headData={topRatings.head}
-                                renderHead={(item, index) => renderRatingHead(item, index)}
-                                bodyData={topRatings.body}
-                                renderBody={(item, index) => renderRatingBody(item, index)}
-                            />
-                        </div>
-                        <div className='card__footer'>
-                            <Link to='/'>View all</Link>
-                        </div>
+                <div className='card'>
+                    <div>
+                        <h3 className='card__header'>Analyst Rating</h3>
+                        <h6>Know more about analyst rating: 
+                            <a href="https://www.investopedia.com/financial-edge/0512/understanding-analyst-ratings.aspx" target="_blank" style ={{color: "green", marginLeft: "1vh", marginRight: "1vh"}} class='bx bxs-info-circle'></a>
+                        </h6>
                     </div>
+                    <div className='card__body'>
+                        <Table
+                            headData={topRatings.head}
+                            renderHead={(item, index) => renderRatingHead(item, index)}
+                            bodyData={topRatings.body}
+                            renderBody={(item, index) => renderRatingBody(item, index)}
+                        />
+                    </div>
+                    <div className='card__footer'>
+                        <Link to='/'>View all</Link>
+                    </div>
+                </div>
             </div>
         </div>
     )
