@@ -42,6 +42,11 @@ const chartOptions = {
         xaxis: {
             categories: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri']
         },
+        yaxis: {
+            labels: {
+                formatter: function(val) { return val.toFixed(2);}
+            }
+        },
         legend: {
             position: 'top'
         },
