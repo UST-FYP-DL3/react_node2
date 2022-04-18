@@ -68,11 +68,19 @@ function Group() {
         ); // get request, response contains everything send from the backend
     };
 
-    const [joinGroup, setjoinGroup] = useState(false);
+    const [isINGroup, setisINGroup] = useState();
 
-    useEffect( () => {
-        setjoinGroup(true);
-    });
+    // useEffect( () => {
+    //     setisINGroup(true);
+    // });
+
+    function quitGroup() {
+        setisINGroup(false);
+    }
+
+    function joinGroup() {
+        setisINGroup(true);
+    }
 
     // team members table data
     const teamMembersGroup = {
@@ -112,7 +120,7 @@ function Group() {
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <TabsMUI value={value} onChange={handleChange} aria-label="basic tabs example" variant='fullWidth'>
                     <TabMUI label="Group Management" {...a11yProps(0)} />
-                    <TabMUI label="Check your Group Investment" {...a11yProps(1)} disabled={joinGroup === false? true : false} />                   
+                    <TabMUI label="Check your Group Investment" {...a11yProps(1)} disabled={isINGroup === false? true : false} />                   
                 </TabsMUI>
             </Box>
             <TabPanel value={value} index={0}>
@@ -124,7 +132,7 @@ function Group() {
                                 <InputGroup.Text id="basic-addon1">Group Name: </InputGroup.Text>
                                 <FormControl placeholder="Username" />
                             </InputGroup>
-                            <Button variant="primary" type="submit" style={{width: '15%'}}>
+                            <Button variant="primary" type="submit" style={{width: '15%'}} onClick={joinGroup}>
                                 Submit
                             </Button>
                             <Box sx={{height: '20vh'}} />
@@ -135,17 +143,17 @@ function Group() {
                                 <InputGroup.Text id="basic-addon2">Group ID: </InputGroup.Text>
                                 <FormControl placeholder="Group ID" />
                             </InputGroup>
-                            <Button variant="primary" type="submit" style={{width: '15%'}}>
+                            <Button variant="primary" type="submit" style={{width: '15%'}} onClick={joinGroup}>
                                 Submit
                             </Button>
                             <Box sx={{height: '20vh'}} />
                         </Tab>
-                        <Tab eventKey="Ouit your group" title="Ouit your group">
+                        <Tab eventKey="Ouit your group" title="Ouit your group" disabled={isINGroup === false? true : false}>
                             <Box variant='full-width' sx={{height: '15vh'}} />
                             <InputGroup className="mb-3">
                                 <InputGroup.Text id="basic-addon3">Quit the group</InputGroup.Text>
                             </InputGroup>
-                            <Button variant="danger" type="submit" style={{width: '15%'}}>
+                            <Button variant="danger" type="submit" style={{width: '15%'}} onClick={quitGroup}>
                                 Quit
                             </Button>
                             <Box sx={{height: '20vh'}} />
