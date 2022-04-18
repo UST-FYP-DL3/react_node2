@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux'
 import Axios from 'axios'
 import './portfolioTabs.css'
 
+import Table from '../table/Table'
+
 // import Chart from "react-apexcharts";
 
 // tutorial
@@ -17,13 +19,13 @@ import './portfolioTabs.css'
 
 import { Link } from 'react-router-dom'
 
-import ReactApexChart from 'react-apexcharts'
+import Chart from 'react-apexcharts'
 
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+// import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
-import { Pie, Doughnut } from 'react-chartjs-2';
+// import { Pie, Doughnut } from 'react-chartjs-2';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+// ChartJS.register(ArcElement, Tooltip, Legend);
 
 
 function Tabs() {
@@ -32,6 +34,7 @@ function Tabs() {
 
     // userHoldings store all data
     const [userHoldings, setUserHoldings] = useState([]); // this is a list
+    const [sumOfCost, setSumOfCost] = useState(0)
 
     const getHoldings = (userID) => {
         // console.log(currentUser.uid)
@@ -40,10 +43,15 @@ function Tabs() {
                 // console.log(currentUser.uid)
                 console.log(response.data)
                 setUserHoldings(response.data) // response has a propert call data
+                setSumOfCost(response.data.map( (value, key) => (value.cost)).reduce( (accumulator, currentValue) => {return accumulator + currentValue}))
             }
         ); // get request, response contains everything send from the backend
     };
       //, {userID: currentUser.uid} // , {userID: 'ZtGPo16e7rdc3lt0m4xGAK8PsB03'}
+
+    useEffect( () => {
+      getHoldings(userID);
+    }, []);
 
     // const [holdingData, setholdingData] = useState([]);
 
@@ -78,79 +86,66 @@ function Tabs() {
     //   }]
     // };
 
-
-    const dataChart1 = {
+    // try to label the total value
+    const currCost = {
+      series: userHoldings.map( (value, key) => (value.cost) ),
       chartOptions: {
         labels: userHoldings.map( (value, key) => (value.stock) ),
         chart: {
           type: 'dount',
-          animations: {
-            enabled: true,
-            easing: 'easeinout',
-            speed: 800,
-            animateGradually: {
-                enabled: true,
-                delay: 150
+        },
+        plotOptions: {
+          pie: {
+            dount: {
+              labels: {
+                show: true,
+                total: {
+                show: true,
+                showAlways: true,
+                },
+              },
             },
-            dynamicAnimation: {
-                enabled: true,
-                speed: 350
-            }
-          }
-        }
-      },
-      series: userHoldings.map( (value, key) => (value.cost) ),
+          },
+        }, 
+      },        
     }
 
-    const dataChart2 = {
-      labels: userHoldings.map( (value, key) => (value.stock) ),
-      datasets: [
-        {
-          label: "Stock Bistribution in terms of Cost",
-          data: userHoldings.map( (value, key) => (value.cost) ),
-          backgroundColor: [
-            "rgba(75,192,192,1)",
-            "#ecf0f1",
-            "#50AF95",
-            "#f3ba2f",
-            "#2a71d0",
-          ],
-          borderColor: "black",
-          borderWidth: 2,
-        },
-      ],
-    };
-    // later setup chart 2 options
-    const optionsChart2 = {
-      maintainAspectRatio: true,
-      responsive: true,
-      scales:{
-      },
-      legend: {
-        labels: {
-          frontsize: 25
-        }
-      }
-    }
+    // const [sumOfCost, setSumOfCost] = useState(0)
+    //  const sumCost = userHoldings.map( (value, key) => (value.cost) ).reduce( (accumulator, currentValue) => {return accumulator + currentValue})
+    
+    // let cost = userHoldings.map( (value, key) => (value.cost) )
+    // let sumOfCost = cost.reduce( (accumulator, currentValue) => {return accumulator + currentValue})
     
     // for plot charts
     const [chart1StockName, setchart1StockName] = useState('')
 
-    const plotChart1 = (chart1StockName) => {
-      // console.log(currentUser.uid)
-      Axios.get(`http://localhost:3001/stockPredChart1${chart1StockName}`).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
-          (response) => {
-              // console.log(currentUser.uid)
-              console.log(response.data)
-              // setUserHoldings(response.data) // response has a propert call data
-          }
-      ); // get request, response contains everything send from the backend
-  };
+    // const plotChart1 = (chart1StockName) => {
+    //   // console.log(currentUser.uid)
+    //   Axios.get(`http://localhost:3001/stockPredChart1${chart1StockName}`).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
+    //       (response) => {
+    //           // console.log(currentUser.uid)
+    //           console.log(response.data)
+    //           // setUserHoldings(response.data) // response has a propert call data
+    //       }
+    //   ); // get request, response contains everything send from the backend
+    // };
 
+    // head for Details
+    const detailsTableHead = ['Stock', 'Quantity', 'Buy At', 'Cost', 'Curr Price', 'Value', 'Profit', '% Change']
+    const renderTablerHead = (item, index) => (
+      <th key={index}>{item}</th>
+    )
 
-    useEffect( () => {
-      getHoldings(userID);
-    }, []);
+    // const detailsTableBody = 
+
+    const renderTablerBody = (item, index) => (
+      <tr key={index}>
+          <td>{item.stock}</td>
+          <td>{item.quantity}</td>
+          <td>{item.buyPrice}</td>
+          <td>{item.cost}</td>
+      </tr>
+    )
   
     return (
       <div>
@@ -165,15 +160,43 @@ function Tabs() {
 
         <div className="content-tabs">
           <div className={toggleState === 1 ? "content  active-content" : "content"}>
-            <div classname='row'>
-                <h6>Stock Distributions in terms of Cost</h6>
-                <ReactApexChart options={dataChart1.chartOptions} series={dataChart1.series} type='donut' width='25%'/>        
-                  
-                <div style={{ maxWidth: "35vh" }}>
-                  <h6>Stock Distributions in terms of Cost</h6>
-                  <Pie data={dataChart2} height={200} options={optionsChart2} />
-                </div>                                                             
-              
+
+          <div className="row">
+                <div className="col-4">
+                    <div className='card'>
+                      <h5>Total Cost: ${sumOfCost.toFixed(2)}</h5>
+                      <Chart options={currCost.chartOptions} series={currCost.series} type='donut' />
+                    </div>
+                </div>
+                <div className="col-4">
+                  <div className='card'>
+                      <h5>Stock Distributions in terms of Cost</h5>
+                      <Chart options={currCost.chartOptions} series={currCost.series} type='donut' />
+                  </div>
+                </div>
+                <div className="col-4">
+                  <div className='card'>
+                      <h5>Stock Distributions in terms of Cost</h5>
+                      <Chart options={currCost.chartOptions} series={currCost.series} type='donut' />
+                  </div>
+                </div>
+                <div className="col-12">
+                  <div className='card'>
+                    <div className='card__header'>
+                      <h3>Details</h3>
+                    </div>
+                    <Table 
+                      headData={detailsTableHead}
+                      renderHead={(item, index) => renderTablerHead(item, index)}
+                      renderBody={(item, index) => renderTablerBody(item, index)}                    
+                    />
+                    <div>
+
+                    </div>
+
+                  </div>
+                </div>          
+                
             </div>
           </div>
           <div className={toggleState === 2 ? "content  active-content" : "content"}>
@@ -187,8 +210,7 @@ function Tabs() {
                       <h6>Chart 2:</h6>
                       <label>Sotck: </label>
                       <input type='text' placeholder=' symbol' onChange={(event)=>{setchart1StockName(event.target.value)}} />
-                      <button onClick={() => {plotChart1(chart1StockName)}}>Search</button>
-                      <iframe width="900" height="800" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/26.embed"></iframe>
+                      
                     </div>                    
                 </div>           
           </div>
@@ -198,6 +220,16 @@ function Tabs() {
   }
   
 export default Tabs;
+
+// <button onClick={() => {plotChart1(chart1StockName)}}>Search</button>
+// <iframe width="900" height="800" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/26.embed"></iframe>
+
+/*
+<div style={{ maxWidth: "35vh" }}>
+<h6>Stock Distributions in terms of Cost</h6>
+<Pie data={dataChart2} height={200} options={optionsChart2} />
+</div>   
+*/
 
 // <iframe width="900" height="800" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/8.embed"></iframe>
 

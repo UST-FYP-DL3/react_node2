@@ -141,8 +141,8 @@ app.post('/delete/:stockDeleting', (req, res) => {
 app.delete('/delete/:userID/:stockDeleting', (req, res) => {
     const userID = req.params.userID
     const stockDeleting = req.params.stockDeleting  // .stockDeleting refer to :stockDeleting
-    console.log(userID)
-    console.log(stockDeleting)
+    // console.log(userID)
+    // console.log(stockDeleting)
     
     const sql = 'DELETE FROM userholdings WHERE userID = ? and stock = ?'
 
