@@ -143,7 +143,7 @@ function Group() {
                         <Tab eventKey="Ouit your group" title="Ouit your group">
                             <Box variant='full-width' sx={{height: '15vh'}} />
                             <InputGroup className="mb-3">
-                                <InputGroup.Text id="basic-addon3">Quit the group by click submit</InputGroup.Text>
+                                <InputGroup.Text id="basic-addon3">Quit the group</InputGroup.Text>
                             </InputGroup>
                             <Button variant="danger" type="submit" style={{width: '15%'}}>
                                 Quit
@@ -204,8 +204,7 @@ function Group() {
                                         </Card.Text>
                                         <Button variant="primary">Accept</Button>
                                     </Card.Body>
-                                </Card>
-                                
+                                </Card>                                
                                 </Tab.Pane>
                             </Tab.Content>
                             </Col>
