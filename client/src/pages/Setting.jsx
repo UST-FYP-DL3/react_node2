@@ -106,13 +106,13 @@ const Setting = () => {
                     </div>
                     <div>
                         <label id ="label">Risk Tolearance Level </label>
-                        <input style ={{margin: "0.5vw", fontSize: "16px"}} type="radio" name="riskLevel" value="very high" onChange={(event)=>{setRiskLevel(event.target.value)}}/> Very High
+                        <input style ={{margin: "0.5vw", fontSize: "20px"}} type="radio" name="riskLevel" value="very high" onChange={(event)=>{setRiskLevel(event.target.value)}}/> Very High
                         <br></br>
-                        <input style ={{margin: "0.5vw", fontSize:"16px"}} type="radio" name="riskLevel" value="high" onChange={(event)=>{setRiskLevel(event.target.value)}}/> High
+                        <input style ={{margin: "0.5vw", fontSize:"20px"}} type="radio" name="riskLevel" value="high" onChange={(event)=>{setRiskLevel(event.target.value)}}/> High
                         <br></br>
-                        <input style ={{margin: "0.5vw", fontSize:"16px"}} type="radio" name="riskLevel" value="medium" onChange={(event)=>{setRiskLevel(event.target.value)}}/> Medium
+                        <input style ={{margin: "0.5vw", fontSize:"20px"}} type="radio" name="riskLevel" value="medium" onChange={(event)=>{setRiskLevel(event.target.value)}}/> Medium
                         <br></br>
-                        <input style ={{margin: "0.5vw", fontSize: "16px"}} type="radio" name="riskLevel" value="low" onChange={(event)=>{setRiskLevel(event.target.value)}}/> Low
+                        <input style ={{margin: "0.5vw", fontSize: "20px"}} type="radio" name="riskLevel" value="low" onChange={(event)=>{setRiskLevel(event.target.value)}}/> Low
                         <br></br>
                     </div>
                     <div style ={{margin: "1vh"}}>

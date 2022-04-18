@@ -6,10 +6,10 @@ const StatusCard = props => {
     return (
         <div className='status-card'>
             <div className="status-card__icon">
-                <i className={props.icon}></i>
+                <i style ={{color: '#00008B'}} className={props.icon}></i>
             </div>
             <div className="status-card__info">
-                <a href ={props.link} style={{fontSize: "25px"}} target="_blank">{props.title}</a>
+                <a href ={props.link} style={{margin: "auto",fontSize: "25px"}} target="_blank">{props.title}</a>
             </div>
         </div>
     )

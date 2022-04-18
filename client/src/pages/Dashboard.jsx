@@ -25,16 +25,11 @@ import Axios from 'axios'
 
 const chartOptions = {
     series: [{
-        name: 'Portfolio 1',
-        data: [2900,3000,3100,2900,2850,3050,3200,3300,3150]
-    }
-    , {
-        name: 'Portfolio 2',
-        data: [3000,3200,3100,2950,2800,3000,3100,3250,3200]
-    }
-    ],
+        name: 'Growth rate (in %)',
+        data: [1.11, 3.06, 2.3, -2.94, 1.913]
+    }],
     options: {
-        color: ['#6ab04c', '#2980b9'],
+        color: ['green'],
         chart: {
             background: 'transparent'
         },
@@ -45,7 +40,7 @@ const chartOptions = {
             curve: 'smooth'
         },
         xaxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']
+            categories: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri']
         },
         legend: {
             position: 'top'
@@ -159,7 +154,7 @@ const Dashboard = () => {
             <h5 id = "subtitle" className="page-header">Portfolio performance in current week</h5>
             <div className="row">
                 <div className="col-5">
-                    <div className="row">
+                    <div style ={{marginTop: "3.5vh"}} className="row">
                         {
                             statusCards.map((item, index) => (
                                 <div className="col-6" key={index}>
@@ -174,7 +169,22 @@ const Dashboard = () => {
                     </div>
                 </div>               
                 <div className="col-7">
-
+                    <div className="card full-height">
+                    <h5>Growth rate (in %) across week</h5>
+                    <Chart
+                            options={themeReducer === 'theme-mode-dark' ? {
+                                ...chartOptions.options,
+                                theme: { mode: 'dark'}
+                            } : {
+                                ...chartOptions.options,
+                                theme: { mode: 'light'}
+                            }}
+                            
+                            series={chartOptions.series}
+                            type='line'
+                            height='100%'
+                        />
+                    </div>
                 </div>
                 <div className="col-7">
                     <div className='card'>
