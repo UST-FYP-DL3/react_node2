@@ -6,6 +6,10 @@ import Axios from 'axios'
 
 import customerList from '../assets/JsonData/customers-list.json'
 
+import { Container, Card } from 'react-bootstrap'
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 const customerTableHead = [
     '',
     'name',
@@ -49,7 +53,7 @@ const renderBody2 = (item, index) => (
     </tr>
 )
 
-const Analytics = () => {
+function Group() {
 
     const [userList, setUserList] = useState([]);
 
@@ -65,32 +69,12 @@ const Analytics = () => {
     return (
         <div>
             <h2 className='container-div'>
-                Analytics
+                Group
             </h2>
             <div className="row">
                 <div className="col-12">
                     <div className="card">
-                        <div className="card__body">
-                            <Table
-                                limit='10'
-                                headData={customerTableHead}
-                                renderHead={(item, index) => renderHead(item, index)}
-                                bodyData={customerList}
-                                renderBody={(item, index) => renderBody(item, index)}
-                            />
-                        </div>
                     </div>
-                </div>
-                <div className='col-12'>
-                    <button onClick={getUser}>Show User</button>
-                    {userList.map((value, key) => {
-                        return <div>
-                            {value.userID}<tr />
-                            {value.name}<tr />
-                            {value.age}<tr />
-                            {value.wage}<tr />
-                        </div>
-                    })}
                 </div>
             </div>
         </div>
@@ -100,4 +84,4 @@ const Analytics = () => {
 // https://www.youtube.com/watch?v=re3OIOr9dJI 1:11:48
 // ...userList in then() of Axios.get ... is destructor
 
-export default Analytics
+export default Group

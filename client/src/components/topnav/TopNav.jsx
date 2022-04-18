@@ -21,7 +21,7 @@ import user_image from '../../assets/images/photo3.jfif'
 import user_menu from '../../assets/JsonData/user_menus.json'
 
 const curr_user = {
-    display_name: 'First Name, Last Name',
+    display_name: 'Jackson, Wong',
     image: user_image
 }
 
