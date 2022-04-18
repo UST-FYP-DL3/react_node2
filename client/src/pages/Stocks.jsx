@@ -131,7 +131,7 @@ const Stocks = () => {
                     
                     series={chartOptions.series}
                     type='line'
-                    height='200%'
+                    height='300vh'
                 />
             </div>
             <div class='col-12'>
