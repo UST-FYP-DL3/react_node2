@@ -1,0 +1,18 @@
+[
+    {
+        "icon": "bx bxl-apple",
+        "content": "AAPL"
+    },
+    {
+        "icon": "bx bxl-pinterest",
+        "content": "PINS"
+    },
+    {
+        "icon": "bx bxl-microsoft",
+        "content": "MSFT"
+    },
+    {
+        "icon": "bx bxl-google",
+        "content": "GOOG"
+    }
+]

@@ -91,12 +91,7 @@ const renderIndicatorBody = (item, index) => (
 )
 
 const topRatings = {
-    head: [
-        'Date',
-        'Analyst',
-        'Action',
-        'Rating'
-    ],
+    head: [ 'Date', 'Analyst', 'Action', 'Rating'],
     body: [
         {
             "date": "29 Oct 21",

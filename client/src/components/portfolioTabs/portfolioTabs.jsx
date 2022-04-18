@@ -14,6 +14,8 @@ import Table from '../table/Table'
 
 import PortfolioTab2 from './PortfolioTab2'
 
+import corrWeek45Data from '../../assets/JsonData/correlationWeek45.json'
+
 // // import portfolioWeek44 from '../../assets/JsonData/PortfolioWeek44.json'
 // // import portfolioWeek45 from '../../assets/JsonData/PortfolioWeek45.json'
 // // import corrPortfolioWeek45 from '../../assets/JsonData/correlationWeek45.json'
@@ -508,18 +510,31 @@ export default function BasicTabs() {
 
   const tradingTableHead = ['Date', 'Stock', 'B / S', 'Quantity', 'Cost', 'P / L']
 
+  const corrweek45 = {
+    head: ["Stock", "NVDA", "NFLX", "DXCM", "ABMD", "CZR", "MSCI", "LDOS", "ODFL", "POOL", "MRNA", "DPZ", "MKTX", "EXR", "LLY"],
+    body: corrWeek45Data
+  }
+
   const renderTableHead = (item, index) => (
     <th key={index}>{item}</th>
   )
-
-  // const detailsTableBody = 
-
-  const renderTableBody = (item, index) => (
+  const rendercorrweek45Body = (item, index) => (
     <tr key={index}>
-        <td>{item.stock}</td>
-        <td>{item.quantity}</td>
-        <td>{item.buyPrice}</td>
-        <td>{item.cost}</td>
+        <td>{item.Stock}</td>
+        <td>{item.NVDA.toFixed(4)}</td>
+        <td>{item.NFLX.toFixed(4)}</td>
+        <td>{item.DXCM.toFixed(4)}</td>
+        <td>{item.ABMD.toFixed(4)}</td>
+        <td>{item.CZR.toFixed(4)}</td>
+        <td>{item.MSCI.toFixed(4)}</td>
+        <td>{item.LDOS.toFixed(4)}</td>
+        <td>{item.ODFL.toFixed(4)}</td>
+        <td>{item.POOL.toFixed(4)}</td>
+        <td>{item.MRNA.toFixed(4)}</td>
+        <td>{item.DPZ.toFixed(4)}</td>
+        <td>{item.MKTX.toFixed(4)}</td>
+        <td>{item.EXR.toFixed(4)}</td>
+        <td>{item.LLY.toFixed(4)}</td>
     </tr>
   )
 
@@ -559,7 +574,7 @@ export default function BasicTabs() {
               <Table 
                 headData={tradingTableHead}
                 renderHead={(item, index) => renderTableHead(item, index)}
-                renderBody={(item, index) => renderTableBody(item, index)}                    
+                // renderBody={(item, index) => renderTableBody(item, index)}                    
               />
             </div>
           </div>          
@@ -588,12 +603,13 @@ export default function BasicTabs() {
           <div className="col-12">
             <div className='card full-height'>
               <div className='card__header'>
-                <h3>Trading Record</h3>
+                <h3>Correlation Table</h3>
               </div>
               <Table 
-                headData={tradingTableHead}
+                headData={corrweek45.head}
                 renderHead={(item, index) => renderTableHead(item, index)}
-                renderBody={(item, index) => renderTableBody(item, index)}                    
+                bodyData={corrweek45.body}
+                renderBody={(item, index) => rendercorrweek45Body(item, index)}                    
               />
             </div>
           </div>          
