@@ -2,15 +2,20 @@
 
 import './topnav.css'
 
+import 'bootstrap/dist/css/bootstrap.min.css'
+
 // import { Link } from 'react-router-dom'
 
 import Dropdown from '../dropdown/Dropdown'
 
 import React, { useState } from "react"
-import { Card, Button, Alert } from "react-bootstrap"
+import { Card, Button, Alert, Container } from "react-bootstrap"
 import { useAuth } from "../../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
 
+import stockConstituents from '../../assets/JsonData/stockConstituents.json'
+
+import SearchBar from '../searchBar/SearchBar'
 
 // import ThemeMenu from '../thememenu/ThemeMenu'
 
@@ -62,8 +67,7 @@ const renderUserToggle = (user) => (
 )
 
 
-
-const Topnav = () => {
+function Topnav() {
 
     const [error, setError] = useState("")
     const { currentUser, logout } = useAuth()
@@ -83,12 +87,18 @@ const Topnav = () => {
 
     return (
         <div className='topnav'>
+            <SearchBar placeholder="Enter a symbol" data={stockConstituents}/>
             <div className="topnav__search">
-                <input type="text" placeholder='Search here...' />
+                {/* <input type="text" placeholder='Search here...' />
                 <Button>
                     <i className='bx bx-search'></i>
-                </Button>
+                </Button> */}
+                {/* <SearchBar placeholder="Enter a symbol" data={stockConstituents}/> */}
             </div>
+            {/* <div className='box' style={{}}>
+                <SearchBar placeholder="Enter a symbol" data={stockConstituents}/>
+            </div> */}
+            {/* Need re-write the Dropdown*/}
             <div className="topnav__right">
                 <div className="topnav__right-item">
                     {/* dropdown here */}
@@ -121,7 +131,7 @@ const Topnav = () => {
                     {/* dropdown here */}
                 </div>
                 <div className="topnav__right-item">
-                    <Button variant="link" onClick={handleLogout}>Log Out</Button>
+                    <Button variant="primary" onClick={handleLogout}>Log Out</Button>
                 </div>
 
             </div>

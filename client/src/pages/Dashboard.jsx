@@ -70,28 +70,28 @@ const topCustomers = {
             "unit": 10,
             "price": "$323.45",
             "capital": "$3234.50",
-            "return": "0.5%"
+            "return": 0.5
         },
         {
             "stockname": "AAPL",
             "unit": 23,
             "price": "$165.45",
             "capital": "$3805.35",
-            "return": "0.3%"
+            "return": 0.3
         },
         {
             "stockname": "LMT",
             "unit": 6,
             "price": "$380.13",
             "capital": "$2280.78",
-            "return": "1.5%"
+            "return": 1.5
         },
         {
             "stockname": "JNJ",
             "unit": 16,
             "price": "$162.45",
             "capital": "$2599.20",
-            "return": "-0.5%"
+            "return": -0.5
         },
     ]
 }
@@ -106,7 +106,7 @@ const renderCusomerBody = (item, index) => (
         <td>{item.unit}</td>
         <td>{item.price}</td>
         <td>{item.capital}</td>
-        <td>{item.return}</td>
+        <td style={{color: item.return >= 0 ? "green" : "red"}} >{item.return}%</td>
     </tr>
 )
 

@@ -57,18 +57,13 @@ function Group() {
       setValue(newValue);
     };
 
-    const [userList, setUserList] = useState([]);
-
-    const getUser = () => {
-        Axios.get("http://localhost:3001/user").then(
-            (response) => {
-                console.log(response.data)
-                setUserList(response.data) // response has a propert call data
-            }
-        ); // get request, response contains everything send from the backend
-    };
-
     const [isINGroup, setisINGroup] = useState();
+
+    const [idHeader, setIdHeader] = useState( () => {return <h5>{joinGroup === false? "You have not joined any group" : "Your Group ID: 001"}</h5>} )
+
+    // function Header() {
+    //     return <h5>{joinGroup === false? "You have not joined any group" : "Your Group ID: 001"}</h5>
+    // }
 
     // useEffect( () => {
     //     setisINGroup(true);
@@ -76,10 +71,12 @@ function Group() {
 
     function quitGroup() {
         setisINGroup(false);
+        setIdHeader(() => {return <h5>You have not joined any group</h5>});
     }
 
     function joinGroup() {
         setisINGroup(true);
+        setIdHeader(() => {return <h5>Your Group ID: 001</h5>});
     }
 
     // team members table data
@@ -116,7 +113,8 @@ function Group() {
     return (
         <div>
             {/* <h2 className='container-div'>Group</h2> joinGroup === false)? <h3>You have not joined any group.</h3> : <h3>Y</h3>  */}
-            <h5>{joinGroup === false? "You have not joined any group" : "Your Group ID: 001"}</h5>
+            {/* <h5>{joinGroup === false? "You have not joined any group" : "Your Group ID: 001"}</h5> */}
+            {idHeader}
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <TabsMUI value={value} onChange={handleChange} aria-label="basic tabs example" variant='fullWidth'>
                     <TabMUI label="Group Management" {...a11yProps(0)} />

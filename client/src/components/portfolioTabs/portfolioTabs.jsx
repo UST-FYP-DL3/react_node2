@@ -351,6 +351,8 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
+import { Container, Card, Row, Col, Button, Form, Nav } from 'react-bootstrap'
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -435,6 +437,7 @@ export default function BasicTabs() {
       labels: StockNameWk44,// StockNameWk44, // userHoldings.map( (value, key) => (value.stock) ),
       chart: {
         type: 'dount',
+        width: '100%',
       },
       plotOptions: {
         pie: {
@@ -453,11 +456,12 @@ export default function BasicTabs() {
   }
 
   const currIndustry = {
-    series: [1957, 1233, 1986, 976, 354],
+    series: [1957, 1233, 1986, 976, 798, 1134],
     chartOptions: {
-      labels: ['Finance', 'FCMG', 'Tech', 'Ind 1', 'Ind 2'],
+      labels: ['Technology', 'Industrials', 'Fiancials', 'Utilities', 'Energy', 'Health Care'],
       chart: {
         type: 'dount',
+        width: '100%',
       },
       plotOptions: {
         pie: {
@@ -492,6 +496,7 @@ export default function BasicTabs() {
       labels: StockNameWk45, // userHoldings.map( (value, key) => (value.stock) ),
       chart: {
         type: 'dount',
+        width: '100%',
       },
       plotOptions: {
         pie: {
@@ -509,7 +514,69 @@ export default function BasicTabs() {
     },        
   }
 
-  const tradingTableHead = ['Date', 'Stock', 'B / S', 'Quantity', 'Value', 'P / L']
+  const predIndustry = {
+    series: [1843, 1323, 1534, 1021, 876, 1291],
+    chartOptions: {
+      labels: ['Technology', 'Industrials', 'Fiancials', 'Utilities', 'Energy', 'Health Care'],
+      chart: {
+        type: 'dount',
+        width: '100%',
+      },
+      plotOptions: {
+        pie: {
+          dount: {
+            labels: {
+              show: true,
+              total: {
+              show: true,
+              showAlways: true,
+              },
+            },
+          },
+        },
+      }, 
+    },        
+  }
+
+  const tradingRecord = {
+    head: ['Date', 'Stock', 'B / S', 'Price', 'Quantity', 'Value', 'P / L'],
+    body: [ {
+      "Date": '2021-11-01',
+      "Stock": 'CSCO',
+      "Action": 'Buy',
+      "Price": 56.11,
+      "Quantity": 15,
+      "Value": 841.65,
+      "Profit": null,
+    },
+    {
+      "Date": '2021-11-01',
+      "Stock": 'BRK.B',
+      "Action": 'Buy',
+      "Price": 286.24,
+      "Quantity": 5,
+      "Value": 1431.2,
+      "Profit": null,
+    },
+    {
+      "Date": '2021-11-01',
+      "Stock": 'SNOW',
+      "Action": 'Sell',
+      "Price": 357.73,
+      "Quantity": 4,
+      "Value": 1430.92,
+      "Profit": 129.43,
+    },
+    {
+      "Date": '2021-11-01',
+      "Stock": 'F',
+      "Action": 'Sell',
+      "Price": 17.95,
+      "Quantity": 75,
+      "Value": 1328.30,
+      "Profit": 98.72,
+    } ]
+  }
 
   const corrweek45 = {
     head: ["Stock", "NVDA", "NFLX", "DXCM", "ABMD", "CZR", "MSCI", "LDOS", "ODFL", "POOL", "MRNA", "DPZ", "MKTX", "EXR", "LLY"],
@@ -522,22 +589,36 @@ export default function BasicTabs() {
   const rendercorrweek45Body = (item, index) => (
     <tr key={index}>
         <td>{item.Stock}</td>
-        <td>{item.NVDA.toFixed(4)}</td>
-        <td>{item.NFLX.toFixed(4)}</td>
-        <td>{item.DXCM.toFixed(4)}</td>
-        <td>{item.ABMD.toFixed(4)}</td>
-        <td>{item.CZR.toFixed(4)}</td>
-        <td>{item.MSCI.toFixed(4)}</td>
-        <td>{item.LDOS.toFixed(4)}</td>
-        <td>{item.ODFL.toFixed(4)}</td>
-        <td>{item.POOL.toFixed(4)}</td>
-        <td>{item.MRNA.toFixed(4)}</td>
-        <td>{item.DPZ.toFixed(4)}</td>
-        <td>{item.MKTX.toFixed(4)}</td>
-        <td>{item.EXR.toFixed(4)}</td>
-        <td>{item.LLY.toFixed(4)}</td>
+        <td style={{color: item.NVDA >= 0 ? "green" : "red"}} >{item.NVDA.toFixed(4)}</td>
+        <td style={{color: item.NFLX >= 0 ? "green" : "red"}}>{item.NFLX.toFixed(4)}</td>
+        <td style={{color: item.DXCM >= 0 ? "green" : "red"}}>{item.DXCM.toFixed(4)}</td>
+        <td style={{color: item.ABMD >= 0 ? "green" : "red"}}>{item.ABMD.toFixed(4)}</td>
+        <td style={{color: item.CZR >= 0 ? "green" : "red"}}>{item.CZR.toFixed(4)}</td>
+        <td style={{color: item.MSCI >= 0 ? "green" : "red"}}>{item.MSCI.toFixed(4)}</td>
+        <td style={{color: item.LDOS >= 0 ? "green" : "red"}}>{item.LDOS.toFixed(4)}</td>
+        <td style={{color: item.ODFL >= 0 ? "green" : "red"}}>{item.ODFL.toFixed(4)}</td>
+        <td style={{color: item.POOL >= 0 ? "green" : "red"}}>{item.POOL.toFixed(4)}</td>
+        <td style={{color: item.MRNA >= 0 ? "green" : "red"}}>{item.MRNA.toFixed(4)}</td>
+        <td style={{color: item.DPZ >= 0 ? "green" : "red"}}>{item.DPZ.toFixed(4)}</td>
+        <td style={{color: item.MKTX >= 0 ? "green" : "red"}}>{item.MKTX.toFixed(4)}</td>
+        <td style={{color: item.EXR >= 0 ? "green" : "red"}}>{item.EXR.toFixed(4)}</td>
+        <td style={{color: item.LLY >= 0 ? "green" : "red"}}>{item.LLY.toFixed(4)}</td>
     </tr>
   )
+
+  const rendertradingRecordBody = (item, index) => (
+    <tr key={index}>
+        <td>{item.Date}</td>
+        <td>{item.Stock}</td>
+        <td>{item.Action}</td>
+        <td>${item.Price}</td>
+        <td>{item.Quantity}</td>
+        <td>${item.Value}</td>      
+        <td style={{color: item.Profit >= 0 ? "green" : "red"}}>{item.Profit}</td>
+    </tr>
+  )
+
+  
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -563,8 +644,14 @@ export default function BasicTabs() {
           </div>
           <div className="col-4">
             <div className='card full-height'>
-                <h5>Other Stats</h5>
-                
+                <h5>Review</h5>
+                <p className="ms-2 text-muted">Compared to last week</p>
+                <Box>
+                <div className='col-12 mt-1'>
+                  <h4 style={{color: 'green'}}> + 5.07%</h4>
+                  <h4 style={{color: 'green'}}> + $598.31</h4>  
+                </div>
+                </Box>               
             </div>
           </div>
           <div className="col-12">
@@ -573,9 +660,10 @@ export default function BasicTabs() {
                 <h3>Trading Record</h3>
               </div>
               <Table 
-                headData={tradingTableHead}
+                headData={tradingRecord.head}
                 renderHead={(item, index) => renderTableHead(item, index)}
-                // renderBody={(item, index) => renderTableBody(item, index)}                    
+                bodyData={tradingRecord.body}
+                renderBody={(item, index) => rendertradingRecordBody(item, index)}                    
               />
             </div>
           </div>          
@@ -592,13 +680,19 @@ export default function BasicTabs() {
           <div className="col-4">
             <div className='card full-height'>
                 <h5>Industry Distribution</h5>
-                <Chart options={currIndustry.chartOptions} series={currIndustry.series} type='donut' />
+                <Chart options={predIndustry.chartOptions} series={predIndustry.series} type='donut' />
             </div>
           </div>
           <div className="col-4">
             <div className='card full-height'>
-                <h5>Other Stats</h5>
-                
+                <h5>Prediction</h5>
+                <p className="ms-2 text-muted">Compared to next week</p>
+                <Box>
+                  <div className='col-12 mt-1'>
+                    <h4 style={{color: 'green'}}> + 4.31%</h4>
+                    <h4 style={{color: 'green'}}> + $601.45</h4>                    
+                  </div>
+                </Box>                
             </div>
           </div>
           <div className="col-12">

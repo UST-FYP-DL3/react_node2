@@ -42,7 +42,7 @@ const Portfolio = () => {
 
     return (
         <div>
-            <h6>Current Date: 2021-11-08 [Day 0]</h6>
+            {/* <h6>Current Date: 2021-11-08 [Day 0]</h6> */}
             <Tabs />
         </div>
     )
