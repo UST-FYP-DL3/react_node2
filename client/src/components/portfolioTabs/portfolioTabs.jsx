@@ -632,19 +632,19 @@ export default function BasicTabs() {
       </Box>
       <TabPanel value={value} index={0}>
         <div className="row">
-          <div className="col-4">
+          <div className="col-4 sm-6">
             <div className='card full-height'>
               <h5>Total Value: ${totalValueWk44.toFixed(2)}</h5>
               <Chart options={currValue.chartOptions} series={currValue.series} type='donut' />
             </div>
           </div>
-          <div className="col-4">
+          <div className="col-4 sm-6">
             <div className='card full-height'>
                 <h5>Industry Distribution</h5>
                 <Chart options={currIndustry.chartOptions} series={currIndustry.series} type='donut' />
             </div>
           </div>
-          <div className="col-4">
+          <div className="col-4 sm-12">
             <div className='card full-height'>
                 <h5>Review</h5>
                 <p className="ms-2 text-muted">Compared to last week</p>
@@ -673,19 +673,19 @@ export default function BasicTabs() {
       </TabPanel>
       <TabPanel value={value} index={1}>
       <div className="row">
-          <div className="col-4">
+          <div className="col-4 sm-6">
             <div className='card full-height'>
               <h5>Total Value: ${totalValueWk45.toFixed(2)}</h5>
               <Chart options={predValue.chartOptions} series={predValue.series} type='donut' />
             </div>
           </div>
-          <div className="col-4">
+          <div className="col-4 sm-6">
             <div className='card full-height'>
                 <h5>Industry Distribution</h5>
                 <Chart options={predIndustry.chartOptions} series={predIndustry.series} type='donut' />
             </div>
           </div>
-          <div className="col-4">
+          <div className="col-4 sm-12">
             <div className='card full-height'>
                 <h5>Prediction</h5>
                 <p className="ms-2 text-muted">Compared to next week</p>

@@ -205,13 +205,13 @@ const Setting = () => {
                             
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" disabled/>
                             <label class="form-check-label" for="exampleRadios1">
-                                Very Low
+                                Low
                             </label>
                             </div>
                             <div class="form-check">
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" disabled/>
                             <label class="form-check-label" for="exampleRadios2">
-                                Low
+                                Medium
                             </label>
                             </div>
                             <div class="form-check disabled">
@@ -263,13 +263,13 @@ const Setting = () => {
                             
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" />
                             <label class="form-check-label" for="exampleRadios1">
-                                Very Low
+                                Low
                             </label>
                             </div>
                             <div class="form-check">
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" />
                             <label class="form-check-label" for="exampleRadios2">
-                                Low
+                                Medium
                             </label>
                             </div>
                             <div class="form-check disabled">
