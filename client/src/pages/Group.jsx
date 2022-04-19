@@ -172,7 +172,7 @@ function Group() {
                         />  
                     </Col>
                 </Row>
-                <Row className='card full-height'>
+                {/* <Row className='card full-height'>
                     <h4 className='mb-3'>Action</h4>
                     <Col>
                     <Tab.Container id="left-tabs-example" defaultActiveKey="first">
@@ -216,7 +216,7 @@ function Group() {
                         </Row>
                         </Tab.Container> 
                     </Col>
-                </Row>
+                </Row> */}
             </TabPanel>
         </div>
     )

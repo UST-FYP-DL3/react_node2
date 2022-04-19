@@ -8,6 +8,8 @@ import Chart from 'react-apexcharts'
 
 import Table from '../components/table/Table'
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 const topIndicator = {
     head: [
         {

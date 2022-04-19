@@ -5,6 +5,10 @@ import { Link, useHistory } from "react-router-dom"
 
 import { Container } from 'react-bootstrap'
 
+import Box from '@mui/material/Box';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 function Preference() {
   const ageRef = useRef()
   const wageRef = useRef()
@@ -68,7 +72,7 @@ function Preference() {
                         </div>
                         </Form.Group>
                         <Button disabled={loading} className="w-100" type="submit">
-                        Save
+                          Save
                         </Button>
                     </Form>
                     </Card.Body>

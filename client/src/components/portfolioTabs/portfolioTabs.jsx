@@ -10,6 +10,8 @@ import Chart from 'react-apexcharts'
 
 import './portfolioTabs.css'
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import Table from '../table/Table'
 
 // import PortfolioTab2 from './PortfolioTab2'
@@ -407,7 +409,7 @@ export default function BasicTabs() {
               // console.log(currentUser.uid)
               console.log(response.data)
               setUserHoldings(response.data) // response has a propert call data
-              setSumOfCost(response.data.map( (value, key) => (value.cost)).reduce( (accumulator, currentValue) => {return accumulator + currentValue}))
+              // setSumOfCost(response.data.map( (value, key) => (value.cost)).reduce( (accumulator, currentValue) => {return accumulator + currentValue}))
           }
       ); // get request, response contains everything send from the backend
   };

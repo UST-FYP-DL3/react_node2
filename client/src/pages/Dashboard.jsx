@@ -8,6 +8,8 @@ import Chart from 'react-apexcharts'
 
 import { useSelector } from 'react-redux'
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import StatusCard from '../components/status-card/StatusCard'
 import IndicatorCard from '../components/status-card/indicatorCard'
 
