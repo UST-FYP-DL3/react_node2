@@ -15,7 +15,6 @@ import TabsMUI from '@mui/material/Tabs';
 import TabMUI from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Grid from '@material-ui/core/Grid';
 
 function TabPanel(props) {
 const { children, value, index, ...other } = props;
