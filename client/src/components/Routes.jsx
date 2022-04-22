@@ -13,12 +13,12 @@ import Portfolio from '../pages/Portfolio'
 const Routes = () => {
     return (
         <Switch>
-            <Route path='/' exact component={Dashboard}/>
-            <Route path='/dashboard' component={Dashboard}/>
-            <Route path='/group' component={Group}/>
-            <Route path='/stocks' component={Stocks}/>
-            <Route path='/setting' component={Setting}/>
-            <Route path='/portfolio' component={Portfolio}/>            
+            <Route exact path='/' component={Dashboard}/>
+            {/* <Route path='/dashboard' component={Dashboard}/> */}
+            <Route exact path='/group' component={Group}/>
+            <Route exact path='/stocks' component={Stocks}/>
+            <Route exact path='/setting' component={Setting}/>
+            <Route exact path='/portfolio' component={Portfolio}/>            
         </Switch>
     )
 }

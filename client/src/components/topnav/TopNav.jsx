@@ -8,10 +8,12 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 import Dropdown from '../dropdown/Dropdown'
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Card, Button, Alert, Container } from "react-bootstrap"
 import { useAuth } from "../../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
+
+import Axios from 'axios'
 
 import stockConstituents from '../../assets/JsonData/stockConstituents.json'
 
@@ -55,13 +57,14 @@ const renderUserMenu =(item, index) => (
     </Link>
 )
 
-const renderUserToggle = (user) => (
+const renderUserToggle = (user, userInfo) => (
+
     <div className="topnav__right-user">
         <div className="topnav__right-user__image">
             <img src={user.image} alt="" />
         </div>
         <div className="topnav__right-user__name">
-            {user.display_name}
+            {userInfo && userInfo[0].firstname}, {userInfo && userInfo[0].lastname}
         </div>
     </div>
 )
@@ -72,6 +75,24 @@ function Topnav() {
     const [error, setError] = useState("")
     const { currentUser, logout } = useAuth()
     const history = useHistory()
+    const userID = currentUser.uid
+
+    // this is to get
+    const [userInfo, setUserInfo] = useState(null);
+
+    const getUserInfo = () => {
+        Axios.get("http://localhost:3001/getuserinfo").then( 
+            (response) => {
+                console.log(response.data)
+                setUserInfo(response.data)
+            }
+        )
+    }
+
+    useEffect( () => {
+        getUserInfo();
+      }, []);
+
 
     async function handleLogout() {
         setError("")
@@ -102,14 +123,15 @@ function Topnav() {
                 <div className="topnav__right-item">
                     {/* dropdown here */}
                 </div>
+                {userInfo &&
                 <div className="topnav__right-item">
                     {/* dropdown here */}
                     <Dropdown
-                        customToggle={() => renderUserToggle(curr_user)}
+                        customToggle={() => renderUserToggle(curr_user, userInfo)}
                         contentData={user_menu}
                         renderItems={(item, index) => renderUserMenu(item, index)}
                     />
-                </div>
+                </div> }
                 <div className="topnav__right-item">
                     {/* dropdown here */}
                     <Dropdown

@@ -1,7 +1,9 @@
 import React, { useRef, useState } from "react"
 import { Form, Button, Card, Alert } from "react-bootstrap"
-import { useAuth } from "../../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
+
+import { useAuth } from "../../contexts/AuthContext"
+import Axios from 'axios'
 
 import { Container } from 'react-bootstrap'
 
@@ -10,30 +12,32 @@ import Box from '@mui/material/Box';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Preference() {
-  const ageRef = useRef()
-  const wageRef = useRef()
-  const amountRef = useRef()
-  const riskLevelRef = useRef()
-  const nameRef = useRef()
-  const { setup } = useAuth()
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const history = useHistory()
 
-  async function handleSubmit(e) {
-    e.preventDefault()
+  const { currentUser } = useAuth()
+  const userID = currentUser.uid
 
-    try {
-      setError("")
-      setLoading(true)
-      //await setup(amountRef.current.value, nameRef.current.value, riskLevelRef.current.value)
-      history.push("/")
-    } catch {
-      setError("Failed to log in")
-    }
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [age, setAge] = useState(0)
+  const [wageMonthly, setWageMonthly] = useState(0)
+  const [initialInvest, setinitialInvest] = useState(0)
+  const [riskLevel, setRiskLevel] = useState(1) // 1: low; 2: medium; 3: high; 4: high
 
-    setLoading(false)
-  }
+  const addUser = (event) => {
+    event.preventDefault();
+    
+    Axios.post("http://localhost:3001/adduser", {
+        userID: userID,
+        firstName: firstName,
+        lastName: lastName,
+        age: age,
+        wageMonthly: wageMonthly,
+        initialInvest, initialInvest,
+        riskLevel: riskLevel
+    }).then(() => {
+        console.log("success") // make good use of the userList without click, not applicable in this situation with ... destrcutor
+    });
+};
 
   return (
     <>
@@ -42,36 +46,41 @@ function Preference() {
                 <Card>
                     <Card.Body>
                     <h4 className="text-center mb-4">Personal Information Collection </h4>
-                    {error && <Alert variant="danger">{error}</Alert>}
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group id="name">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" placeholder="Input your name" ref={nameRef} required />
+                    
+                    <Form>
+                        <Form.Group id="first name">
+                        <Form.Label>First Name</Form.Label>
+                        <Form.Control type="text" placeholder="Input your name" required onChange={(event)=>{setFirstName(event.target.value)}}/>
+                        </Form.Group>
+                        <Form.Group id="last name">
+                        <Form.Label>Last Name</Form.Label>
+                        <Form.Control type="text" placeholder="Input your name" required onChange={(event)=>{setLastName(event.target.value)}}/>
                         </Form.Group>
                         <Form.Group id="age">
                         <Form.Label>Age</Form.Label>
-                        <Form.Control type="number" placeholder="Input your age" ref={ageRef} required />
+                        <Form.Control type="number" placeholder="Input your age" required onChange={(event)=>{setAge(event.target.value)}}/>
                         </Form.Group>
                         <Form.Group id="wage">
-                        <Form.Label>Wage (in annual)</Form.Label>
-                        <Form.Control type="number" placeholder="Input your annual salary" ref={wageRef} required />
+                        <Form.Label>Your Monthly Wage (in USD)</Form.Label>
+                        <Form.Control type="number" placeholder="Input your monthly salary" required onChange={(event)=>{setWageMonthly(event.target.value)}}/>
                         </Form.Group>
                         <Form.Group id="investmentAmount">
                         <Form.Label>Initial investment amount (in USD)</Form.Label>
-                        <Form.Control type="number" placeholder="Input your initial capital" ref={amountRef} required />
+                        <Form.Control type="number" placeholder="Input your initial capital" required onChange={(event)=>{setinitialInvest(event.target.value)}}/>
                         </Form.Group>
                         <Form.Group id="riskLevel">
                         <Form.Label>Risk acceptance level</Form.Label>
                         <div>
-                            <select name="Risk acceptance level  ">
-                                <option>Very High</option>
-                                <option>High</option>
-                                <option>Medium</option>
-                                <option>Low</option>
+                            <select name="Risk acceptance level  " onChange={(event)=>{setRiskLevel(event.target.value)}}>
+                                <option value={4}>Very High</option>
+                                <option value={3}>High</option>
+                                <option value={2}>Medium</option>
+                                <option value={1}>Low</option>
                             </select>
                         </div>
                         </Form.Group>
-                        <Button disabled={loading} className="w-100" type="submit">
+
+                        <Button className="mt-3" type="submit" variant="primary" onClick={addUser}>
                           Save
                         </Button>
                     </Form>

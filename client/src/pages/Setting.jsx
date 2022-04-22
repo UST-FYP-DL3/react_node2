@@ -10,25 +10,48 @@ import { Form, Button, Col, Row, Container, Card } from 'react-bootstrap'
 
 const Setting = () => {
     const { currentUser } = useAuth()
-
     const userID = currentUser.uid
-    const [name, setName] = useState('') // pass the empty string
-    const [age, setAge] = useState(0) // pass the initial value
-    const [wage, setWage] = useState(0) // pass the initial value
 
-    const [capital, setInvestmentCapital] = useState(0) // pass the initial value
-    const [riskLevel, setRiskLevel] = useState(0) // pass the initial value
+    // this is to get
+    const [userInfo, setUserInfo] = useState(null);
 
-    const addUser = () => {
-        Axios.post("http://localhost:3001/create", {
+    const getUserInfo = () => {
+        Axios.get("http://localhost:3001/getuserinfo").then( 
+            (response) => {
+                console.log(response.data)
+                setUserInfo(response.data)
+            }
+        )
+    }
+
+    useEffect( () => {
+        getUserInfo();
+      }, []);
+
+    // this is for update, not for get to shoe
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [age, setAge] = useState(0)
+    const [wageMonthly, setWageMonthly] = useState(0)
+    const [initialInvest, setInitialInvest] = useState(0)
+    const [riskLevel, setRiskLevel] = useState(1) // 1: low; 2: medium; 3: high; 4: high
+
+    const updateUserInfo = (event) => {
+        event.preventDefault();
+        
+        Axios.post("http://localhost:3001/updateuserinfo", {
             userID: userID,
-            name: name,
+            firstName: firstName,
+            lastName: lastName,
             age: age,
-            wage: wage,
-        }).then(() => {
-            console.log("success") // make good use of the userList without click, not applicable in this situation with ... destrcutor
+            wageMonthly: wageMonthly,
+            initialInvest: initialInvest,
+            riskLevel, riskLevel
+        }).then((response) => {
+            console.log("success updateuserinfo") 
         });
     };
+
 
     const [stock, setStock] = useState('') // pass the empty string
     const [buyPrice, setBuyPrice] = useState(0) // pass the initial value
@@ -171,7 +194,7 @@ const Setting = () => {
         //     </div>                 
         // </div>
         <div>
-            <Row className="justify-content-md-center">
+            { userInfo && <Row className="justify-content-md-center">
                 <div className='col-12'>
                     <h2 className='container-div'>Setting</h2>
                 </div>
@@ -183,45 +206,49 @@ const Setting = () => {
                     </div>
                     <Form>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control placeholder="Jackson, Wong" disabled />
+                            <Form.Label>First Name</Form.Label>
+                            <Form.Control placeholder={userInfo[0].firstname} disabled />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label>Last Name</Form.Label>
+                            <Form.Control placeholder={userInfo[0].lastname} disabled />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Label>Age</Form.Label>
-                            <Form.Control placeholder="22" disabled />
+                            <Form.Control placeholder={userInfo[0].age} disabled />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Wage (in annual)</Form.Label>
-                            <Form.Control placeholder="$18000" disabled />
+                            <Form.Label>Monthly Wage</Form.Label>
+                            <Form.Control placeholder={userInfo[0].wagemonthly} disabled />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Investment Capital (in annual)</Form.Label>
-                            <Form.Control placeholder="20000" disabled />
+                            <Form.Label>Initial Investment Capital</Form.Label>
+                            <Form.Control placeholder={userInfo[0].initialinvestamount} disabled />
                         </Form.Group>
                         
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Risk Tolerance Level</Form.Label>
                         <div class="form-check">
                             
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" disabled/>
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked={userInfo[0].riskacceptlevel == 1? true : false} disabled/>
                             <label class="form-check-label" for="exampleRadios1">
                                 Low
                             </label>
                             </div>
                             <div class="form-check">
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" disabled/>
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" checked={userInfo[0].riskacceptlevel == 2? true : false} disabled/>
                             <label class="form-check-label" for="exampleRadios2">
                                 Medium
                             </label>
                             </div>
                             <div class="form-check disabled">
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" disabled/>
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" checked={userInfo[0].riskacceptlevel == 3? true : false} disabled/>
                             <label class="form-check-label" for="exampleRadios3">
                                 High
                             </label>
                             </div>
                             <div class="form-check disabled">
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" checked disabled/>
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" checked={userInfo[0].riskacceptlevel == 4? true : false} disabled/>
                             <label class="form-check-label" for="exampleRadios3">
                                 Very High
                             </label>
@@ -241,57 +268,61 @@ const Setting = () => {
                     </div>
                     <Form>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" placeholder="First Name, Last Name" />
+                            <Form.Label>First Name</Form.Label>
+                            <Form.Control type="text" placeholder="First Name" onChange={(event)=>{setFirstName(event.target.value)}} />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label>Last Name</Form.Label>
+                            <Form.Control type="text" placeholder="Last Name" onChange={(event)=>{setLastName(event.target.value)}} />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Label>Age</Form.Label>
-                            <Form.Control type="number" placeholder="" />
+                            <Form.Control type="number" placeholder="" onChange={(event)=>{setAge(event.target.value)}}/>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Wage (in annual)</Form.Label>
-                            <Form.Control type="number" placeholder="in USD" />
+                            <Form.Label>Monthly Wage</Form.Label>
+                            <Form.Control type="number" placeholder="in USD" onChange={(event)=>{setWageMonthly(event.target.value)}}/>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Investment Capital (in annual)</Form.Label>
-                            <Form.Control type="number" placeholder="in USD" />
+                            <Form.Label>Initial Investment Capital</Form.Label>
+                            <Form.Control type="number" placeholder="in USD" onChange={(event)=>{setInitialInvest(event.target.value)}}/>
                         </Form.Group>
                         
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Risk Tolerance Level</Form.Label>
                         <div class="form-check">
                             
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" />
+                            <input class="form-check-input" type="radio" value="1" onChange={(event)=>{setRiskLevel(event.target.value)}} />
                             <label class="form-check-label" for="exampleRadios1">
                                 Low
                             </label>
                             </div>
                             <div class="form-check">
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" />
+                            <input class="form-check-input" type="radio" value="2" onChange={(event)=>{setRiskLevel(event.target.value)}} />
                             <label class="form-check-label" for="exampleRadios2">
                                 Medium
                             </label>
                             </div>
                             <div class="form-check disabled">
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" />
+                            <input class="form-check-input" type="radio" value="3" onChange={(event)=>{setRiskLevel(event.target.value)}} />
                             <label class="form-check-label" for="exampleRadios3">
                                 High
                             </label>
                             </div>
                             <div class="form-check disabled">
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" />
+                            <input class="form-check-input" type="radio" value="4" onChange={(event)=>{setRiskLevel(event.target.value)}} />
                             <label class="form-check-label" for="exampleRadios3">
                                 Very High
                             </label>
                             </div>
                         </Form.Group>
-                        <Button className="ms-3" variant="primary" type="submit">
+                        <Button className="ms-3" variant="primary" type="submit" onClick={updateUserInfo}>
                             Save
                         </Button>
                     </Form>
                 </Card>
                 </div>
-            </Row>
+            </Row> }
         </div>
 
         

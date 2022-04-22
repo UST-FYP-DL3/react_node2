@@ -56,10 +56,11 @@ function Group() {
       setValue(newValue);
     };
 
-    const [isINGroup, setisINGroup] = useState();
+    const [isINGroup, setisINGroup] = useState(true);
 
-    const [idHeader, setIdHeader] = useState( () => {return <h5>{joinGroup === false? "You have not joined any group" : "Your Group ID: 001"}</h5>} )
-
+    const [idHeader, setIdHeader] = useState();
+    
+    // <h5>{isINGroup === false? "You have not joined any group" : "Your Group ID: 001"}</h5>
     // function Header() {
     //     return <h5>{joinGroup === false? "You have not joined any group" : "Your Group ID: 001"}</h5>
     // }
@@ -67,6 +68,11 @@ function Group() {
     // useEffect( () => {
     //     setisINGroup(true);
     // });
+
+    useEffect( () => {
+        setisINGroup(true);
+        setIdHeader( () => {return <h5>{isINGroup === true? "Your Group ID: 001" : "You have not joined any group" }</h5> } );
+      }, []);
 
     function quitGroup() {
         setisINGroup(false);
@@ -82,7 +88,7 @@ function Group() {
     const teamMembersGroup = {
         head: ["Name", "Investment", "Percentage"],
         body: [{
-            "name": "Eric Ma",
+            "name": "Jackson Wong",
             "Investment": 10000,
             "Percentage": "25%"
         },
@@ -117,13 +123,13 @@ function Group() {
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <TabsMUI value={value} onChange={handleChange} aria-label="basic tabs example" variant='fullWidth'>
                     <TabMUI label="Group Management" {...a11yProps(0)} />
-                    <TabMUI label="Check your Group Investment" {...a11yProps(1)} disabled={isINGroup === false? true : false} />                   
+                    <TabMUI label="Check your Group Information" {...a11yProps(1)} disabled={isINGroup === false? true : false} />                   
                 </TabsMUI>
             </Box>
             <TabPanel value={value} index={0}>
                 <Row className='card full-height'>
                     <Tabs defaultActiveKey="Create by your own" id="uncontrolled-tab-example" className="col-12">
-                        <Tab eventKey="Create by your own" title="Create by your own">
+                        <Tab eventKey="Create by your own" title="Create by your own" disabled={isINGroup === true? true : false}>
                             <Box variant='full-width' sx={{height: '15vh'}} />
                             <InputGroup className="mb-3">
                                 <InputGroup.Text id="basic-addon1">Group Name: </InputGroup.Text>
@@ -134,7 +140,7 @@ function Group() {
                             </Button>
                             <Box sx={{height: '20vh'}} />
                         </Tab>
-                        <Tab eventKey="Join group by group ID" title="Join group by group ID">
+                        <Tab eventKey="Join group by group ID" title="Join group by group ID" disabled={isINGroup === true? true : false}>
                             <Box variant='full-width' sx={{height: '15vh'}} />
                             <InputGroup className="mb-3">
                                 <InputGroup.Text id="basic-addon2">Group ID: </InputGroup.Text>
@@ -172,16 +178,16 @@ function Group() {
                         />  
                     </Col>
                 </Row>
-                {/* <Row className='card full-height'>
+                <Row className='card full-height'>
                     <h4 className='mb-3'>Action</h4>
                     <Col>
                     <Tab.Container id="left-tabs-example" defaultActiveKey="first">
                         <Row>
                             <Col sm={3}>
                             <Nav variant="pills" className="flex-column">
-                                <Nav.Item>
+                                {/* <Nav.Item>
                                 <Nav.Link eventKey="first">Portfolio</Nav.Link>
-                                </Nav.Item>
+                                </Nav.Item> */}
                                 <Nav.Item>
                                 <Nav.Link eventKey="second">New Member</Nav.Link>
                                 </Nav.Item>
@@ -190,7 +196,7 @@ function Group() {
                             <Col sm={9}>
                             <Tab.Content>
                                 <Tab.Pane eventKey="first">
-                                <Card>                                    
+                                {/* <Card>                                    
                                     <Card.Body>
                                     <Card.Title>Confirm Next Week's Portfolio</Card.Title>
                                         <Card.Text>
@@ -198,7 +204,7 @@ function Group() {
                                         </Card.Text>
                                         <Button variant="primary">Confirm</Button>
                                     </Card.Body>
-                                </Card>
+                                </Card> */}
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="second">
                                 <Card>                                    
@@ -216,7 +222,7 @@ function Group() {
                         </Row>
                         </Tab.Container> 
                     </Col>
-                </Row> */}
+                </Row>
             </TabPanel>
         </div>
     )

@@ -22,16 +22,19 @@ const db = mysql.createConnection({
     database: 'fypsystem' // name of scheme in mySQL
 })
 
-app.post('/create', (req, res) => { // request and response, res => send sth to the front
+app.post('/adduser', (req, res) => { // request and response, res => send sth to the front
     const userID = req.body.userID
-    const name = req.body.name
+    const firstName = req.body.firstName
+    const lastName = req.body.lastName
     const age = req.body.age
-    const wage = req.body.wage
+    const wageMonthly = req.body.wageMonthly
+    const initialInvest = req.body.initialInvest
+    const riskLevel = req.body.riskLevel
     // const product = req.body.age*req.body.wage
 
-    const sql = 'INSERT INTO userinfo (userID, name, age, wage) VALUES (?,?,?,?)'
+    const sql = 'INSERT INTO userinfo (userID, firstname, lastname, age, wagemonthly, initialinvestamount, riskacceptlevel) VALUES (?,?,?,?,?,?,?)'
     
-    db.query(sql, [userID, name, age, wage], (err, result) => {
+    db.query(sql, [userID, firstName, lastName, age, wageMonthly, initialInvest, riskLevel], (err, result) => {
         if (err) {
             console.log(err)
         }
@@ -41,7 +44,7 @@ app.post('/create', (req, res) => { // request and response, res => send sth to 
     });
 })  // app.post or app.get, put or delete
 
-app.get('/user', (req, res) => { // standard for creating express when using request
+app.get('/getuserinfo', (req, res) => { // standard for creating express when using request
     db.query('SELECT * FROM userinfo', (err, result) => {
         if (err) {
             console.log(err)
@@ -50,6 +53,29 @@ app.get('/user', (req, res) => { // standard for creating express when using req
             res.send(result) // or res.json
         }
     })
+});
+
+app.post("/updateuserinfo", (req, res) => {
+    const userID = req.body.userID
+    const firstname = req.body.firstName
+    const lastname = req.body.lastName
+    const age = req.body.age
+    const wagemonthly = req.body.wageMonthly
+    const initialinvestamount = req.body.initialInvest
+    const riskacceptlevel = req.body.riskLevel
+
+    const sql = 'UPDATE userinfo SET userID = ?, firstname = ?, lastname = ?, age = ?, wagemonthly = ?, initialinvestamount = ?, riskacceptlevel = ?'
+
+    db.query(
+      sql,
+      [userID, firstname, lastname, age, wagemonthly, initialinvestamount, riskacceptlevel],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send(result);
+        }
+    });
 });
 
 // get the holdings for PortfolioTabs
