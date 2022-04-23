@@ -101,6 +101,76 @@ app.get('/holdings:userID', (req, res) => { // standard for creating express whe
     })
 });
 
+// get company name of a single stock
+app.get('/singlestockdetails:stocksymbol', (req, res) => { // request and response, res => send sth to the front
+    const stockSymbol = req.params.stocksymbol
+
+    const sql = 'SELECT * FROM fypsystem.stockconstituents where Symbol = ?' 
+    
+    db.query(sql, [stockSymbol], (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            res.send(result) 
+        }
+    });
+})
+
+// get current (today) price of a stock
+app.post('/stockcurrprice', (req, res) => { // request and response, res => send sth to the front
+    const stockSymbol = req.body.stockSymbol + ' US EQUITY'
+    const currDate = req.body.currDate
+
+    const sql = 'SELECT * FROM fypsystem.stockpriceprediction where Stock = ? and Date = ?'
+    
+    db.query(sql, [stockSymbol, currDate], (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            res.send(result) 
+        }
+    });
+})
+
+// get yesterdayprice of a stock
+app.post('/stockyesterdayprice', (req, res) => { // request and response, res => send sth to the front
+    const stockSymbol = req.body.stockSymbol + ' US EQUITY'
+    const currDate = req.body.currDate
+
+    const sql = 'SELECT * FROM fypsystem.stockpriceprediction where stockrecordid = ((SELECT stockrecordid FROM fypsystem.stockpriceprediction where Stock = ? and Date = ?) - 1)'
+    
+    db.query(sql, [stockSymbol, currDate], (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            res.send(result) 
+        }
+    });
+})
+
+// get the close price of a stock with dates for chart
+app.post('/stockcloseprice', (req, res) => { // request and response, res => send sth to the front
+    const stock = req.body.stock + ' US EQUITY'
+    const startDate = req.body.startDate
+    const endDate = req.body.endDate
+    // const product = req.body.age*req.body.wage
+
+    const sql = 'SELECT CLOSE FROM fypsystem.stockpriceprediction where Stock = ? and (Date BETWEEN ? AND ? )' 
+    
+    db.query(sql, [stock, startDate, endDate], (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            res.send(result) 
+        }
+    });
+})
+
+
 app.post('/addAholding', (req, res) => { // request and response, res => send sth to the front
     const userID = req.body.userID
     const stock = req.body.stock

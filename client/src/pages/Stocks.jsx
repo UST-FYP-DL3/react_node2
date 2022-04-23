@@ -2,13 +2,22 @@ import React, {useEffect, useState} from 'react'
 import './Stocks.css';
 import { useSelector } from 'react-redux'
 
+import { useAuth } from '../contexts/AuthContext'
+import Axios from 'axios'
+
 import { Link } from 'react-router-dom'
 
 import Chart from 'react-apexcharts'
 
+import Box from '@mui/material/Box';
+
+import { Row, Col, Card, Contianer, Button, InputGroup, FormControl } from 'react-bootstrap'
+
 import Table from '../components/table/Table'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+import stockConstituents from '../assets/JsonData/stockConstituents.json'
 
 const topIndicator = {
     head: [
@@ -135,74 +144,201 @@ const renderRatingBody = (item, index) => (
     </tr>
 )
 
-const Stocks = () => {
-    const themeReducer = useSelector(state => state.ThemeReducer.mode)
+function Stocks(props) {
+    
+    // date format
+    const SystemTIME = '16:30:00'
+    const SystemDATE = '2021-11-08' // 
+    var currDate = new Date(SystemDATE)
+    var yesterdayDate = new Date(SystemDATE);
+    yesterdayDate.setDate(currDate.getDate()-1)
+    currDate = currDate.toISOString().split('T')[0]
+    yesterdayDate = yesterdayDate.toISOString().split('T')[0]
+
+    const { currentUser } = useAuth()
+    const userID = currentUser.uid // ZtGPo16e7rdc3lt0m4xGAK8PsB03
+
+    const [searchSymbol, setSearchSymbol] = useState(null)
+    const [searchCompany, setSearchCompany] = useState(null)
+    const [searchSector, setSearchSector] = useState(null)
+
+    const getSingleStockDetails = (searchSymbolget) => {
+        // console.log(currentUser.uid)
+        Axios.get(`http://localhost:3001/singlestockdetails${searchSymbolget}`).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
+            (response) => {
+                // console.log(currentUser.uid)
+                console.log(response.data)
+                // console.log(response.data[0].stockname)
+                // console.log(response.data[0].stocksector)
+                setSearchCompany(response.data[0].stockname)
+                setSearchSector(response.data[0].stocksector) // response has a propert call data
+                // setSumOfCost(response.data.map( (value, key) => (value.cost)).reduce( (accumulator, currentValue) => {return accumulator + currentValue}))
+            }
+        ); // get request, response contains everything send from the backend
+    };
+
+    const [currPrice, setCurrPrice] = useState(0)
+    const [yesterdayPrice, setYesterdayPrice] = useState(0)
+    
+    const getStockCurrPrice = (searchSymbolget) => {
+        // console.log(currentUser.uid)
+        Axios.post('http://localhost:3001/stockcurrprice', {
+            stockSymbol: searchSymbolget,
+            currDate: currDate,
+        }).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
+            (response) => {
+                // console.log(currentUser.uid)
+                console.log(response.data)
+                // console.log(response.data[0].CLOSE)
+                setCurrPrice(response.data[0].CLOSE)
+                // setSumOfCost(response.data.map( (value, key) => (value.cost)).reduce( (accumulator, currentValue) => {return accumulator + currentValue}))
+            }
+        ); // get request, response contains everything send from the backend
+    };
+
+    const getStockYesterdayPrice = (searchSymbolget) => {
+        // console.log(currentUser.uid)
+        Axios.post('http://localhost:3001/stockyesterdayprice', {
+            stockSymbol: searchSymbolget,
+            currDate: currDate,
+        }).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
+            (response) => {
+                console.log(response.data)
+                setYesterdayPrice(response.data[0].CLOSE)
+            }
+        ); // get request, response contains everything send from the backend
+    };
+
+    function clickSearch(searchSymbol) {
+        setSearchSymbol(searchSymbol);
+        getSingleStockDetails(searchSymbol); 
+        getStockCurrPrice(searchSymbol);
+        getStockYesterdayPrice(searchSymbol);
+    }
+
+    const defaultStock = 'AMZN'
+    useEffect( () => {
+        setSearchSymbol(defaultStock);  // default is MSFT
+        getSingleStockDetails(defaultStock);
+        getStockCurrPrice(defaultStock);
+        getStockYesterdayPrice(defaultStock)
+      }, []);
+
     return (
-        <div style ={{border: "2px solid lightgrey", borderRadius: "10px"}}>
-            <h2 className='container-div'>Stock Information</h2>
-            <div style ={{display: "inline-block"}}>
-                <h4 style ={{margin: "2vh", fontWeight: "600", marginBottom: "0.5vh"}}>Apple Inc.</h4>
-          <span style ={{margin: "2vh", fontWeight: "400"}}>NasdaqGS: AAPL</span>      
+        <div className='row'>
+            <div className='col-12'>
+                <h2 className='container-div'>Stock Information</h2>
             </div>
-            <div style ={{display: "inline-block"}}>
-                <button style ={{margin: "2vh"}} class="button-star" role="button">
-                    <i style ={{color: "#ffbf00", float: "right", clear: "right"}}class='bx bxs-star'>
-                        <text style ={{margin: "1vh",color: "#696969"}}>Save To Watchlist</text>
-                    </i>
-                </button>
-            </div>
-            <div style ={{border: "2px solid lightgrey"}}>
-                <h2 style ={{margin: "2vh", fontWeight: "700", marginBottom: "0vh"}}>150.440</h2>
-                <p style ={{color: "red",margin: "2vh", marginTop: "0vh", marginBottom: "0vh", fontWeight: "400"}}>151.28 (-0.55%)</p>
-                <p style ={{margin: "2vh", marginTop: "0vh", fontWeight: "400"}}>At close: 2021-11-08  4:00 PM EDT (USD) · Market closed</p> 
-            </div>
-            <div class='col-12'>
-                <iframe width='100%' height="600" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/26.embed"></iframe>
-            </div>
-            <div className="col-12">
-                    <div className='card'>
-                        <div>
-                            <h3 className='card__header'>Trading indicators</h3>
-                            <h6>Click 
-                                <span style ={{color: "blue", marginLeft: "1vh", marginRight: "1vh"}} class='bx bxs-info-circle'></span>
-                                icon to see the indicator details.
-                            </h6>
-                        </div>
-                        <div className='card__body'>
-                            <Table
-                                headData={topIndicator.head}
-                                renderHead={(item, index) => renderIndicatorHead(item, index)}
-                                bodyData={topIndicator.body}
-                                renderBody={(item, index) => renderIndicatorBody(item, index)}
-                            />
-                        </div>
-                        <div className='card__footer'>
-                            <Link to='/'>View all</Link>
-                        </div>
-                    </div>
-            </div>
-            <div className="col-12">
+
+            <Row className='justify-content-md-center mt-3'>
+                <div className='col-10'>
+                    <InputGroup className="mb-3">
+                        <FormControl placeholder="Enter Stock Symbol (e.g. AAPL)" onChange={(event)=>{setSearchSymbol(event.target.value)}} />
+                        <Button variant="outline-secondary" id="button-addon2" onClick={ () => {clickSearch(searchSymbol) }} >Search</Button>
+                    </InputGroup>
+                </div>
+            </Row>
+
+
+            <div className='col-12'>
                 <div className='card'>
-                    <div>
-                        <h3 className='card__header'>Analyst Rating</h3>
-                        <h6>Know more about analyst rating: 
-                            <a href="https://www.investopedia.com/financial-edge/0512/understanding-analyst-ratings.aspx" target="_blank" style ={{color: "green", marginLeft: "1vh", marginRight: "1vh"}} class='bx bxs-info-circle'></a>
-                        </h6>
-                    </div>
-                    <div className='card__body'>
-                        <Table
-                            headData={topRatings.head}
-                            renderHead={(item, index) => renderRatingHead(item, index)}
-                            bodyData={topRatings.body}
-                            renderBody={(item, index) => renderRatingBody(item, index)}
-                        />
-                    </div>
-                    <div className='card__footer'>
-                        <Link to='/'>View all</Link>
+                    <h2>{searchCompany != null? searchCompany : <span></span> }&nbsp;({searchSymbol != null? searchSymbol : <span></span> })</h2>                 
+                    <span style ={{marginTop: "1vh"}}>Sector: {searchSector != null? searchSector : <div></div> }</span>
+                    <hr />
+                    <h2 style ={{fontWeight: "700", marginLeft: "2vh"}}>{currPrice.toFixed(2)}</h2>
+                    <p style ={{color: currPrice >= yesterdayPrice ? "green" : "red", margin: "2vh", marginTop: "0vh", marginBottom: "0vh", fontWeight: "400"}}>
+                        {yesterdayPrice.toFixed(2)}&nbsp;
+                        {currPrice >= yesterdayPrice ? ( <span><i class='bx bxs-up-arrow' /> {(currPrice - yesterdayPrice).toFixed(2)} </span>) : (<span><i class='bx bxs-down-arrow' /> {(yesterdayPrice - currPrice).toFixed(2)} </span>) }
+                        &nbsp;({((currPrice/yesterdayPrice-1)*100).toFixed(2)}%)</p>                   
+                    <p style ={{marginLeft: "2vh", marginTop: "0vh", fontWeight: "400"}}>At close: {currDate}  {SystemTIME} EST. Market closed</p>
+                    <div style ={{display: "inline-block"}}>
+                        <button class="button-star" role="button" style={{marginTop: '0vh'}}>
+                            <i style ={{color: "#ffbf00", float: "right", clear: "right"}} class='bx bxs-star' />
+                            <text style ={{margin: "1vh",color: "#696969"}}>Save To Watchlist</text>
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div>
+                
+            </div>
+
+
+
+
+
+
+
+
+            <div className='col-12'>
+                <div style ={{border: "2px solid lightgrey", borderRadius: "10px"}}>
+                    
+                    <div style ={{display: "inline-block"}}>
+                        <h4 style ={{margin: "2vh", fontWeight: "600", marginBottom: "0.5vh"}}>Apple Inc.</h4>
+                <span style ={{margin: "2vh", fontWeight: "400"}}>NasdaqGS: AAPL</span>      
+                    </div>
+                    <div style ={{display: "inline-block"}}>
+                        <button style ={{margin: "2vh"}} class="button-star" role="button">
+                            <i style ={{color: "#ffbf00", float: "right", clear: "right"}}class='bx bxs-star'>
+                                <text style ={{margin: "1vh",color: "#696969"}}>Save To Watchlist</text>
+                            </i>
+                        </button>
+                    </div>
+                    <div style ={{border: "2px solid lightgrey"}}>
+                        <h2 style ={{margin: "2vh", fontWeight: "700", marginBottom: "0vh"}}>150.440</h2>
+                        <p style ={{color: "red",margin: "2vh", marginTop: "0vh", marginBottom: "0vh", fontWeight: "400"}}>151.28 (-0.55%)</p>
+                        <p style ={{margin: "2vh", marginTop: "0vh", fontWeight: "400"}}>At close: 2021-11-08  4:00 PM EDT (USD) · Market closed</p> 
+                    </div>
+                    <div class='col-12'>
+                        <iframe width='100%' height="600" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/26.embed"></iframe>
+                    </div>
+                    <div className="col-12">
+                            <div className='card'>
+                                <div>
+                                    <h3 className='card__header'>Trading indicators</h3>
+                                    <h6>Click 
+                                        <span style ={{color: "blue", marginLeft: "1vh", marginRight: "1vh"}} class='bx bxs-info-circle'></span>
+                                        icon to see the indicator details.
+                                    </h6>
+                                </div>
+                                <div className='card__body'>
+                                    <Table
+                                        headData={topIndicator.head}
+                                        renderHead={(item, index) => renderIndicatorHead(item, index)}
+                                        bodyData={topIndicator.body}
+                                        renderBody={(item, index) => renderIndicatorBody(item, index)}
+                                    />
+                                </div>
+                                <div className='card__footer'>
+                                    <Link to='/'>View all</Link>
+                                </div>
+                            </div>
+                    </div>
+                    <div className="col-12">
+                        <div className='card'>
+                            <div>
+                                <h3 className='card__header'>Analyst Rating</h3>
+                                <h6>Know more about analyst rating: 
+                                    <a href="https://www.investopedia.com/financial-edge/0512/understanding-analyst-ratings.aspx" target="_blank" style ={{color: "green", marginLeft: "1vh", marginRight: "1vh"}} class='bx bxs-info-circle'></a>
+                                </h6>
+                            </div>
+                            <div className='card__body'>
+                                <Table
+                                    headData={topRatings.head}
+                                    renderHead={(item, index) => renderRatingHead(item, index)}
+                                    bodyData={topRatings.body}
+                                    renderBody={(item, index) => renderRatingBody(item, index)}
+                                />
+                            </div>
+                            <div className='card__footer'>
+                                <Link to='/'>View all</Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+        </div>  // the return <div className='row'>      
     )
 }
 
@@ -248,3 +384,5 @@ export default Stocks
                 />
             </div>
                 */}
+
+

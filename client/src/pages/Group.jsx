@@ -116,7 +116,11 @@ function Group() {
     )
 
     return (
-        <div>
+        <div className='row'>
+            <div className='col-12'>
+                    <h2 className='container-div'>Group</h2>
+            </div>
+
             {/* <h2 className='container-div'>Group</h2> joinGroup === false)? <h3>You have not joined any group.</h3> : <h3>Y</h3>  */}
             {/* <h5>{joinGroup === false? "You have not joined any group" : "Your Group ID: 001"}</h5> */}
             {idHeader}

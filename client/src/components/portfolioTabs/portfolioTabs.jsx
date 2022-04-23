@@ -402,9 +402,9 @@ export default function BasicTabs() {
   const [userHoldings, setUserHoldings] = useState([]); // this is a list
   const [sumOfCost, setSumOfCost] = useState(0)
 
-  const getHoldings = (userID) => {
+  const getHoldings = (userIDget) => {
       // console.log(currentUser.uid)
-      Axios.get(`http://localhost:3001/holdings${userID}`).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
+      Axios.get(`http://localhost:3001/holdings${userIDget}`).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
           (response) => {
               // console.log(currentUser.uid)
               console.log(response.data)
@@ -434,9 +434,9 @@ export default function BasicTabs() {
   var totalValueWk44 = StockValueWk44.reduce( (accumulator, currentValue) => {return accumulator+currentValue} )
 
   const currValue = {
-    series: StockValueWk44, // StockValueWk44, // userHoldings.map( (value, key) => (value.cost) ),
+    series: userHoldings.map( (value, key) => (value.cost) ), // StockValueWk44, // userHoldings.map( (value, key) => (value.cost) ),
     chartOptions: {
-      labels: StockNameWk44,// StockNameWk44, // userHoldings.map( (value, key) => (value.stock) ),
+      labels: userHoldings.map( (value, key) => (value.stock) ), // StockNameWk44, // userHoldings.map( (value, key) => (value.stock) ),
       chart: {
         type: 'dount',
         width: '100%',

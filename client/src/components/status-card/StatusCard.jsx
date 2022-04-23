@@ -2,7 +2,7 @@ import React from 'react'
 
 import './statuscard.css'
 
-const StatusCard = props => {
+const StatusCard = (props) => {
     return (
         <div className='status-card'>
             <div className="status-card__icon">

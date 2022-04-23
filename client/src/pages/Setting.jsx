@@ -194,7 +194,7 @@ const Setting = () => {
         //     </div>                 
         // </div>
         <div>
-            { userInfo && <Row className="justify-content-md-center">
+            <Row className="justify-content-md-center">
                 <div className='col-12'>
                     <h2 className='container-div'>Setting</h2>
                 </div>
@@ -204,7 +204,7 @@ const Setting = () => {
                     <div className='card__header'>
                         <h4 className="pb-3">Current Setting</h4>
                     </div>
-                    <Form>
+                    { userInfo && <Form>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Label>First Name</Form.Label>
                             <Form.Control placeholder={userInfo[0].firstname} disabled />
@@ -254,7 +254,7 @@ const Setting = () => {
                             </label>
                             </div>
                         </Form.Group>
-                    </Form>
+                    </Form> }
                 </Card>
 
 
@@ -322,7 +322,7 @@ const Setting = () => {
                     </Form>
                 </Card>
                 </div>
-            </Row> }
+            </Row>
         </div>
 
         

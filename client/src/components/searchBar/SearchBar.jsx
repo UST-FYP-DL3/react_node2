@@ -9,7 +9,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Card, Button, Alert, Container } from "react-bootstrap"
 import Box from '@mui/material/Box';
 
-function SearchBar( {placeholder, data} ) {
+function SearchBar( {placeholder, data, location} ) {
 
     const [filteredData, setFilteredData] = useState([]);
     const [wordEntered, setWordEntered] = useState("");

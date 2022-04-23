@@ -41,8 +41,11 @@ const Portfolio = () => {
     };
 
     return (
-        <div>
+        <div className='row'>
             {/* <h6>Current Date: 2021-11-08 [Day 0]</h6> */}
+            <div className='col-12'>
+                    <h2 className='container-div'>Portfolio</h2>
+            </div>
             <Tabs />
         </div>
     )
