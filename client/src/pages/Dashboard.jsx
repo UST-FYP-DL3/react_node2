@@ -179,18 +179,18 @@ const Dashboard = () => {
                     <div className="card full-height">
                     <h5>Growth rate (in %) across week</h5>
                     <Chart
-                            options={themeReducer === 'theme-mode-dark' ? {
-                                ...chartOptions.options,
-                                theme: { mode: 'dark'}
-                            } : {
-                                ...chartOptions.options,
-                                theme: { mode: 'light'}
-                            }}
-                            
-                            series={chartOptions.series}
-                            type='line'
-                            height='100%'
-                        />
+                        options={themeReducer === 'theme-mode-dark' ? {
+                            ...chartOptions.options,
+                            theme: { mode: 'dark'}
+                        } : {
+                            ...chartOptions.options,
+                            theme: { mode: 'light'}
+                        }}
+                        
+                        series={chartOptions.series}
+                        type='line'
+                        height='100%'
+                    />
                     </div>
                 </div>
                 <div className="col-7">

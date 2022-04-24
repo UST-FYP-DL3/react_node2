@@ -156,19 +156,14 @@ app.post('/stockpriceplot', (req, res) => { // request and response, res => send
     const stockSymbol = req.body.stockSymbol + ' US EQUITY'
     const startPlotDate = req.body.startPlotDate
     const endPlotDate = req.body.endPlotDate
-    
-    console.log(stockSymbol)
-    console.log(startPlotDate)
-    console.log(endPlotDate)
 
-    const sql = 'SELECT Stock, Date, CLOSE FROM fypsystem.stockpriceprediction where Stock = ? and (Date BETWEEN ? AND ? )' 
+    const sql = 'SELECT Stock, Date, OPEN, HIGH, LOW, CLOSE FROM fypsystem.stockpriceprediction where Stock = ? and (Date BETWEEN ? AND ? )' 
     
     db.query(sql, [stockSymbol, startPlotDate, endPlotDate], (err, result) => {
         if (err) {
             console.log(err)
         }
         else {
-            console.log("stockpriceplot send")
             res.send(result) 
         }
     });

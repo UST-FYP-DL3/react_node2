@@ -8,14 +8,22 @@ import Axios from 'axios'
 import { Link } from 'react-router-dom'
 
 import Chart from 'react-apexcharts'
-// import Plot from 'react-plotly.js';
-import createPlotlyComponent from 'react-plotly.js/factory'
+import Plot from 'react-plotly.js';
+// import createPlotlyComponent from 'react-plotly.js/factory'
 // const Plotly = window.Plotly
 // const Plot = createPlotlyComponent(Plotly)
 
-import { Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap'
+// import Plotly from "plotly.js-basic-dist-min";
+// import createPlotlyComponent from "react-plotly.js/factory";
+// const Plot = createPlotlyComponent(Plotly);
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+import { Row, Col, Button, InputGroup, FormControl, Card } from 'react-bootstrap'
 
 import Table from '../components/table/Table'
+import { getContrastRatio } from '@mui/material';
 
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -148,19 +156,27 @@ const renderRatingBody = (item, index) => (
 
 function Stocks(props) {
 
-    const Plotly = window.Plotly
-    const Plot = createPlotlyComponent(Plotly)
+    // const Plot = createPlotlyComponent(Plotly);
     
     // date format
-    const SystemTIME = '16:30:00'
-    const SystemDATE = '2021-11-08' // 
-    var currDate = new Date(SystemDATE)
-    var yesterdayDate = new Date(SystemDATE);
-    yesterdayDate.setDate(currDate.getDate()-1)
+    const SystemCurrTIME = '16:30:00'
+    const SystemCurrDATE = '2021-11-08' // one date later for difference between date in res.send and mysql
+    const SystemEndPredDATE = '2021-11-15'
+    var currDate = new Date(SystemCurrDATE)
+    // var yesterdayDate = new Date(SystemDATE)
+    // yesterdayDate.setDate(currDate.getDate()-1)
+    var endPredDate = new Date(SystemEndPredDATE);
+    
     currDate = currDate.toISOString().split('T')[0]
-    yesterdayDate = yesterdayDate.toISOString().split('T')[0]
+    // yesterdayDate = yesterdayDate.toISOString().split('T')[0]
+    endPredDate = endPredDate.toISOString().split('T')[0]
 
-    const defaultStock = 'AMZN'
+    console.log(currDate)
+    // console.log(yesterdayDate)
+    console.log(endPredDate)
+
+
+    const defaultStock = 'MSFT'
 
     const { currentUser } = useAuth()
     const userID = currentUser.uid // ZtGPo16e7rdc3lt0m4xGAK8PsB03
@@ -218,23 +234,262 @@ function Stocks(props) {
         ); // get request, response contains everything send from the backend
     };
 
-    const [startPlotDate, setstartPlotDate] = useState('2021-01-01') 
+    const [startPlotDate, setstartPlotDate] = useState('2015-06-01') 
     const [endPlotDate, setEndPlotDate] = useState('2021-11-15') 
     const [plotData, setPlotData] = useState([])
 
-    const plotSotckPriceWithDates = (searchSymbolget, startPlotDateget, endPlotDateget) => {
+    // function setDateReturntoTmr() {
+    //     console.log("DateChange")
+    //     console.log(plotData)
+    //     if (plotData == []) {
+    //         return;
+    //     }
+    //     else {
+    //         for (let i = 0; i < plotData.length; i++) {
+    //             let dateChange = new Date(plotData[i].Date)
+    //             dateChange.setDate(dateChange.getDate()+1)
+    //             plotData[i].Date = dateChange
+    //         }
+    //     }
+    // }
+
+    const getSotckPriceWithDates = (searchSymbolget, startPlotDateget, endPlotDateget) => {
         console.log("enter plotSotckPriceWithDates")
         // console.log(currentUser.uid)
         Axios.post('http://localhost:3001/stockpriceplot', {
             stockSymbol: searchSymbolget,
             startPlotDate: startPlotDateget,
-            endPlotDate: endPlotDateget
+            endPlotDate: endPlotDateget,
         }).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
             (response) => {
                 console.log(response.data)
                 setPlotData(response.data)
+                // setDateReturntoTmr()
             }
         ); // get request, response contains everything send from the backend
+    };
+
+    const chartPricePlotly = {
+        data: [
+        {
+            x: plotData != null ? plotData.map((value, key) => value.Date) : [], // [1, 2, 3],
+            y: plotData != null ? plotData.map((value, key) => value.CLOSE) : [],
+            type: 'line',
+            mode: 'lines+markers',
+            marker: {color: 'light blue'},
+        }],
+        layout: {
+            title: `Stock Price of ${displaySymbol}`,
+            xaxis: {title: "Date"},
+            yaxis: {title: "Price"},
+            shapes: [{
+                type: 'line',
+                name: 'Today',
+                x0: currDate,
+                x1: currDate,
+                y0: 0,
+                y1: 1,
+                yref: 'paper',
+                line: {
+                    color: 'grey',
+                }
+            }]
+        }
+    }
+
+    const chartPricePlotlyCandle= {
+        data: [
+        {
+            x: plotData != null ? plotData.map((value, key) => value.Date ) : [], // [1, 2, 3],
+            close: plotData != null ? plotData.map((value, key) => value.CLOSE) : [],
+            high: plotData != null ? plotData.map((value, key) => value.HIGH) : [],
+            low: plotData != null ? plotData.map((value, key) => value.LOW) : [],
+            open: plotData != null ? plotData.map((value, key) => value.OPEN) : [],
+            
+            decreasing: {line: {color: 'green'}},
+            decreasing: {line: {color: 'red'}},
+
+            type: 'candlestick',
+            xaxis: 'x',
+            yaxis: 'y'
+        }],
+        layout: {
+            title: `Stock Price of ${displaySymbol}`,
+            dragmode: 'zoom',  
+            showlegend: false, 
+            xaxis: {
+                title: "Date",
+                autorange: true, 
+                // domain: [0, 1], 
+                range: [startPlotDate, endPlotDate], 
+                rangeslider: {visible: false}, 
+                type: 'date'
+            }, 
+            yaxis: {
+                title: "Price",
+                autorange: true, 
+                // domain: [0, 1], 
+                // range: [114.609999778, 137.410004222], 
+                type: 'linear'
+            },
+            // xaxis: {title: "Date"},
+            // yaxis: {title: "Price"},
+            shapes: [ {
+                type: 'rect',
+                xref: 'x',
+                yref: 'paper',
+                x0: currDate,
+                y0: 0,
+                x1: endPredDate,
+                y1: 1,
+                fillcolor: '#d3d3d3',
+                opacity: 0.5,
+                line: { width: 0 }
+            },
+            {
+                type: 'line',
+                x0: currDate,
+                x1: currDate,
+                y0: 0,
+                y1: 1,
+                yref: 'paper',
+                line: {
+                    color: 'grey',
+                    opacity: 0.5
+                }
+            } ],
+            annotations: [ {
+                x: currDate,
+                y: 0.9,
+                xref: 'x',
+                yref: 'paper',
+                text: 'prediction',
+                font: {color: 'blue'},
+                showarrow: true,
+                xanchor: 'right',
+                ax: -20,
+                ay: 0
+            },
+            {
+                x: currDate,
+                y: 1,
+                xref: 'x',
+                yref: 'paper',
+                text: 'Today',
+                font: {color: 'black'},
+                showarrow: true,
+                // xanchor: 'down',
+                ax: 0,
+                ay: -5
+            } ],
+        }
+    }
+
+    const chartPriceApex = {
+        series: [{
+            name: displaySymbol,
+            data: plotData != null ? plotData.map((value, key) => value.CLOSE) : [],
+        }],
+        options: {
+            chart: {
+                type: 'area',
+                stacked: false,
+                height: 350,
+                zoom: {
+                type: 'x',
+                enabled: true,
+                autoScaleYaxis: true
+                },
+                toolbar: {
+                    autoSelected: 'zoom'
+                }
+            },
+            forecastDataPoints: {
+                count: 5
+            },
+            dataLabels: {
+                enabled: false
+            },
+            markers: {
+                size: 0,
+            },
+            title: {
+                text: `Stock Price of ${displaySymbol}`,
+                align: 'center',
+                style: {
+                    fontSize: '20px',
+                    fontWeight: '',
+                },
+            },
+            yaxis: {
+                labels: {
+                    formatter: function (val) { return (val).toFixed(4); },
+                },
+                title: { 
+                    text: 'Price',
+                    style: {
+                        fontSize: '15px',
+                        fontWeight: '',
+                    }
+                },
+            },
+            xaxis: {
+                categories: plotData != null ? plotData.map((value, key) => value.Date) : [],
+                title: { 
+                    text: "Date",
+                    style: {
+                        fontSize: '15px',
+                        fontWeight: '',
+                    }
+                },
+                type: 'datetime',
+            },
+            tooltip: {
+                shared: false,
+                y: {
+                formatter: function (val) { return val.toFixed(4) }
+                }
+            },
+            stroke: {
+                width: 2
+            },
+            markers: {
+                size: 3
+            },
+            annotations: {
+                xaxis: [{
+                    x: new Date(currDate).getTime(),
+                    x2: null,
+                    strokeDashArray: 0,
+                    borderColor: '#555b65',
+                    label: {
+                        borderColor: '#555b65',
+                        style: {
+                          color: '#fff',
+                          background: '#555b65',
+                        },
+                        text: 'Today',
+                    }
+                },
+                {
+                    x: new Date(currDate).getTime(),
+                    x2: new Date('2021-11-15').getTime(),
+                    strokeDashArray: 1,
+                    borderColor: '#555b65',
+                    width: '300%',
+                    label: {
+                        borderColor: '#555b65',
+                        orientation: 'horizontal',
+                        textAnchor: 'middle',
+                        style: {
+                          color: '#fff',
+                          background: '#555b65',
+                        },
+                        text: 'Prediction',
+                    }
+                }, ]
+            },
+        },
     };
 
     function clickSearch(searchSymbol) {
@@ -243,6 +498,7 @@ function Stocks(props) {
         getStockCurrPrice(searchSymbol);
         getStockYesterdayPrice(searchSymbol);
         setdisplaySymbol(searchSymbol);
+        getSotckPriceWithDates(searchSymbol, startPlotDate, endPlotDate);
     }
 
     // when first load the page
@@ -251,7 +507,7 @@ function Stocks(props) {
         getSingleStockDetails(defaultStock);
         getStockCurrPrice(defaultStock);
         getStockYesterdayPrice(defaultStock);
-        plotSotckPriceWithDates(defaultStock, '2021-01-01', '2021-11-15');
+        getSotckPriceWithDates(defaultStock, startPlotDate, endPlotDate);
       }, []);
 
     return (
@@ -280,7 +536,7 @@ function Stocks(props) {
                         {yesterdayPrice.toFixed(2)}&nbsp;
                         {currPrice >= yesterdayPrice ? ( <span><i class='bx bxs-up-arrow' /> {(currPrice - yesterdayPrice).toFixed(2)} </span>) : (<span><i class='bx bxs-down-arrow' /> {(yesterdayPrice - currPrice).toFixed(2)} </span>) }
                         &nbsp;({((currPrice/yesterdayPrice-1)*100).toFixed(2)}%)</p>                   
-                    <p style ={{marginLeft: "2vh", marginTop: "0vh", fontWeight: "400"}}>At close: {currDate}  {SystemTIME} EST. Market closed</p>
+                    <p style ={{marginLeft: "2vh", marginTop: "0vh", fontWeight: "400"}}>At close: {currDate}  {SystemCurrTIME} EST. Market closed</p>
                     <div style ={{display: "inline-block"}}>
                         <button class="button-star" role="button" style={{marginTop: '0vh'}}>
                             <i style ={{color: "#ffbf00", float: "right", clear: "right"}} class='bx bxs-star' />
@@ -292,8 +548,20 @@ function Stocks(props) {
 
             <div className='col-12'>
                 <div className='card'>
-
-
+                    {/* <Plot
+                        data={chartPricePlotly.data}
+                        layout={chartPricePlotly.layout}
+                    />
+                    <Chart
+                        series={chartPriceApex.series}
+                        options={chartPriceApex.options}                        
+                        type='line'
+                        height='500'
+                    /> */}
+                    <Plot
+                        data={chartPricePlotlyCandle.data}
+                        layout={chartPricePlotlyCandle.layout}
+                    />
                 </div>
             </div>
 
@@ -314,7 +582,7 @@ function Stocks(props) {
                     <div style ={{display: "inline-block"}}>
                         <button style ={{margin: "2vh"}} class="button-star" role="button">
                             <i style ={{color: "#ffbf00", float: "right", clear: "right"}}class='bx bxs-star'>
-                                <text style ={{margin: "1vh",color: "#696969"}}>Save To Watchlist</text>
+                                <span style ={{margin: "1vh",color: "#696969"}}>Save To Watchlist</span>
                             </i>
                         </button>
                     </div>
@@ -323,7 +591,7 @@ function Stocks(props) {
                         <p style ={{color: "red",margin: "2vh", marginTop: "0vh", marginBottom: "0vh", fontWeight: "400"}}>151.28 (-0.55%)</p>
                         <p style ={{margin: "2vh", marginTop: "0vh", fontWeight: "400"}}>At close: 2021-11-08  4:00 PM EDT (USD) · Market closed</p> 
                     </div>
-                    <div class='col-12'>
+                    <div className='col-12'>
                         <iframe width='100%' height="600" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/26.embed"></iframe>
                     </div>
                     <div className="col-12">
