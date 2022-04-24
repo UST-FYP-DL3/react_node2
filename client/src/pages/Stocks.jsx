@@ -234,24 +234,10 @@ function Stocks(props) {
         ); // get request, response contains everything send from the backend
     };
 
-    const [startPlotDate, setstartPlotDate] = useState('2015-06-01') 
-    const [endPlotDate, setEndPlotDate] = useState('2021-11-15') 
+    const [startPlotDate, setStartPlotDate] = useState(new Date('2021-01-01')) 
+    const [endPlotDate, setEndPlotDate] = useState(new Date('2021-11-15')) 
     const [plotData, setPlotData] = useState([])
 
-    // function setDateReturntoTmr() {
-    //     console.log("DateChange")
-    //     console.log(plotData)
-    //     if (plotData == []) {
-    //         return;
-    //     }
-    //     else {
-    //         for (let i = 0; i < plotData.length; i++) {
-    //             let dateChange = new Date(plotData[i].Date)
-    //             dateChange.setDate(dateChange.getDate()+1)
-    //             plotData[i].Date = dateChange
-    //         }
-    //     }
-    // }
 
     const getSotckPriceWithDates = (searchSymbolget, startPlotDateget, endPlotDateget) => {
         console.log("enter plotSotckPriceWithDates")
@@ -264,7 +250,6 @@ function Stocks(props) {
             (response) => {
                 console.log(response.data)
                 setPlotData(response.data)
-                // setDateReturntoTmr()
             }
         ); // get request, response contains everything send from the backend
     };
@@ -297,7 +282,9 @@ function Stocks(props) {
         }
     }
 
-    const chartPricePlotlyCandle= {
+    const [withPred, setWithPred] = useState(true)
+
+    const chartPricePlotlyCandlewithPred = {
         data: [
         {
             x: plotData != null ? plotData.map((value, key) => value.Date ) : [], // [1, 2, 3],
@@ -382,6 +369,44 @@ function Stocks(props) {
                 ax: 0,
                 ay: -5
             } ],
+        }
+    }
+
+    const chartPricePlotlyCandleNoPred = {
+        data: [
+        {
+            x: plotData != null ? plotData.map((value, key) => value.Date ) : [], // [1, 2, 3],
+            close: plotData != null ? plotData.map((value, key) => value.CLOSE) : [],
+            high: plotData != null ? plotData.map((value, key) => value.HIGH) : [],
+            low: plotData != null ? plotData.map((value, key) => value.LOW) : [],
+            open: plotData != null ? plotData.map((value, key) => value.OPEN) : [],
+            
+            decreasing: {line: {color: 'green'}},
+            decreasing: {line: {color: 'red'}},
+
+            type: 'candlestick',
+            xaxis: 'x',
+            yaxis: 'y'
+        }],
+        layout: {
+            title: `Stock Price of ${displaySymbol}`,
+            dragmode: 'zoom',  
+            showlegend: false, 
+            xaxis: {
+                title: "Date",
+                autorange: true, 
+                // domain: [0, 1], 
+                range: [startPlotDate, endPlotDate], 
+                rangeslider: {visible: false}, 
+                type: 'date'
+            }, 
+            yaxis: {
+                title: "Price",
+                autorange: true, 
+                // domain: [0, 1], 
+                // range: [114.609999778, 137.410004222], 
+                type: 'linear'
+            },
         }
     }
 
@@ -492,7 +517,20 @@ function Stocks(props) {
         },
     };
 
-    function clickSearch(searchSymbol) {
+    const [startInputDate, setStartInputtDate] = useState(new Date());
+    const [endInputDate, setEndInputDate] = useState(new Date());
+
+    function clickDateSearch(searchSymbol) {
+
+        setStartPlotDate(startInputDate);
+        setEndPlotDate(endInputDate);
+
+        setWithPred( (endPlotDate > currDate || endInputDate > currDate)? true : false);
+
+        getSotckPriceWithDates(searchSymbol, startInputDate, endInputDate);
+    }
+
+    function clickSymbolSearch(searchSymbol) {
         setSearchSymbol(searchSymbol);
         getSingleStockDetails(searchSymbol); 
         getStockCurrPrice(searchSymbol);
@@ -519,8 +557,8 @@ function Stocks(props) {
             <Row className='justify-content-md-center mt-3'>
                 <div className='col-10'>
                     <InputGroup className="mb-3">
-                        <FormControl placeholder="Enter Stock Symbol (e.g. AAPL)" onChange={(event)=>{setSearchSymbol(event.target.value)}} />
-                        <Button variant="outline-secondary" id="button-addon2" onClick={ () => {clickSearch(searchSymbol) }} >Search</Button>
+                        <FormControl placeholder="Enter Stock Symbol (e.g. MSFT)" onChange={(event)=>{setSearchSymbol(event.target.value)}} />
+                        <Button variant="outline-secondary" id="button-addon2" onClick={ () => {clickSymbolSearch(searchSymbol) }} >Search</Button>
                     </InputGroup>
                 </div>
             </Row>
@@ -548,6 +586,22 @@ function Stocks(props) {
 
             <div className='col-12'>
                 <div className='card'>
+                    <Row className='justify-content-center'>
+                        <div className='col-4'>
+                            <span>Choose Start Date:</span>
+                            <DatePicker selected={startInputDate} onChange={(date) => setStartInputtDate(date)}/>
+                        </div>
+                        <div className='col-4'>
+                            <span>Choose End Date:</span>
+                            <DatePicker selected={endInputDate} onChange={(date) => setEndInputDate(date)}/>
+                        </div>
+                        <div className='col-1'>
+                            <Button variant='secondary' onClick={ () => {clickDateSearch(searchSymbol) }}>
+                                Search
+                            </Button>
+                        </div>
+                    </Row>
+                    <hr />
                     {/* <Plot
                         data={chartPricePlotly.data}
                         layout={chartPricePlotly.layout}
@@ -559,8 +613,8 @@ function Stocks(props) {
                         height='500'
                     /> */}
                     <Plot
-                        data={chartPricePlotlyCandle.data}
-                        layout={chartPricePlotlyCandle.layout}
+                        data={chartPricePlotlyCandlewithPred.data}
+                        layout={chartPricePlotlyCandlewithPred.layout}
                     />
                 </div>
             </div>
