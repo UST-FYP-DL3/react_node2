@@ -1,10 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import{ useRef } from "react"
 import { useAuth } from "../../contexts/AuthContext"
-import { useSelector } from 'react-redux'
 import Axios from 'axios'
 
-import { Link } from 'react-router-dom'
 
 import Chart from 'react-apexcharts'
 

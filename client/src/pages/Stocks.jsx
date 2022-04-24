@@ -8,16 +8,18 @@ import Axios from 'axios'
 import { Link } from 'react-router-dom'
 
 import Chart from 'react-apexcharts'
+// import Plot from 'react-plotly.js';
+import createPlotlyComponent from 'react-plotly.js/factory'
+// const Plotly = window.Plotly
+// const Plot = createPlotlyComponent(Plotly)
 
-import Box from '@mui/material/Box';
-
-import { Row, Col, Card, Contianer, Button, InputGroup, FormControl } from 'react-bootstrap'
+import { Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap'
 
 import Table from '../components/table/Table'
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
-import stockConstituents from '../assets/JsonData/stockConstituents.json'
+// import stockConstituents from '../assets/JsonData/stockConstituents.json'
 
 const topIndicator = {
     head: [
@@ -145,6 +147,9 @@ const renderRatingBody = (item, index) => (
 )
 
 function Stocks(props) {
+
+    const Plotly = window.Plotly
+    const Plot = createPlotlyComponent(Plotly)
     
     // date format
     const SystemTIME = '16:30:00'
@@ -155,12 +160,16 @@ function Stocks(props) {
     currDate = currDate.toISOString().split('T')[0]
     yesterdayDate = yesterdayDate.toISOString().split('T')[0]
 
+    const defaultStock = 'AMZN'
+
     const { currentUser } = useAuth()
     const userID = currentUser.uid // ZtGPo16e7rdc3lt0m4xGAK8PsB03
 
     const [searchSymbol, setSearchSymbol] = useState(null)
     const [searchCompany, setSearchCompany] = useState(null)
     const [searchSector, setSearchSector] = useState(null)
+
+    const [displaySymbol, setdisplaySymbol] = useState(defaultStock)
 
     const getSingleStockDetails = (searchSymbolget) => {
         // console.log(currentUser.uid)
@@ -209,19 +218,40 @@ function Stocks(props) {
         ); // get request, response contains everything send from the backend
     };
 
+    const [startPlotDate, setstartPlotDate] = useState('2021-01-01') 
+    const [endPlotDate, setEndPlotDate] = useState('2021-11-15') 
+    const [plotData, setPlotData] = useState([])
+
+    const plotSotckPriceWithDates = (searchSymbolget, startPlotDateget, endPlotDateget) => {
+        console.log("enter plotSotckPriceWithDates")
+        // console.log(currentUser.uid)
+        Axios.post('http://localhost:3001/stockpriceplot', {
+            stockSymbol: searchSymbolget,
+            startPlotDate: startPlotDateget,
+            endPlotDate: endPlotDateget
+        }).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
+            (response) => {
+                console.log(response.data)
+                setPlotData(response.data)
+            }
+        ); // get request, response contains everything send from the backend
+    };
+
     function clickSearch(searchSymbol) {
         setSearchSymbol(searchSymbol);
         getSingleStockDetails(searchSymbol); 
         getStockCurrPrice(searchSymbol);
         getStockYesterdayPrice(searchSymbol);
+        setdisplaySymbol(searchSymbol);
     }
 
-    const defaultStock = 'AMZN'
+    // when first load the page
     useEffect( () => {
-        setSearchSymbol(defaultStock);  // default is MSFT
+        setSearchSymbol(defaultStock);  // default is ...
         getSingleStockDetails(defaultStock);
         getStockCurrPrice(defaultStock);
-        getStockYesterdayPrice(defaultStock)
+        getStockYesterdayPrice(defaultStock);
+        plotSotckPriceWithDates(defaultStock, '2021-01-01', '2021-11-15');
       }, []);
 
     return (
@@ -242,7 +272,7 @@ function Stocks(props) {
 
             <div className='col-12'>
                 <div className='card'>
-                    <h2>{searchCompany != null? searchCompany : <span></span> }&nbsp;({searchSymbol != null? searchSymbol : <span></span> })</h2>                 
+                    <h2>{searchCompany != null? searchCompany : <span></span> }&nbsp;({displaySymbol != null? displaySymbol : <span></span> })</h2>                 
                     <span style ={{marginTop: "1vh"}}>Sector: {searchSector != null? searchSector : <div></div> }</span>
                     <hr />
                     <h2 style ={{fontWeight: "700", marginLeft: "2vh"}}>{currPrice.toFixed(2)}</h2>
@@ -260,8 +290,11 @@ function Stocks(props) {
                 </div>
             </div>
 
-            <div>
-                
+            <div className='col-12'>
+                <div className='card'>
+
+
+                </div>
             </div>
 
 

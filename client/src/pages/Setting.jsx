@@ -6,7 +6,7 @@ import Axios from 'axios'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { Form, Button, Col, Row, Container, Card } from 'react-bootstrap'
+import { Form, Button, Col, Row, Card } from 'react-bootstrap'
 
 const Setting = () => {
     const { currentUser } = useAuth()
