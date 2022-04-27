@@ -117,6 +117,24 @@ app.get('/singlestockdetails:stocksymbol', (req, res) => { // request and respon
     });
 })
 
+// user performance
+app.get('/getuserperformance', (req, res) => { // standard for creating express when using request
+    
+    const sql = "SELECT * FROM fypsystem.userperformance where year_week Between '2021-01' and '2021-44';"
+
+    db.query(sql, 
+    (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            // console.log( result.map( (value, key) => (value.stock) ) )
+            // console.log( result.map( (value, key) => (value.cost) ) )
+            res.send(result) // or res.json or res.send
+        }
+    })
+});
+
 // get current (today) price of a stock
 app.post('/stockcurrprice', (req, res) => { // request and response, res => send sth to the front
     const stockSymbol = req.body.stockSymbol + ' US EQUITY'

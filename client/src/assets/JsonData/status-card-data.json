@@ -1,22 +1,22 @@
 [
     {
         "icon": "bx bx-money-withdraw",
-        "count": "$600",
-        "title": "Total Profit"
+        "count": 233050.12,
+        "title": "Current Balance"
     },
     {
         "icon": "bx bx-candles",
-        "count": "$50",
-        "title": "Daily Profit"
+        "count": 1282.03,
+        "title": "Weekly Profit"
     },
     {
         "icon": "bx bx-stats",
-        "count": "$3701",
+        "count": 231762.82,
         "title": "Total Assets"
     },
     {
         "icon": "bx bx-dollar-circle",
-        "count": "$1711",
+        "count": 5.28,
         "title": "Cash"
     }
 ]

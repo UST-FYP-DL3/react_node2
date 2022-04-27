@@ -414,6 +414,9 @@ export default function BasicTabs() {
   const [currWeekBuyCost, setcurrWeekBuyCost] = useState(0);
   const [nextWeekBuyCost, setnextWeekBuyCost] = useState(0);
 
+  const [currWeekExitValue, setcurrWeekExitValue] = useState(0);
+  const [nextWeekExitValue, setnextWeekExitValue] = useState(0);
+
   const { currentUser } = useAuth()
   const userID = currentUser.uid // ZtGPo16e7rdc3lt0m4xGAK8PsB03
 
@@ -443,7 +446,8 @@ export default function BasicTabs() {
           console.log(response.data);
           setcurrWeekRecomend(response.data);
           // console.log(currWeekRecomend);
-          setcurrWeekBuyCost( response.data.map( (value, key) => (value.predicted_cost) ).reduce( (accumulator, currentValue) => {return accumulator+currentValue} ) )
+          setcurrWeekBuyCost( response.data.map( (value, key) => (value.predicted_cost) ).reduce( (accumulator, currentValue) => {return accumulator+currentValue} ) );
+          setcurrWeekExitValue( response.data.map( (value, key) => (value.exit_value) ).reduce( (accumulator, currentValue) => {return accumulator+currentValue} ) ) 
       }
     )
   };
@@ -458,12 +462,13 @@ export default function BasicTabs() {
         (response) => {
           console.log(response.data);
           setnextWeekRecomend(response.data);
-          setnextWeekBuyCost( response.data.map( (value, key) => (value.predicted_cost) ).reduce( (accumulator, currentValue) => {return accumulator+currentValue} ) )
+          setnextWeekBuyCost( response.data.map( (value, key) => (value.predicted_cost) ).reduce( (accumulator, currentValue) => {return accumulator+currentValue} ) );
+          setnextWeekExitValue( response.data.map( (value, key) => (value.exit_value) ).reduce( (accumulator, currentValue) => {return accumulator+currentValue} ) )
       }
     )
   };
 
-  const currValue = {
+  const currCost = {
     series: currWeekRecomend.map( (value, key) => (value.predicted_entry_price) ), // StockValueWk44, // userHoldings.map( (value, key) => (value.cost) ),
     chartOptions: {
       labels: currWeekRecomend.map( (value, key) => (value.stock_code) ), // StockNameWk44, // userHoldings.map( (value, key) => (value.stock) ),
@@ -487,10 +492,10 @@ export default function BasicTabs() {
     },        
   }
 
-  const currIndustry = {
-    series: [1957, 1233, 1986, 976, 798, 1134],
+  const currValue = {
+    series: currWeekRecomend.map( (value, key) => (value.exit_price) ),
     chartOptions: {
-      labels: ['Technology', 'Industrials', 'Fiancials', 'Utilities', 'Energy', 'Health Care'],
+      labels: currWeekRecomend.map( (value, key) => (value.stock_code) ),
       chart: {
         type: 'dount',
         width: '100%',
@@ -512,7 +517,7 @@ export default function BasicTabs() {
   }
 
   
-  const predValue = {
+  const predCost = {
     series: nextWeekRecomend.map( (value, key) => (value.predicted_entry_price) ), // userHoldings.map( (value, key) => (value.cost) ),
     chartOptions: {
       labels: nextWeekRecomend.map( (value, key) => (value.stock_code) ), // userHoldings.map( (value, key) => (value.stock) ),
@@ -536,10 +541,10 @@ export default function BasicTabs() {
     },        
   }
 
-  const predIndustry = {
-    series: [1843, 1323, 1534, 1021, 876, 1291],
+  const predValue = {
+    series: nextWeekRecomend.map( (value, key) => (value.exit_price) ),
     chartOptions: {
-      labels: ['Technology', 'Industrials', 'Energy', 'Utilities', 'Energy', 'Health Care'],
+      labels: nextWeekRecomend.map( (value, key) => (value.stock_code) ),
       chart: {
         type: 'dount',
         width: '100%',
@@ -673,23 +678,23 @@ export default function BasicTabs() {
           <div className="col-4 sm-6">
             <div className='card full-height'>
               <h5>Total Cost: ${currWeekBuyCost.toFixed(2)} </h5>
-              <Chart options={currValue.chartOptions} series={currValue.series} type='donut' />
+              <Chart options={currCost.chartOptions} series={currCost.series} type='donut' />
             </div>
           </div>
           <div className="col-4 sm-6">
             <div className='card full-height'>
-                <h5>Industry Distribution</h5>
-                <Chart options={currIndustry.chartOptions} series={currIndustry.series} type='donut' />
+                <h5>Current Value: ${currWeekExitValue.toFixed(2)}</h5>
+                <Chart options={currValue.chartOptions} series={currValue.series} type='donut' />
             </div>
           </div>
           <div className="col-4 sm-12">
             <div className='card full-height'>
                 <h5>Review</h5>
-                <p className="ms-2 text-muted">Compared to last week</p>
+                <p className="ms-2 text-muted">Actual Earning in this Week:</p>
                 <Box>
                 <div className='col-12 mt-1'>
-                  <h4 style={{color: 'green'}}> + 5.07%</h4>
-                  <h4 style={{color: 'green'}}> + $598.31</h4>  
+                <h4 style={{color: 'green'}}> +{((currWeekExitValue/currWeekBuyCost - 1)*100).toFixed(2)}%</h4>
+                    <h4 style={{color: 'green'}}> {(currWeekExitValue - currWeekBuyCost).toFixed(2)}</h4>   
                 </div>
                 </Box>               
             </div>
@@ -720,24 +725,24 @@ export default function BasicTabs() {
       <div className="row">
           <div className="col-4 sm-6">
             <div className='card full-height'>
-              <h5>Total Cost: ${nextWeekBuyCost.toFixed(2)}</h5>
-              <Chart options={predValue.chartOptions} series={predValue.series} type='donut' />
+              <h5>Predicted Cost: ${nextWeekBuyCost.toFixed(2)}</h5>
+              <Chart options={predCost.chartOptions} series={predCost.series} type='donut' />
             </div>
           </div>
           <div className="col-4 sm-6">
             <div className='card full-height'>
-                <h5>Industry Distribution</h5>
-                <Chart options={predIndustry.chartOptions} series={predIndustry.series} type='donut' />
+                <h5>Predicted Value: ${nextWeekExitValue.toFixed(2)}</h5>
+                <Chart options={predValue.chartOptions} series={predValue.series} type='donut' />
             </div>
           </div>
           <div className="col-4 sm-12">
             <div className='card full-height'>
                 <h5>Prediction</h5>
-                <p className="ms-2 text-muted">Compared to next week</p>
+                <p className="ms-2 text-muted">Estimated Earning in next week:</p>
                 <Box>
                   <div className='col-12 mt-1'>
-                    <h4 style={{color: 'green'}}> + 4.31%</h4>
-                    <h4 style={{color: 'green'}}> + $601.45</h4>                    
+                    <h4 style={{color: 'green'}}> +{((nextWeekExitValue/nextWeekBuyCost - 1)*100).toFixed(2)}%</h4>
+                    <h4 style={{color: 'green'}}> {(nextWeekExitValue - nextWeekBuyCost).toFixed(2)}</h4>                    
                   </div>
                 </Box>                
             </div>

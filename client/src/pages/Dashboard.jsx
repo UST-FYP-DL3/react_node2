@@ -31,78 +31,6 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
 
-const chartOptions = {
-    series: [{
-        name: 'Growth rate (in %)',
-        data: [1.11, 3.06, 2.3, -2.94, 1.913]
-    }],
-    options: {
-        color: ['green'],
-        chart: {
-            background: 'transparent'
-        },
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            curve: 'smooth'
-        },
-        xaxis: {
-            categories: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri']
-        },
-        yaxis: {
-            labels: {
-                formatter: function(val) { return val.toFixed(2);}
-            }
-        },
-        legend: {
-            position: 'top'
-        },
-        grid: {
-            show: false
-        }
-    }
-}
-
-const topCustomers = {
-    head: [
-        'Stock',
-        'Unit',
-        'Price',
-        'Capital',
-        'Return'
-    ],
-    body: [
-        {
-            "stockname": "MSFT",
-            "unit": 10,
-            "price": "$323.45",
-            "capital": "$3234.50",
-            "return": 0.5
-        },
-        {
-            "stockname": "AAPL",
-            "unit": 23,
-            "price": "$165.45",
-            "capital": "$3805.35",
-            "return": 0.3
-        },
-        {
-            "stockname": "LMT",
-            "unit": 6,
-            "price": "$380.13",
-            "capital": "$2280.78",
-            "return": 1.5
-        },
-        {
-            "stockname": "JNJ",
-            "unit": 16,
-            "price": "$162.45",
-            "capital": "$2599.20",
-            "return": -0.5
-        },
-    ]
-}
 
 const renderCusomerHead = (item, index) => (
     <th style ={{textAlign: "center"}} key={index}>{item}</th>
@@ -141,7 +69,7 @@ const Dashboard = () => {
         });
       };
 
-    const [usertradingRecord, setuserTradingRecord] = useState();
+    const [usertradingRecord, setuserTradingRecord] = useState([]);
 
     const getTradingRecording = (userIDget) => {
     Axios.post('http://localhost:3001/gettradingrecord', {
@@ -159,6 +87,77 @@ const Dashboard = () => {
     { field: 'entry_price', sortable: true, filter: true, displayName: "Entry Price"  },
     { field: 'pnl', sortable: true, filter: true, displayName: "P / L"  },
     ])
+
+    const [userPerformanceData, setuserPerformanceData] = useState([])
+
+    const getuserperformance = () => {
+      Axios.get('http://localhost:3001/getuserperformance', {
+        }).then(
+          (response) => {
+            console.log(response.data);
+            setuserPerformanceData(response.data);
+            // console.log(currWeekRecomend);
+            // setcurrWeekBuyCost( response.data.map( (value, key) => (value.predicted_cost) ).reduce( (accumulator, currentValue) => {return accumulator+currentValue} ) )
+        }
+      )
+    };
+
+    const chartOptions = {
+        series: [{
+            name: 'Growth Rate (in %) this year',
+            data: userPerformanceData.map( (value, key) => value.growth_rate )
+        }],
+        options: {
+            color: ['green'],
+            chart: {
+                background: 'transparent'
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            xaxis: {
+                categories: userPerformanceData.map( (value, key) => value.year_week ),
+                title: { text: "Year-Week", }
+            },
+            yaxis: {
+                labels: {
+                    formatter: function(val) { return (val*100).toFixed(2);}
+                }
+            },
+            legend: {
+                position: 'top'
+            },
+            grid: {
+                show: false
+            }
+        }
+    }
+
+    // const [summaryCard, setsummaryCard] = useState([
+    //     {
+    //         "icon": "bx bx-money-withdraw",
+    //         "count": userPerformanceData[42][0].current_balance,
+    //         "title": "Current Balance"
+    //     },
+    //     {
+    //         "icon": "bx bx-candles",
+    //         "count": userPerformanceData[42][0].weekly_profit,
+    //         "title": "Weekly Profit"
+    //     },
+    //     {
+    //         "icon": "bx bx-stats",
+    //         "count": userPerformanceData[42][0].total_asset,
+    //         "title": "Total Assets"
+    //     },
+    //     {
+    //         "icon": "bx bx-dollar-circle",
+    //         "count": userPerformanceData[42][0].cash,
+    //         "title": "Cash"
+    //     }
+    // ])
       
     
     /*
@@ -180,15 +179,16 @@ const Dashboard = () => {
     }*/
     useEffect( () => {
         getTradingRecording(userID);
+        getuserperformance();
       }, []);
 
     return (
         <div>
             <h2 className='container-div'>Account Summary</h2>
-            <h5 id = "subtitle" className="page-header">Portfolio performance in current week</h5>
+            <h3 id = "subtitle" className="page-header">Portfolio performance</h3>
             <div className="row">
                 <div className="col-5">
-                    <div style ={{marginTop: "3.5vh"}} className="row">
+                    <div style ={{marginTop: "3vh"}} className="row">
                         {
                             statusCards.map((item, index) => (
                                 <div className="col-6" key={index}>
@@ -204,16 +204,9 @@ const Dashboard = () => {
                 </div>               
                 <div className="col-7">
                     <div className="card full-height">
-                    <h5>Growth rate (in %) across week</h5>
+                    <h5>Growth Rate (in %) this year</h5>
                     <Chart
-                        options={themeReducer === 'theme-mode-dark' ? {
-                            ...chartOptions.options,
-                            theme: { mode: 'dark'}
-                        } : {
-                            ...chartOptions.options,
-                            theme: { mode: 'light'}
-                        }}
-                        
+                        options={chartOptions.options}                        
                         series={chartOptions.series}
                         type='line'
                         height='100%'
