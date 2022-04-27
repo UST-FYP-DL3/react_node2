@@ -125,7 +125,7 @@ function Stocks(props) {
                 setSearchSector(response.data[0].stocksector) // response has a propert call data
                 // setSumOfCost(response.data.map( (value, key) => (value.cost)).reduce( (accumulator, currentValue) => {return accumulator + currentValue}))
             }
-        ); // get request, response contains everything send from the backend
+        ); 
     };
 
     const [currPrice, setCurrPrice] = useState(0)
