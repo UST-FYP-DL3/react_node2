@@ -89,18 +89,18 @@ function Group() {
         head: ["Name", "Investment", "Percentage"],
         body: [{
             "name": "Jackson Wong",
-            "Investment": 10000,
-            "Percentage": "25%"
+            "Investment": "$50,000",
+            "Percentage": "20.833%"
         },
         {
             "name": "Samson Fung",
-            "Investment": 10000,
-            "Percentage": "25%"
+            "Investment": "$100,000",
+            "Percentage": "41.667%"
         },
         {
             "name": "Ryan Ling",
-            "Investment": 20000,
-            "Percentage": "50%"
+            "Investment": "$90,000",
+            "Percentage": "37.5%"
         }
     ]}
     

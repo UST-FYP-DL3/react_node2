@@ -119,8 +119,8 @@ const Dashboard = () => {
                 curve: 'smooth'
             },
             xaxis: {
-                categories: userPerformanceData.map( (value, key) => value.year_week ),
-                title: { text: "Year-Week", }
+                categories: userPerformanceData.map( (value, key) => value.Date ),
+                title: { text: "Date", }
             },
             yaxis: {
                 labels: {

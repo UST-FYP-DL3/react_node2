@@ -120,7 +120,7 @@ app.get('/singlestockdetails:stocksymbol', (req, res) => { // request and respon
 // user performance
 app.get('/getuserperformance', (req, res) => { // standard for creating express when using request
     
-    const sql = "SELECT * FROM fypsystem.userperformance where year_week Between '2021-01' and '2021-44';"
+    const sql = "SELECT * FROM fypsystem.userperformancedata where Date Between '2021-01-03' and '2021-11-07';"
 
     db.query(sql, 
     (err, result) => {

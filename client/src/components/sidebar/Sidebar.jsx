@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import './sidebar.css'
 
-import logo from '../../assets/images/unifi-logo'
+import logo from '../../assets/images/logo-g.png'
 
 import sidebar_items from '../../assets/JsonData/sidebar_routes.json'
 

@@ -694,7 +694,7 @@ export default function BasicTabs() {
                 <Box>
                 <div className='col-12 mt-1'>
                 <h4 style={{color: 'green'}}> +{((currWeekExitValue/currWeekBuyCost - 1)*100).toFixed(2)}%</h4>
-                    <h4 style={{color: 'green'}}> {(currWeekExitValue - currWeekBuyCost).toFixed(2)}</h4>   
+                    <h4 style={{color: 'green'}}> ${(currWeekExitValue - currWeekBuyCost).toFixed(2)}</h4>   
                 </div>
                 </Box>               
             </div>
@@ -742,7 +742,7 @@ export default function BasicTabs() {
                 <Box>
                   <div className='col-12 mt-1'>
                     <h4 style={{color: 'green'}}> +{((nextWeekExitValue/nextWeekBuyCost - 1)*100).toFixed(2)}%</h4>
-                    <h4 style={{color: 'green'}}> {(nextWeekExitValue - nextWeekBuyCost).toFixed(2)}</h4>                    
+                    <h4 style={{color: 'green'}}> ${(nextWeekExitValue - nextWeekBuyCost).toFixed(2)}</h4>                    
                   </div>
                 </Box>                
             </div>
