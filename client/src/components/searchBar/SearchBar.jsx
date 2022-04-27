@@ -6,10 +6,10 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from "@mui/icons-material/Close";
 
-import { Card, Button, Alert, Container } from "react-bootstrap"
+import { Card, Button, Alert, Container, InputGroup, FormControl } from "react-bootstrap"
 import Box from '@mui/material/Box';
 
-function SearchBar( {placeholder, data, location} ) {
+function SearchBar( props ) {
 
     const [filteredData, setFilteredData] = useState([]);
     const [wordEntered, setWordEntered] = useState("");
@@ -17,7 +17,7 @@ function SearchBar( {placeholder, data, location} ) {
     const handleFilter = (event) => {
       const searchWord = event.target.value;
       setWordEntered(searchWord);
-      const newFilter = data.filter((value) => {
+      const newFilter = props.data.filter((value) => {
         return value.Name.toLowerCase().includes(searchWord.toLowerCase()) || value.Symbol.toLowerCase().includes(searchWord.toLowerCase());
       });
   
@@ -38,7 +38,7 @@ function SearchBar( {placeholder, data, location} ) {
           <div className="searchInputs">
             <input
               type="text"
-              placeholder={placeholder}
+              placeholder={props.placeholder}
               value={wordEntered}
               onChange={handleFilter}
             />
@@ -49,14 +49,18 @@ function SearchBar( {placeholder, data, location} ) {
                 <CloseIcon id="clearBtn" onClick={clearInput} />
               )}
             </div>
+            {/* <InputGroup>
+              <FormControl placeholder="Enter Stock Symbol (e.g. MSFT)" value={wordEntered} onChange={handleFilter}/>
+            </InputGroup> */}
+            
           </div>
           {filteredData.length != 0 && (
             <div className="dataResult">
               {filteredData.slice(0, 15).map((value, key) => {
                 return (
-                  <a className="dataItem" href={'/'} target="_blank">
+                  <button className="dataItem" onClick={() => props.searching(value.Symbol)} >
                     <p>{value.Symbol}: {value.Name}</p>
-                  </a>
+                  </button>
                 );
               })}
             </div>

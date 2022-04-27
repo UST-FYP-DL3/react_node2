@@ -27,13 +27,15 @@ import { getContrastRatio } from '@mui/material';
 
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
-// import stockConstituents from '../assets/JsonData/stockConstituents.json'
+import stockConstituents from '../assets/JsonData/stockConstituents.json'
 
 import { render } from 'react-dom';
 import { AgGridReact } from 'ag-grid-react';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+
+import SearchBar from '../components/searchBar/SearchBar'
 
 const topRatings = {
     head: [ 'Date', 'Analyst', 'Action', 'Rating'],
@@ -675,14 +677,25 @@ function Stocks(props) {
                 <h2 className='container-div'>Stock Information</h2>
             </div>
 
-            <Row className='justify-content-md-center mt-3'>
-                <div className='col-10'>
-                    <InputGroup className="mb-3">
+            <Row className='mt-3 mb-3'>
+                <div className='col-12 mb-3'>
+                    {/* <InputGroup>
                         <FormControl placeholder="Enter Stock Symbol (e.g. MSFT)" onChange={(event)=>{setSearchSymbol(event.target.value)}} />
                         <Button variant="outline-secondary" id="button-addon2" onClick={ () => {clickSymbolSearch(searchSymbol) }} >Search</Button>
-                    </InputGroup>
+                        <Button variant="outline-secondary" id="button-addon2" onClick={ () => {clickSymbolSearch(searchSymbol) }} >Search</Button>                        
+                    </InputGroup> */}
+                    <SearchBar placeholder="Stock Symbol or Name (e.g. MSFT)" data={stockConstituents} searching={searchResult => setSearchSymbol(searchResult)}/>
                 </div>
+                {/* <Button variant="outline-secondary" id="button-addon2" onClick={ () => {clickSymbolSearch(searchSymbol) }} >Search</Button> */}
+                <div className='col-12'>
+                    <Button variant="secondary mx-2" id="button-addon2" onClick={ () => {clickSymbolSearch(searchSymbol) }} >Search</Button>
+                </div>
+                
             </Row>
+
+            {/* <Row className='justify-content-md-center mt-3'>
+                <SearchBar placeholder="Search" data={stockConstituents} />
+            </Row> */}
 
 
             <div className='col-12'>
