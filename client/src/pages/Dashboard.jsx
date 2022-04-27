@@ -25,6 +25,12 @@ import postImage from '../assets/images/post2.jfif'
 import './dashboard.css';
 import Axios from 'axios'
 
+import { AgGridReact } from 'ag-grid-react';
+
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+
+
 const chartOptions = {
     series: [{
         name: 'Growth rate (in %)',
@@ -135,6 +141,24 @@ const Dashboard = () => {
         });
       };
 
+    const [usertradingRecord, setuserTradingRecord] = useState();
+
+    const getTradingRecording = (userIDget) => {
+    Axios.post('http://localhost:3001/gettradingrecord', {
+        userID: userIDget,
+        }).then(
+        (response) => {
+            console.log(response.data);
+            setuserTradingRecord(response.data);
+        }
+    )
+    };
+    const [colDefsTrading, setcolDefsTrading] = useState([
+    { field: 'stock_code', sortable: true, filter: true, displayName: "Stock"  },
+    { field: 'num_of_shares', sortable: true, filter: true, displayName: "Quantity"  },
+    { field: 'entry_price', sortable: true, filter: true, displayName: "Entry Price"  },
+    { field: 'pnl', sortable: true, filter: true, displayName: "P / L"  },
+    ])
       
     
     /*
@@ -154,6 +178,9 @@ const Dashboard = () => {
     const displayInfo = () => {
         console.log(name + age + wage); // show the info for testing
     }*/
+    useEffect( () => {
+        getTradingRecording(userID);
+      }, []);
 
     return (
         <div>
@@ -193,25 +220,32 @@ const Dashboard = () => {
                     />
                     </div>
                 </div>
-                <div className="col-7">
+                <div className="col-8">
                     <div className='card'>
                         <div className='card__header'>
                             <h3>Portfolio</h3>
                         </div>
                         <div className='card__body'>
-                            <Table
+                            {/* <Table
                                 headData={topCustomers.head}
                                 renderHead={(item, index) => renderCusomerHead(item, index)}
                                 bodyData={topCustomers.body}
                                 renderBody={(item, index) => renderCusomerBody(item, index)}
-                            />
+                            /> */}
+                            <div className="ag-theme-alpine" style={{height: 300, width : '100%'}}>
+                                <AgGridReact
+                                    rowData={usertradingRecord}
+                                    columnDefs={colDefsTrading}
+                                    animateRows={true} >
+                                </AgGridReact>
+                            </div>
                         </div>
                         <div className='card__footer'>
                             <Link to='/'>View all</Link>
                         </div>
                     </div>
                 </div>
-                <div className="col-5">
+                <div className="col-4">
                             <h3 style={{textAlign: "center"}}>Further readings</h3>
                             <h5 style={{textAlign: "center"}}>This week's key performance indicators</h5>
                             

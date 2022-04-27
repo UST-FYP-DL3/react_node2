@@ -204,6 +204,81 @@ app.post('/stockanalystratings', (req, res) => { // request and response, res =>
     });
 })
 
+// current Tab
+app.post('/getcurrweeklyRecommendation', (req, res) => { // standard for creating express when using request
+    const userID = req.body.userID
+    const weekNo = req.body.weekNo
+    
+    const sql = "SELECT * FROM fypsystem.predictportfolio where userID = ? and weekno = ?"
+
+    db.query(sql, [userID, weekNo], 
+    (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            // console.log( result.map( (value, key) => (value.stock) ) )
+            // console.log( result.map( (value, key) => (value.cost) ) )
+            res.send(result) // or res.json or res.send
+        }
+    })
+});
+
+app.post('/getnextweeklyRecommendation', (req, res) => { // standard for creating express when using request
+    const userID = req.body.userID
+    const weekNo = req.body.weekNo
+    
+    const sql = "SELECT * FROM fypsystem.predictportfolio where userID = ? and weekno = ?"
+
+    db.query(sql, [userID, weekNo], 
+    (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            // console.log( result.map( (value, key) => (value.stock) ) )
+            // console.log( result.map( (value, key) => (value.cost) ) )
+            res.send(result) // or res.json or res.send
+        }
+    })
+});
+
+
+app.post('/gettradingrecord', (req, res) => { // standard for creating express when using request
+    const userID = req.body.userID
+    
+    const sql = "SELECT * FROM fypsystem.usertradingrecord where userID = ?"
+
+    db.query(sql, [userID], 
+    (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            // console.log( result.map( (value, key) => (value.stock) ) )
+            // console.log( result.map( (value, key) => (value.cost) ) )
+            res.send(result) // or res.json or res.send
+        }
+    })
+});
+
+app.get('/getnextweekcorrelation', (req, res) => { // standard for creating express when using request
+    
+    const sql = "SELECT * FROM fypsystem.nextweekcorrelation"
+
+    db.query(sql, 
+    (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            // console.log( result.map( (value, key) => (value.stock) ) )
+            // console.log( result.map( (value, key) => (value.cost) ) )
+            res.send(result) // or res.json or res.send
+        }
+    })
+});
+
 
 app.post('/addAholding', (req, res) => { // request and response, res => send sth to the front
     const userID = req.body.userID

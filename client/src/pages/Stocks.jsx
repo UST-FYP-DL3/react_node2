@@ -86,7 +86,7 @@ function Stocks(props) {
     
     // date format
     const SystemCurrTIME = '16:30:00'
-    const SystemCurrDATE = '2021-11-08' // one date later for difference between date in res.send and mysql
+    const SystemCurrDATE = '2021-11-05' // one date later for difference between date in res.send and mysql
     const SystemEndPredDATE = '2021-11-15'
     var currDate = new Date(SystemCurrDATE)
     // var yesterdayDate = new Date(SystemDATE)

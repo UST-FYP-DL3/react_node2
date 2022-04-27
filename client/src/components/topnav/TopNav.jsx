@@ -110,10 +110,10 @@ function Topnav() {
         <div className='topnav'>
             {/* <SearchBar placeholder="Enter a symbol" data={stockConstituents}/> */}
             <div className="topnav__search">
-                <input type="text" placeholder='Search here...' />
+                {/* <input type="text" placeholder='Search here...' />
                 <Button>
                     <i className='bx bx-search'></i>
-                </Button>
+                </Button> */}
             </div>
             {/* <div className='box' style={{}}>
                 <SearchBar placeholder="Enter a symbol" data={stockConstituents}/>

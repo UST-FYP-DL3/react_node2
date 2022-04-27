@@ -9,7 +9,7 @@ const StatusCard = props => {
                 <i style ={{color: '#00008B'}} className={props.icon}></i>
             </div>
             <div className="status-card__info">
-                <a href ={props.link} style={{margin: "auto",fontSize: "25px"}} target="_blank">{props.title}</a>
+                <a href ={props.link} style={{margin: "auto",fontSize: "20px"}} target="_blank">{props.title}</a>
             </div>
         </div>
     )

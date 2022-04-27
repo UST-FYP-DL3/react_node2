@@ -16,6 +16,12 @@ import Table from '../table/Table'
 
 import corrWeek45Data from '../../assets/JsonData/correlationWeek45.json'
 
+import { render } from 'react-dom';
+import { AgGridReact } from 'ag-grid-react';
+
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+
 // // import portfolioWeek44 from '../../assets/JsonData/PortfolioWeek44.json'
 // // import portfolioWeek45 from '../../assets/JsonData/PortfolioWeek45.json'
 // // import corrPortfolioWeek45 from '../../assets/JsonData/correlationWeek45.json'
@@ -389,9 +395,24 @@ function a11yProps(index) {
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
 
+  const SystemCurrTIME = '16:30:00'
+  const SystemCurrDATE = '2021-11-04' // one date later for difference between date in res.send and mysql
+  const SystemEndPredDATE = '2021-11-15'
+  var currDate = new Date(SystemCurrDATE)
+  currDate = currDate.toISOString().split('T')[0]
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const [currWeekNo, setCurrWeekNo] = useState(44)
+  const [nextWeekNo, setNextWeekNo] = useState(45)
+
+  const [currWeekRecomend, setcurrWeekRecomend] = useState([]);
+  const [nextWeekRecomend, setnextWeekRecomend] = useState([]);
+
+  const [currWeekBuyCost, setcurrWeekBuyCost] = useState(0);
+  const [nextWeekBuyCost, setnextWeekBuyCost] = useState(0);
 
   const { currentUser } = useAuth()
   const userID = currentUser.uid // ZtGPo16e7rdc3lt0m4xGAK8PsB03
@@ -413,28 +434,39 @@ export default function BasicTabs() {
   };
     //, {userID: currentUser.uid} // , {userID: 'ZtGPo16e7rdc3lt0m4xGAK8PsB03'}
 
-  useEffect( () => {
-    getHoldings(userID);
-  }, []);
+  const getcurrweekRecommendation = (userIDget, currWeekNoget) => {
+    Axios.post('http://localhost:3001/getcurrweeklyRecommendation', {
+        userID: userIDget,
+        weekNo: currWeekNoget,
+      }).then(
+        (response) => {
+          console.log(response.data);
+          setcurrWeekRecomend(response.data);
+          // console.log(currWeekRecomend);
+          setcurrWeekBuyCost( response.data.map( (value, key) => (value.predicted_cost) ).reduce( (accumulator, currentValue) => {return accumulator+currentValue} ) )
+      }
+    )
+  };
 
+  const [calCurrBuyCost, setcalCurrBuyCost] = useState();
 
-  var StockNameWk44 = ["ABMD", "CZR", "DPZ", "DXCM", "EXR", "LDOS", "MKTX", 
-                              "MRNA", "MSCI", "NFLX", "NOC", "NVDA", "ODFL", "POOL", "TMUS"]
-  var StockShareWk44 = [1, 2, 3, 1, 7, 1, 1, 4, 1, 2, 1, 5, 2, 1, 1]
-  var StockPriceWk44 = [359.75, 105.3, 496.67, 637.09, 197.43, 95.82, 390.06, 
-                        244.68, 652.7685, 651.45, 363.27, 308.04, 351.45, 519.7799, 120.86]
-                        // change to 2021-11-05 close price, not yet change
-                        // if change remove this comment
-  var StockValueWk44 = []
-  for (var i = 0; i < StockShareWk44.length; i++) {
-    StockValueWk44[i] = StockShareWk44[i]*StockPriceWk44[i]
-  }
-  var totalValueWk44 = StockValueWk44.reduce( (accumulator, currentValue) => {return accumulator+currentValue} )
+  const getnextweekRecommendation = (userIDget, nextWeekNoget) => {
+    Axios.post('http://localhost:3001/getnextweeklyRecommendation', {
+        userID: userIDget,
+        weekNo: nextWeekNoget,
+      }).then(
+        (response) => {
+          console.log(response.data);
+          setnextWeekRecomend(response.data);
+          setnextWeekBuyCost( response.data.map( (value, key) => (value.predicted_cost) ).reduce( (accumulator, currentValue) => {return accumulator+currentValue} ) )
+      }
+    )
+  };
 
   const currValue = {
-    series: userHoldings.map( (value, key) => (value.cost) ), // StockValueWk44, // userHoldings.map( (value, key) => (value.cost) ),
+    series: currWeekRecomend.map( (value, key) => (value.predicted_entry_price) ), // StockValueWk44, // userHoldings.map( (value, key) => (value.cost) ),
     chartOptions: {
-      labels: userHoldings.map( (value, key) => (value.stock) ), // StockNameWk44, // userHoldings.map( (value, key) => (value.stock) ),
+      labels: currWeekRecomend.map( (value, key) => (value.stock_code) ), // StockNameWk44, // userHoldings.map( (value, key) => (value.stock) ),
       chart: {
         type: 'dount',
         width: '100%',
@@ -478,22 +510,12 @@ export default function BasicTabs() {
       }, 
     },        
   }
-  
-  var StockNameWk45 = ["ABMD", "CZR", "DPZ", "DXCM", "EXR", "LDOS", "LLY", 
-                              "MKTX", "MRNA", "MSCI", "NFLX", "NVDA", "ODFL", "POOL"]
-  var StockShareWk45 = [1, 2, 3, 1, 7, 2, 1, 1, 4, 1, 1, 5, 3, 1]
-  var StockPricePredWk45 = [364.71560, 107.213300, 501.98077, 627.79380, 195.39474, 96.085526, 263.89730,
-                            393.45030, 244.98958, 659.07855, 220.73108, 655.76930, 291.66815, 348.09146, 519.73720]
-  var StockValuePredWk45 = []
-  for (var i = 0; i < StockShareWk45.length; i++) {
-    StockValuePredWk45[i] = StockShareWk45[i]*StockPricePredWk45[i]
-  }
-  var totalValueWk45 = StockValuePredWk45.reduce( (accumulator, currentValue) => {return accumulator+currentValue} )
+
   
   const predValue = {
-    series: StockValuePredWk45, // userHoldings.map( (value, key) => (value.cost) ),
+    series: nextWeekRecomend.map( (value, key) => (value.predicted_entry_price) ), // userHoldings.map( (value, key) => (value.cost) ),
     chartOptions: {
-      labels: StockNameWk45, // userHoldings.map( (value, key) => (value.stock) ),
+      labels: nextWeekRecomend.map( (value, key) => (value.stock_code) ), // userHoldings.map( (value, key) => (value.stock) ),
       chart: {
         type: 'dount',
         width: '100%',
@@ -517,7 +539,7 @@ export default function BasicTabs() {
   const predIndustry = {
     series: [1843, 1323, 1534, 1021, 876, 1291],
     chartOptions: {
-      labels: ['Technology', 'Industrials', 'Fiancials', 'Utilities', 'Energy', 'Health Care'],
+      labels: ['Technology', 'Industrials', 'Energy', 'Utilities', 'Energy', 'Health Care'],
       chart: {
         type: 'dount',
         width: '100%',
@@ -538,45 +560,57 @@ export default function BasicTabs() {
     },        
   }
 
-  const tradingRecord = {
-    head: ['Date', 'Stock', 'B / S', 'Price', 'Quantity', 'Value', 'P / L'],
-    body: [ {
-      "Date": '2021-11-01',
-      "Stock": 'CSCO',
-      "Action": 'Buy',
-      "Price": 56.11,
-      "Quantity": 15,
-      "Value": 841.65,
-      "Profit": null,
-    },
-    {
-      "Date": '2021-11-01',
-      "Stock": 'BRK.B',
-      "Action": 'Buy',
-      "Price": 286.24,
-      "Quantity": 5,
-      "Value": 1431.2,
-      "Profit": null,
-    },
-    {
-      "Date": '2021-11-01',
-      "Stock": 'SNOW',
-      "Action": 'Sell',
-      "Price": 357.73,
-      "Quantity": 4,
-      "Value": 1430.92,
-      "Profit": 129.43,
-    },
-    {
-      "Date": '2021-11-01',
-      "Stock": 'F',
-      "Action": 'Sell',
-      "Price": 17.95,
-      "Quantity": 75,
-      "Value": 1328.30,
-      "Profit": 98.72,
-    } ]
-  }
+  const [usertradingRecord, setuserTradingRecord] = useState();
+
+  const getTradingRecording = (userIDget) => {
+    Axios.post('http://localhost:3001/gettradingrecord', {
+        userID: userIDget,
+      }).then(
+        (response) => {
+          console.log(response.data);
+          setuserTradingRecord(response.data);
+      }
+    )
+  };
+  const [colDefsTrading, setcolDefsTrading] = useState([
+    { field: 'entry_date', sortable: true, filter: true, displayName: "Entry Date" },
+    { field: 'stock_code', sortable: true, filter: true, displayName: "Stock"  },
+    { field: 'num_of_shares', sortable: true, filter: true, displayName: "Quantity"  },
+    { field: 'entry_price', sortable: true, filter: true, displayName: "Entry Price"  },
+    { field: 'stoploss', sortable: true, filter: true, displayName: "Stoploss"  },
+    { field: 'exit_price', sortable: true, filter: true, displayName: "Exit Price"  },
+    { field: 'pnl', sortable: true, filter: true, displayName: "P / L"  },
+  ])
+
+
+
+  const [nextWeekCorrelation, setnextWeekCorrelation] = useState()
+
+  const getnextweekcorrelation = () => {
+    Axios.get('http://localhost:3001/getnextweekcorrelation', {
+      }).then(
+        (response) => {
+          console.log(response.data);
+          setnextWeekCorrelation(response.data);
+          // console.log(currWeekRecomend);
+          // setcurrWeekBuyCost( response.data.map( (value, key) => (value.predicted_cost) ).reduce( (accumulator, currentValue) => {return accumulator+currentValue} ) )
+      }
+    )
+  };
+
+  const [colDefsCorrleation, setcolDefsCorrleation] = useState([
+    { field: 'Stock', sortable: true, filter: true, displayName: "Stock" },
+    { field: 'NLOK US EQUITY', sortable: true, filter: true, displayName: "NLOK" },
+    { field: 'IPG US EQUITY', sortable: true, filter: true, displayName: "IPG"  },
+    { field: 'NI US EQUITY', sortable: true, filter: true, displayName: "NI"  },
+    { field: 'PFE US EQUITY', sortable: true, filter: true, displayName: "PFE"  },
+    { field: 'CSX US EQUITY', sortable: true, filter: true, displayName: "CSX"  },
+    { field: 'SEE US EQUITY', sortable: true, filter: true, displayName: "SEE"  },
+    { field: 'UDR US EQUITY', sortable: true, filter: true, displayName: "UDR"  },
+    { field: 'ROL US EQUITY', sortable: true, filter: true, displayName: "ROL"  },
+  ])
+
+
 
   const corrweek45 = {
     head: ["Stock", "NVDA", "NFLX", "DXCM", "ABMD", "CZR", "MSCI", "LDOS", "ODFL", "POOL", "MRNA", "DPZ", "MKTX", "EXR", "LLY"],
@@ -618,7 +652,13 @@ export default function BasicTabs() {
     </tr>
   )
 
-  
+  useEffect( () => {
+    getHoldings(userID);
+    getcurrweekRecommendation(userID, currWeekNo);
+    getnextweekRecommendation(userID, nextWeekNo);
+    getTradingRecording(userID);
+    getnextweekcorrelation();
+  }, []);
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -632,7 +672,7 @@ export default function BasicTabs() {
         <div className="row">
           <div className="col-4 sm-6">
             <div className='card full-height'>
-              <h5>Total Value: ${totalValueWk44.toFixed(2)}</h5>
+              <h5>Total Cost: ${currWeekBuyCost.toFixed(2)} </h5>
               <Chart options={currValue.chartOptions} series={currValue.series} type='donut' />
             </div>
           </div>
@@ -659,12 +699,19 @@ export default function BasicTabs() {
               <div className='card__header'>
                 <h3>Trading Record</h3>
               </div>
-              <Table 
+              {/* <Table 
                 headData={tradingRecord.head}
                 renderHead={(item, index) => renderTableHead(item, index)}
                 bodyData={tradingRecord.body}
                 renderBody={(item, index) => rendertradingRecordBody(item, index)}                    
-              />
+              /> */}
+              <div className="ag-theme-alpine" style={{height: 400, width : '100%'}}>
+                <AgGridReact
+                    rowData={usertradingRecord}
+                    columnDefs={colDefsTrading}
+                    animateRows={true} >
+                </AgGridReact>
+              </div>
             </div>
           </div>          
         </div>
@@ -673,7 +720,7 @@ export default function BasicTabs() {
       <div className="row">
           <div className="col-4 sm-6">
             <div className='card full-height'>
-              <h5>Total Value: ${totalValueWk45.toFixed(2)}</h5>
+              <h5>Total Cost: ${nextWeekBuyCost.toFixed(2)}</h5>
               <Chart options={predValue.chartOptions} series={predValue.series} type='donut' />
             </div>
           </div>
@@ -700,12 +747,19 @@ export default function BasicTabs() {
               <div className='card__header'>
                 <h3>Correlation Table</h3>
               </div>
-              <Table 
+              {/* <Table 
                 headData={corrweek45.head}
                 renderHead={(item, index) => renderTableHead(item, index)}
                 bodyData={corrweek45.body}
                 renderBody={(item, index) => rendercorrweek45Body(item, index)}                    
-              />
+              /> */}
+              <div className="ag-theme-alpine" style={{height: 400, width : '100%'}}>
+                <AgGridReact
+                    rowData={nextWeekCorrelation}
+                    columnDefs={colDefsCorrleation}
+                    animateRows={true} >
+                </AgGridReact>
+              </div>
             </div>
           </div>          
         </div> 
