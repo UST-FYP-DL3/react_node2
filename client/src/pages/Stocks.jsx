@@ -29,87 +29,11 @@ import { getContrastRatio } from '@mui/material';
 
 // import stockConstituents from '../assets/JsonData/stockConstituents.json'
 
-const topIndicator = {
-    head: [
-        {
-            "item": 'Date',
-            "website": 'https://www.investopedia.com/terms/i/investment_horizon.asp#:~:text=An%20investment%20horizon%20refers%20to%20the%20length%20of,has%20a%20long-term%20investment%20horizon%20and%20is%20risk-averse.'
-        },
-        {
-            "item": 'ATR',
-            "website": 'https://www.investopedia.com/terms/a/atr.asp'
-        },
-        {
-            "item": 'BB_MA',
-            "website": 'https://www.investopedia.com/articles/technical/102201.asp'
-        },
-        {
-            "item": 'EMAVG',
-            "website": 'https://www.investopedia.com/ask/answers/122314/what-exponential-moving-average-ema-formula-and-how-ema-calculated.asp#:~:text=The%20exponential%20moving%20average%20%28EMA%29%20is%20a%20technical,more%20weighting%20or%20importance%20to%20recent%20price%20data.'
-        },
-        {
-            "item": 'MOM',
-            "website": 'https://www.investopedia.com/terms/m/momentum.asp'
-        },
-        {
-            "item": 'RSI',
-            "website": 'https://www.investopedia.com/terms/r/rsi.asp'
-        }
-    ],
-    body: [
-        {
-            "date": "10 Nov 21",
-            "atr": 2.513468,
-            "bb_ma": 213.062940,
-            "emavg": 216.478291,
-            "mom": 2.4600,
-            "rsi": 59.948243
-        },
-        {
-            "date": "09 Nov 21",
-            "atr": 2.940202,
-            "bb_ma": 212.384345,
-            "emavg": 216.687436,
-            "mom": 0.6500,
-            "rsi": 61.758888
-        },
-        {
-            "date": "08 Nov 21",
-            "atr": 3.317803,
-            "bb_ma": 211.640785,
-            "emavg": 216.606154,
-            "mom": 3.0200,
-            "rsi": 60.116419
-        },
-        {
-            "date": "05 Nov 21",
-            "atr": 4.006704,
-            "bb_ma": 210.863830,
-            "emavg": 217.064231,
-            "mom": 7.2500,
-            "rsi": 62.014016
-        },
-    ]
-}
+import { render } from 'react-dom';
+import { AgGridReact } from 'ag-grid-react';
 
-const renderIndicatorHead = (item, index) => (
-    <th style ={{textAlign: "center"}} key={index}>
-        {item.item}
-        <a href = {item.website} style ={{color: "blue", marginLeft: "2vh"}} target="_blank" class='bx bxs-info-circle'>
-        </a>
-    </th>
-)
-
-const renderIndicatorBody = (item, index) => (
-    <tr style ={{textAlign: "center"}} key={index}>
-        <td>{item.date}</td>
-        <td>{item.atr}</td>
-        <td>{item.bb_ma}</td>
-        <td>{item.emavg}</td>
-        <td>{item.mom}</td>
-        <td>{item.rsi}</td>
-    </tr>
-)
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
 const topRatings = {
     head: [ 'Date', 'Analyst', 'Action', 'Rating'],
@@ -171,9 +95,9 @@ function Stocks(props) {
     // yesterdayDate = yesterdayDate.toISOString().split('T')[0]
     endPredDate = endPredDate.toISOString().split('T')[0]
 
-    console.log(currDate)
+    // console.log(currDate)
     // console.log(yesterdayDate)
-    console.log(endPredDate)
+    // console.log(endPredDate)
 
 
     const defaultStock = 'MSFT'
@@ -234,13 +158,12 @@ function Stocks(props) {
         ); // get request, response contains everything send from the backend
     };
 
-    const [startPlotDate, setStartPlotDate] = useState(new Date('2021-01-01')) 
+    const [startPlotDate, setStartPlotDate] = useState(new Date('2020-12-31')) 
     const [endPlotDate, setEndPlotDate] = useState(new Date('2021-11-15')) 
     const [plotData, setPlotData] = useState([])
 
-
     const getSotckPriceWithDates = (searchSymbolget, startPlotDateget, endPlotDateget) => {
-        console.log("enter plotSotckPriceWithDates")
+        // console.log("enter plotSotckPriceWithDates")
         // console.log(currentUser.uid)
         Axios.post('http://localhost:3001/stockpriceplot', {
             stockSymbol: searchSymbolget,
@@ -347,14 +270,14 @@ function Stocks(props) {
             } ],
             annotations: [ {
                 x: currDate,
-                y: 0.9,
+                y: 0.95,
                 xref: 'x',
                 yref: 'paper',
                 text: 'prediction',
                 font: {color: 'blue'},
                 showarrow: true,
                 xanchor: 'right',
-                ax: -20,
+                ax: -15,
                 ay: 0
             },
             {
@@ -517,8 +440,8 @@ function Stocks(props) {
         },
     };
 
-    const [startInputDate, setStartInputtDate] = useState(new Date());
-    const [endInputDate, setEndInputDate] = useState(new Date());
+    const [startInputDate, setStartInputDate] = useState(new Date('2020-12-31'));
+    const [endInputDate, setEndInputDate] = useState(new Date('2021-11-15'));
 
     function clickDateSearch(searchSymbol) {
 
@@ -530,6 +453,64 @@ function Stocks(props) {
         getSotckPriceWithDates(searchSymbol, startInputDate, endInputDate);
     }
 
+
+    const renderIndicatorHead = (item, index) => (
+        <th style ={{textAlign: "center"}} key={index}>
+            {item.item}
+            <a href = {item.website} style ={{color: "blue", marginLeft: "2vh"}} target="_blank" class='bx bxs-info-circle'>
+            </a>
+        </th>
+    )
+
+    const renderIndicatorBody = (item, index) => (
+        <tr style ={{textAlign: "center"}} key={index}>
+            <td>{item.Date}</td>
+            <td>{item.ATR}</td>
+            <td>{item.BB_MA}</td>
+            <td>{item.EMAVG}</td>
+            <td>{item.MOM}</td>
+            <td>{item.RSI}</td>
+        </tr>
+    )
+
+    const [startIndicatorDate, setStartIndicatorDate] = useState(new Date('2021-09-30')) 
+    const [endIndicatorDate, setEndIndicatorDate] = useState(new Date('2021-11-08')) 
+    const [indicatorData, setIndicatorData] = useState([])
+
+    // for select the date
+    const [startInputDateIndicator, setstartInputDateIndicator] = useState(new Date('2021-09-30'));
+    const [endInputDateIndicator, setendInputDateIndicator] = useState(new Date('2021-11-08'));
+
+    
+    const getIndicatorWithDates = (searchSymbolget, startIndicatorDateget, endIndicatorDateget) => {
+        // console.log("enter plotSotckPriceWithDates")
+        // console.log(currentUser.uid)
+        Axios.post('http://localhost:3001/stocktradingindicators', {
+            stockSymbol: searchSymbolget,
+            startIndicatorDate: startIndicatorDateget,
+            endIndicatorDate: endIndicatorDateget,
+        }).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
+            (response) => {
+                console.log("getIndicatorWithDates, indicatorData:")
+                console.log(response.data);
+                setIndicatorData(response.data);
+                // setrowDataIndicator(response.data);
+            }
+        ) // get request, response contains everything send from the backend
+    };
+    
+    function clickIndicatorSearch(searchSymbol) {
+
+        setStartIndicatorDate(startInputDateIndicator);
+        setEndIndicatorDate(endInputDateIndicator);
+
+        getIndicatorWithDates(searchSymbol, startInputDateIndicator, endInputDateIndicator);
+
+    }
+
+
+    
+    // overall search
     function clickSymbolSearch(searchSymbol) {
         setSearchSymbol(searchSymbol);
         getSingleStockDetails(searchSymbol); 
@@ -537,7 +518,36 @@ function Stocks(props) {
         getStockYesterdayPrice(searchSymbol);
         setdisplaySymbol(searchSymbol);
         getSotckPriceWithDates(searchSymbol, startPlotDate, endPlotDate);
+        getIndicatorWithDates(searchSymbol, startIndicatorDate, endIndicatorDate);
+        getRatingWithDates(searchSymbol, startRatingDate, endRatingDate);
     }
+
+    const topIndicatorHeader = [
+        {
+            "item": 'Date',
+            "website": 'https://www.investopedia.com/terms/i/investment_horizon.asp#:~:text=An%20investment%20horizon%20refers%20to%20the%20length%20of,has%20a%20long-term%20investment%20horizon%20and%20is%20risk-averse.'
+        },
+        {
+            "item": 'ATR',
+            "website": 'https://www.investopedia.com/terms/a/atr.asp'
+        },
+        {
+            "item": 'BB_MA',
+            "website": 'https://www.investopedia.com/articles/technical/102201.asp'
+        },
+        {
+            "item": 'EMAVG',
+            "website": 'https://www.investopedia.com/ask/answers/122314/what-exponential-moving-average-ema-formula-and-how-ema-calculated.asp#:~:text=The%20exponential%20moving%20average%20%28EMA%29%20is%20a%20technical,more%20weighting%20or%20importance%20to%20recent%20price%20data.'
+        },
+        {
+            "item": 'MOM',
+            "website": 'https://www.investopedia.com/terms/m/momentum.asp'
+        },
+        {
+            "item": 'RSI',
+            "website": 'https://www.investopedia.com/terms/r/rsi.asp'
+        }
+    ]    
 
     // when first load the page
     useEffect( () => {
@@ -546,7 +556,118 @@ function Stocks(props) {
         getStockCurrPrice(defaultStock);
         getStockYesterdayPrice(defaultStock);
         getSotckPriceWithDates(defaultStock, startPlotDate, endPlotDate);
-      }, []);
+        getIndicatorWithDates(defaultStock, startIndicatorDate, endIndicatorDate);
+        getRatingWithDates(defaultStock, startRatingDate, endRatingDate);
+    }, []);
+
+    const indicatorHeaderLink = {
+        "Date": 'https://www.investopedia.com/terms/i/investment_horizon.asp#:~:text=An%20investment%20horizon%20refers%20to%20the%20length%20of,has%20a%20long-term%20investment%20horizon%20and%20is%20risk-averse.',
+        "ATR": 'https://www.investopedia.com/terms/a/atr.asp',
+        "ROC" : 'https://www.investopedia.com/terms/p/pricerateofchange.asp',
+        "EMAVG": 'https://www.investopedia.com/ask/answers/122314/what-exponential-moving-average-ema-formula-and-how-ema-calculated.asp#:~:text=The%20exponential%20moving%20average%20%28EMA%29%20is%20a%20technical,more%20weighting%20or%20importance%20to%20recent%20price%20data.',
+        "MOM": 'https://www.investopedia.com/terms/m/momentum.asp',
+        "RSI": 'https://www.investopedia.com/terms/r/rsi.asp',
+    }
+
+    // const [rowDataIndicator, setrowDataIndicator] = useState([]);
+    const [colDefsIndicator, setcolDefsIndicator] = useState([
+        { field: 'Date', sortable: true, filter: true, headerComponentParams: {template: '<div class="ag-cell-label-container" role="presentation">' +
+        '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+        '  <div ref="eLabel" class="ag-header-cell-label" role="presentation">' +
+        '    <span ref="eSortOrder" class="ag-header-icon ag-sort-order"></span>' +
+        '    <span ref="eSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>' +
+        '    <span ref="eSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>' +
+        '    <span ref="eSortNone" class="ag-header-icon ag-sort-none-icon"></span>' +
+        `    <div>Date<a href = ${indicatorHeaderLink.Date} target='_blank' class='bx bxs-info-circle'></a></div>` +
+        '    <span ref="eFilter" class="ag-header-icon ag-filter-icon"></span>' +
+        '  </div>' +
+        '</div>' } },
+        { field: 'ATR', sortable: true, filter: true, headerComponentParams: { template: '<div class="ag-cell-label-container" role="presentation">' +
+        '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+        '  <div ref="eLabel" class="ag-header-cell-label" role="presentation">' +
+        '    <span ref="eSortOrder" class="ag-header-icon ag-sort-order"></span>' +
+        '    <span ref="eSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>' +
+        '    <span ref="eSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>' +
+        '    <span ref="eSortNone" class="ag-header-icon ag-sort-none-icon"></span>' +
+        `    <div>ATR<a href = ${indicatorHeaderLink.ATR} target='_blank' class='bx bxs-info-circle'></a></div>` +
+        '    <span ref="eFilter" class="ag-header-icon ag-filter-icon"></span>' +
+        '  </div>' +
+        '</div>' } },
+        { field: 'ROC', sortable: true, filter: true, headerComponentParams: { template: '<div class="ag-cell-label-container" role="presentation">' +
+        '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+        '  <div ref="eLabel" class="ag-header-cell-label" role="presentation">' +
+        '    <span ref="eSortOrder" class="ag-header-icon ag-sort-order"></span>' +
+        '    <span ref="eSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>' +
+        '    <span ref="eSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>' +
+        '    <span ref="eSortNone" class="ag-header-icon ag-sort-none-icon"></span>' +
+        `    <div>ROC<a href = ${indicatorHeaderLink.ROC} target='_blank' class='bx bxs-info-circle'></a></div>` +
+        '    <span ref="eFilter" class="ag-header-icon ag-filter-icon"></span>' +
+        '  </div>' +
+        '</div>' } },
+        { field: 'EMAVG', sortable: true, filter: true, headerComponentParams: { template: '<div class="ag-cell-label-container" role="presentation">' +
+        '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+        '  <div ref="eLabel" class="ag-header-cell-label" role="presentation">' +
+        '    <span ref="eSortOrder" class="ag-header-icon ag-sort-order"></span>' +
+        '    <span ref="eSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>' +
+        '    <span ref="eSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>' +
+        '    <span ref="eSortNone" class="ag-header-icon ag-sort-none-icon"></span>' +
+        `    <div>EMAVG<a href = ${indicatorHeaderLink.EMAVG} target='_blank' class='bx bxs-info-circle'></a></div>` +
+        '    <span ref="eFilter" class="ag-header-icon ag-filter-icon"></span>' +
+        '  </div>' +
+        '</div>' } },
+        { field: 'MOM', sortable: true, filter: true, headerComponentParams: { template: '<div class="ag-cell-label-container" role="presentation">' +
+        '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+        '  <div ref="eLabel" class="ag-header-cell-label" role="presentation">' +
+        '    <span ref="eSortOrder" class="ag-header-icon ag-sort-order"></span>' +
+        '    <span ref="eSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>' +
+        '    <span ref="eSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>' +
+        '    <span ref="eSortNone" class="ag-header-icon ag-sort-none-icon"></span>' +
+        `    <div>MOM<a href = ${indicatorHeaderLink.MOM} target='_blank' class='bx bxs-info-circle'></a></div>` +
+        '    <span ref="eFilter" class="ag-header-icon ag-filter-icon"></span>' +
+        '  </div>' +
+        '</div>' } },
+        { field: 'RSI', sortable: true, filter: true, headerComponentParams: { template: '<div class="ag-cell-label-container" role="presentation">' +
+        '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+        '  <div ref="eLabel" class="ag-header-cell-label" role="presentation">' +
+        '    <span ref="eSortOrder" class="ag-header-icon ag-sort-order"></span>' +
+        '    <span ref="eSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>' +
+        '    <span ref="eSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>' +
+        '    <span ref="eSortNone" class="ag-header-icon ag-sort-none-icon"></span>' +
+        `    <div>RSI<a href = ${indicatorHeaderLink.RSI} target='_blank' class='bx bxs-info-circle'></a></div>` +
+        '    <span ref="eFilter" class="ag-header-icon ag-filter-icon"></span>' +
+        '  </div>' +
+        '</div>' } },
+    ])
+
+    const [startRatingDate, setStartRatingDate] = useState(new Date('2021-09-30')) 
+    const [endRatingDate, setEndRatingDate] = useState(new Date('2021-11-08')) 
+    const [ratingData, setRatingData] = useState([])
+
+    const [colDefsRating, setcolDefsRating] = useState([
+        { field: 'Date', sortable: true, filter: true },
+        { field: 'Analyst', sortable: true, filter: true },
+        { field: 'Action', sortable: true, filter: true },
+        { field: 'Rating', sortable: true, filter: true },
+    ])
+
+    const getRatingWithDates = (searchSymbolget, startRatingDateget, endRatingDateget) => {
+        // console.log("enter plotSotckPriceWithDates")
+        // console.log(currentUser.uid)
+        Axios.post('http://localhost:3001/stockanalystratings', {
+            stockSymbol: searchSymbolget,
+            startRatingDate: startRatingDateget,
+            endRatingDate: endRatingDateget,
+        }).then( // Axios.get('http://localhost:3001/holdings', {userID: currentUserID})
+            (response) => {
+                console.log("getRatingWithDates, ratingData:")
+                console.log(response.data);
+                setRatingData(response.data);
+                // setrowDataIndicator(response.data);
+            }
+        ) // get request, response contains everything send from the backend
+    };
+
+
 
     return (
         <div className='row'>
@@ -585,20 +706,23 @@ function Stocks(props) {
             </div>
 
             <div className='col-12'>
-                <div className='card'>
+                <div className='card'>                   
                     <Row className='justify-content-center'>
                         <div className='col-4'>
-                            <span>Choose Start Date:</span>
-                            <DatePicker selected={startInputDate} onChange={(date) => setStartInputtDate(date)}/>
+                            <span>Choose Start Date: (From 2015-05-31)</span>
+                            <DatePicker dateFormat="yyyy-MM-dd" selected={startInputDate} onChange={(date) => setStartInputDate(date)}/>
                         </div>
                         <div className='col-4'>
-                            <span>Choose End Date:</span>
-                            <DatePicker selected={endInputDate} onChange={(date) => setEndInputDate(date)}/>
+                            <span>Choose End Date: (To 2021-11-15)</span>
+                            <DatePicker dateFormat="yyyy-MM-dd" selected={endInputDate} onChange={(date) => setEndInputDate(date)}/>
                         </div>
                         <div className='col-1'>
                             <Button variant='secondary' onClick={ () => {clickDateSearch(searchSymbol) }}>
                                 Search
                             </Button>
+                        </div>
+                        <div className='col-6'>
+                            
                         </div>
                     </Row>
                     <hr />
@@ -619,80 +743,64 @@ function Stocks(props) {
                 </div>
             </div>
 
+            <div className='col-12'>
+                <div className='card'>
+                    <div className='card__header'>
+                        <h3>Trading indicators</h3>
+                        <h6>Click 
+                            <span style ={{color: "blue", marginLeft: "1vh", marginRight: "1vh"}} class='bx bxs-info-circle'></span>
+                            icon to see the indicator details.
+                        </h6>
+                    </div>
 
+                    <Row className='justify-content-center'>
+                        <div className='col-4'>
+                            <span>Choose Start Date: (From 2021-09-30)</span>
+                            <DatePicker dateFormat="yyyy-MM-dd" selected={startInputDateIndicator} onChange={(date) => setstartInputDateIndicator(date)}/>
+                        </div>
+                        <div className='col-4'>
+                            <span>Choose End Date: (To 2021-11-15)</span>
+                            <DatePicker dateFormat="yyyy-MM-dd" selected={endInputDateIndicator} onChange={(date) => setendInputDateIndicator(date)}/>
+                        </div>
+                        <div className='col-1'>
+                            <Button variant='secondary' onClick={ () => {clickIndicatorSearch(searchSymbol) }}>
+                                Search
+                            </Button>
+                        </div>
+                    </Row>
 
+                    <div className="ag-theme-alpine" style={{height: 400, width : '100%'}}>
+                        <AgGridReact
+                            rowData={indicatorData}
+                            columnDefs={colDefsIndicator}
+                            animateRows={true} >
+                        </AgGridReact>
+                    </div>
 
-
-
-
+                </div>
+            </div>
 
             <div className='col-12'>
-                <div style ={{border: "2px solid lightgrey", borderRadius: "10px"}}>
-                    
-                    <div style ={{display: "inline-block"}}>
-                        <h4 style ={{margin: "2vh", fontWeight: "600", marginBottom: "0.5vh"}}>Apple Inc.</h4>
-                <span style ={{margin: "2vh", fontWeight: "400"}}>NasdaqGS: AAPL</span>      
+                <div className='card'>
+                    <div className='card__header'>
+                        <h3>Analyst Ratings</h3>
+                        <h6>Know more about analyst rating: 
+                            <a href="https://www.investopedia.com/financial-edge/0512/understanding-analyst-ratings.aspx" target="_blank" style ={{color: "green", marginLeft: "1vh", marginRight: "1vh"}} class='bx bxs-info-circle'></a>
+                        </h6>
                     </div>
-                    <div style ={{display: "inline-block"}}>
-                        <button style ={{margin: "2vh"}} class="button-star" role="button">
-                            <i style ={{color: "#ffbf00", float: "right", clear: "right"}}class='bx bxs-star'>
-                                <span style ={{margin: "1vh",color: "#696969"}}>Save To Watchlist</span>
-                            </i>
-                        </button>
+
+                    <div className="ag-theme-alpine" style={{height: 400, width : '100%'}}>
+                        <AgGridReact
+                            rowData={ratingData}
+                            columnDefs={colDefsRating}
+                            animateRows={true} >
+                        </AgGridReact>
                     </div>
-                    <div style ={{border: "2px solid lightgrey"}}>
-                        <h2 style ={{margin: "2vh", fontWeight: "700", marginBottom: "0vh"}}>150.440</h2>
-                        <p style ={{color: "red",margin: "2vh", marginTop: "0vh", marginBottom: "0vh", fontWeight: "400"}}>151.28 (-0.55%)</p>
-                        <p style ={{margin: "2vh", marginTop: "0vh", fontWeight: "400"}}>At close: 2021-11-08  4:00 PM EDT (USD) · Market closed</p> 
-                    </div>
-                    <div className='col-12'>
-                        <iframe width='100%' height="600" frameborder="0" scrolling="no" src="//plotly.com/~fyp21dl3/26.embed"></iframe>
-                    </div>
-                    <div className="col-12">
-                            <div className='card'>
-                                <div>
-                                    <h3 className='card__header'>Trading indicators</h3>
-                                    <h6>Click 
-                                        <span style ={{color: "blue", marginLeft: "1vh", marginRight: "1vh"}} class='bx bxs-info-circle'></span>
-                                        icon to see the indicator details.
-                                    </h6>
-                                </div>
-                                <div className='card__body'>
-                                    <Table
-                                        headData={topIndicator.head}
-                                        renderHead={(item, index) => renderIndicatorHead(item, index)}
-                                        bodyData={topIndicator.body}
-                                        renderBody={(item, index) => renderIndicatorBody(item, index)}
-                                    />
-                                </div>
-                                <div className='card__footer'>
-                                    <Link to='/'>View all</Link>
-                                </div>
-                            </div>
-                    </div>
-                    <div className="col-12">
-                        <div className='card'>
-                            <div>
-                                <h3 className='card__header'>Analyst Rating</h3>
-                                <h6>Know more about analyst rating: 
-                                    <a href="https://www.investopedia.com/financial-edge/0512/understanding-analyst-ratings.aspx" target="_blank" style ={{color: "green", marginLeft: "1vh", marginRight: "1vh"}} class='bx bxs-info-circle'></a>
-                                </h6>
-                            </div>
-                            <div className='card__body'>
-                                <Table
-                                    headData={topRatings.head}
-                                    renderHead={(item, index) => renderRatingHead(item, index)}
-                                    bodyData={topRatings.body}
-                                    renderBody={(item, index) => renderRatingBody(item, index)}
-                                />
-                            </div>
-                            <div className='card__footer'>
-                                <Link to='/'>View all</Link>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
-                </div>
+            </div>
+
+
         </div>  // the return <div className='row'>      
     )
 }

@@ -169,6 +169,41 @@ app.post('/stockpriceplot', (req, res) => { // request and response, res => send
     });
 })
 
+// get the indicator
+app.post('/stocktradingindicators', (req, res) => { // request and response, res => send sth to the front
+    const stockSymbol = req.body.stockSymbol + ' US EQUITY'
+    const startIndicatorDate = req.body.startIndicatorDate
+    const endIndicatorDate = req.body.endIndicatorDate
+
+    const sql = 'SELECT * FROM fypsystem.technicaldata where Stock = ? and (Date BETWEEN ? AND ?);' 
+    
+    db.query(sql, [stockSymbol, startIndicatorDate, endIndicatorDate], (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            res.json(result) 
+        }
+    });
+})
+
+app.post('/stockanalystratings', (req, res) => { // request and response, res => send sth to the front
+    const stockSymbol = req.body.stockSymbol + ' US EQUITY'
+    const startRatingDate = req.body.startRatingDate
+    const endRatingDate = req.body.endRatingDate
+
+    const sql = 'SELECT * FROM fypsystem.analystdata where Stock = ? and (Date BETWEEN ? AND ?);' 
+    
+    db.query(sql, [stockSymbol, startRatingDate, endRatingDate], (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            res.json(result) 
+        }
+    });
+})
+
 
 app.post('/addAholding', (req, res) => { // request and response, res => send sth to the front
     const userID = req.body.userID
@@ -266,24 +301,43 @@ app.get('/stockPredChart1:chart1StockName', (req, res) => {
             console.log(err)
         }
         else {
-            // res.send(result)
+            res.send(result)
         }
     })
 })
 
-// app.post('/plotingChartone', (req, res) => { // request and response, res => send sth to the front
-//     const stockName = req.body.chart1StockName
-//     console.log(stockName)
+app.get('/searching:input', (req, res) => {
+    console.log(req.params.input)
+    var options = {
+        mode: 'text',
+        args: [
+            req.params.input,
+        ]
+    }
 
-//     PythonShell.run('../plotly/predictionCharts.py', stockName, (err, result) => {
-//         if (err) {
-//             console.log(err)
-//         }
-//         else {
-//             // res.send(result)
-//         }
-//     })
-// })
+    PythonShell.run('../plotly/search.py', options, (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            res.send(result)
+        }
+    })
+})
+
+app.post('/plotingChartone', (req, res) => { // request and response, res => send sth to the front
+    const stockName = req.body.chart1StockName
+    console.log(stockName)
+
+    PythonShell.run('../plotly/predictionCharts.py', stockName, (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            // res.send(result)
+        }
+    })
+})
 
 
 app.listen(3001, 
