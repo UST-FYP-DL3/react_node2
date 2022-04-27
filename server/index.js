@@ -175,7 +175,7 @@ app.post('/stocktradingindicators', (req, res) => { // request and response, res
     const startIndicatorDate = req.body.startIndicatorDate
     const endIndicatorDate = req.body.endIndicatorDate
 
-    const sql = 'SELECT * FROM fypsystem.technicaldata where Stock = ? and (Date BETWEEN ? AND ?);' 
+    const sql = 'SELECT * FROM fypsystem.technicaldata where Stock = ? and (Date BETWEEN ? AND ?) ORDER BY Date DESC;' 
     
     db.query(sql, [stockSymbol, startIndicatorDate, endIndicatorDate], (err, result) => {
         if (err) {
@@ -192,7 +192,7 @@ app.post('/stockanalystratings', (req, res) => { // request and response, res =>
     const startRatingDate = req.body.startRatingDate
     const endRatingDate = req.body.endRatingDate
 
-    const sql = 'SELECT * FROM fypsystem.analystdata where Stock = ? and (Date BETWEEN ? AND ?);' 
+    const sql = 'SELECT * FROM fypsystem.analystdata where Stock = ? and (Date BETWEEN ? AND ?) ORDER BY Date DESC;' 
     
     db.query(sql, [stockSymbol, startRatingDate, endRatingDate], (err, result) => {
         if (err) {
