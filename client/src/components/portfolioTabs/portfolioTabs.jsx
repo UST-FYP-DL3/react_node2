@@ -446,8 +446,14 @@ export default function BasicTabs() {
           console.log(response.data);
           setcurrWeekRecomend(response.data);
           // console.log(currWeekRecomend);
-          setcurrWeekBuyCost( response.data.map( (value, key) => (value.predicted_cost) ).reduce( (accumulator, currentValue) => {return accumulator+currentValue} ) );
-          setcurrWeekExitValue( response.data.map( (value, key) => (value.exit_value) ).reduce( (accumulator, currentValue) => {return accumulator+currentValue} ) ) 
+          setcurrWeekBuyCost( response.data.length > 0 ? 
+            response.data.map( (value, key) => (value.predicted_cost) ).reduce( 
+              (accumulator, currentValue) => {return accumulator+currentValue} 
+              ) : null);
+          setcurrWeekExitValue( response.data.length > 0 ? 
+            response.data.map( (value, key) => (value.exit_value) ).reduce( 
+              (accumulator, currentValue) => {return accumulator+currentValue} 
+              ) : null ) 
       }
     )
   };
@@ -462,8 +468,14 @@ export default function BasicTabs() {
         (response) => {
           console.log(response.data);
           setnextWeekRecomend(response.data);
-          setnextWeekBuyCost( response.data.map( (value, key) => (value.predicted_cost) ).reduce( (accumulator, currentValue) => {return accumulator+currentValue} ) );
-          setnextWeekExitValue( response.data.map( (value, key) => (value.exit_value) ).reduce( (accumulator, currentValue) => {return accumulator+currentValue} ) )
+          setnextWeekBuyCost( response.data.length > 0 ? 
+            response.data.map( (value, key) => (value.predicted_cost) ).reduce( 
+              (accumulator, currentValue) => {return accumulator+currentValue} 
+              ) : null);
+          setnextWeekExitValue( response.data.length > 0 ? 
+            response.data.map( (value, key) => (value.exit_value) ).reduce( 
+              (accumulator, currentValue) => {return accumulator+currentValue} 
+              ) : null )
       }
     )
   };
@@ -605,14 +617,25 @@ export default function BasicTabs() {
 
   const [colDefsCorrleation, setcolDefsCorrleation] = useState([
     { field: 'Stock', sortable: true, filter: true, displayName: "Stock" },
-    { field: 'NLOK US EQUITY', sortable: true, filter: true, displayName: "NLOK" },
-    { field: 'IPG US EQUITY', sortable: true, filter: true, displayName: "IPG"  },
-    { field: 'NI US EQUITY', sortable: true, filter: true, displayName: "NI"  },
+    { field: 'AMCR US EQUITY', sortable: true, filter: true, displayName: "AMCR" },
+    { field: 'OGN US EQUITY', sortable: true, filter: true, displayName: "OGN"  },
+    { field: 'FOX US EQUITY', sortable: true, filter: true, displayName: "FOX"  },
+    { field: 'JNPR US EQUITY', sortable: true, filter: true, displayName: "JNPR"  },
+    { field: 'CAG US EQUITY', sortable: true, filter: true, displayName: "CAG"  },
+    { field: 'NLOK US EQUITY', sortable: true, filter: true, displayName: "NLOK"  },
+    { field: 'K US EQUITY', sortable: true, filter: true, displayName: "K"  },
+    { field: 'CPB US EQUITY', sortable: true, filter: true, displayName: "CPB"  },
+    { field: 'CTVA US EQUITY', sortable: true, filter: true, displayName: "CTVA"  },
     { field: 'PFE US EQUITY', sortable: true, filter: true, displayName: "PFE"  },
-    { field: 'CSX US EQUITY', sortable: true, filter: true, displayName: "CSX"  },
-    { field: 'SEE US EQUITY', sortable: true, filter: true, displayName: "SEE"  },
-    { field: 'UDR US EQUITY', sortable: true, filter: true, displayName: "UDR"  },
+    { field: 'HRL US EQUITY', sortable: true, filter: true, displayName: "HRL"  },
+    { field: 'VZ US EQUITY', sortable: true, filter: true, displayName: "VZ"  },
+    { field: 'KO US EQUITY', sortable: true, filter: true, displayName: "KO"  },
+    { field: 'GIS US EQUITY', sortable: true, filter: true, displayName: "GIS"  },
+    { field: 'CL US EQUITY', sortable: true, filter: true, displayName: "CL"  },
+    { field: 'BMY US EQUITY', sortable: true, filter: true, displayName: "BMY"  },
     { field: 'ROL US EQUITY', sortable: true, filter: true, displayName: "ROL"  },
+    { field: 'IR US EQUITY', sortable: true, filter: true, displayName: "IR"  },
+    { field: 'KR US EQUITY', sortable: true, filter: true, displayName: "KR"  },
   ])
 
 
@@ -677,13 +700,13 @@ export default function BasicTabs() {
         <div className="row">
           <div className="col-4 sm-6">
             <div className='card full-height'>
-              <h5>Total Cost: ${currWeekBuyCost.toFixed(2)} </h5>
+              <h5>Total Cost: ${ currWeekBuyCost ? currWeekBuyCost.toFixed(2) : null} </h5>
               <Chart options={currCost.chartOptions} series={currCost.series} type='donut' />
             </div>
           </div>
           <div className="col-4 sm-6">
             <div className='card full-height'>
-                <h5>Current Value: ${currWeekExitValue.toFixed(2)}</h5>
+                <h5>Current Value: ${ currWeekExitValue ? currWeekExitValue.toFixed(2) : null}</h5>
                 <Chart options={currValue.chartOptions} series={currValue.series} type='donut' />
             </div>
           </div>
@@ -725,13 +748,13 @@ export default function BasicTabs() {
       <div className="row">
           <div className="col-4 sm-6">
             <div className='card full-height'>
-              <h5>Predicted Cost: ${nextWeekBuyCost.toFixed(2)}</h5>
+              <h5>Predicted Cost: ${nextWeekBuyCost ? nextWeekBuyCost.toFixed(2) : null }</h5>
               <Chart options={predCost.chartOptions} series={predCost.series} type='donut' />
             </div>
           </div>
           <div className="col-4 sm-6">
             <div className='card full-height'>
-                <h5>Predicted Value: ${nextWeekExitValue.toFixed(2)}</h5>
+                <h5>Predicted Value: ${ nextWeekExitValue ? nextWeekExitValue.toFixed(2) : null }</h5>
                 <Chart options={predValue.chartOptions} series={predValue.series} type='donut' />
             </div>
           </div>
@@ -758,7 +781,7 @@ export default function BasicTabs() {
                 bodyData={corrweek45.body}
                 renderBody={(item, index) => rendercorrweek45Body(item, index)}                    
               /> */}
-              <div className="ag-theme-alpine" style={{height: 400, width : '100%'}}>
+              <div className="ag-theme-alpine" style={{height: 600, width : '100%'}}>
                 <AgGridReact
                     rowData={nextWeekCorrelation}
                     columnDefs={colDefsCorrleation}

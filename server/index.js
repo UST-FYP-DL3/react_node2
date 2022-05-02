@@ -44,8 +44,12 @@ app.post('/adduser', (req, res) => { // request and response, res => send sth to
     });
 })  // app.post or app.get, put or delete
 
-app.get('/getuserinfo', (req, res) => { // standard for creating express when using request
-    db.query('SELECT * FROM userinfo', (err, result) => {
+app.get('/getuserinfo:userIDget', (req, res) => { // standard for creating express when using request
+    const userID = req.params.userIDget 
+
+    const sql = 'SELECT * FROM userinfo WHERE userID = ?'
+
+    db.query(sql, [userID], (err, result) => {
         if (err) {
             console.log(err)
         }
@@ -64,11 +68,11 @@ app.post("/updateuserinfo", (req, res) => {
     const initialinvestamount = req.body.initialInvest
     const riskacceptlevel = req.body.riskLevel
 
-    const sql = 'UPDATE userinfo SET userID = ?, firstname = ?, lastname = ?, age = ?, wagemonthly = ?, initialinvestamount = ?, riskacceptlevel = ?'
+    const sql = 'UPDATE userinfo SET firstname = ?, lastname = ?, age = ?, wagemonthly = ?, initialinvestamount = ?, riskacceptlevel = ? WHERE userID = ?'
 
     db.query(
       sql,
-      [userID, firstname, lastname, age, wagemonthly, initialinvestamount, riskacceptlevel],
+      [firstname, lastname, age, wagemonthly, initialinvestamount, riskacceptlevel, userID],
       (err, result) => {
         if (err) {
           console.log(err);
@@ -118,11 +122,32 @@ app.get('/singlestockdetails:stocksymbol', (req, res) => { // request and respon
 })
 
 // user performance
-app.get('/getuserperformance', (req, res) => { // standard for creating express when using request
+app.post('/getuserperformance', (req, res) => { // standard for creating express when using request
+    const userID = req.body.userID
     
-    const sql = "SELECT * FROM fypsystem.userperformancedata where Date Between '2021-01-03' and '2021-11-07';"
+    const sql = "SELECT * FROM fypsystem.userperformancedata WHERE userID = ? AND date Between '2021-01-01' and '2021-11-07';"
 
-    db.query(sql, 
+    db.query(sql, [userID],
+    (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            // console.log( result.map( (value, key) => (value.stock) ) )
+            // console.log( result.map( (value, key) => (value.cost) ) )
+            res.send(result) // or res.json or res.send
+        }
+    })
+});
+
+// get account summary
+app.post('/getaccountsummary', (req, res) => {
+    // standard for creating express when using request
+    const userID = req.body.userID
+    
+    const sql = "SELECT * FROM fypsystem.userperformancedata WHERE userID = ? AND id = (SELECT MAX(id) from fypsystem.userperformancedata);"
+
+    db.query(sql, [userID],
     (err, result) => {
         if (err) {
             console.log(err)
@@ -155,11 +180,13 @@ app.post('/stockcurrprice', (req, res) => { // request and response, res => send
 // get yesterdayprice of a stock
 app.post('/stockyesterdayprice', (req, res) => { // request and response, res => send sth to the front
     const stockSymbol = req.body.stockSymbol + ' US EQUITY'
-    const currDate = req.body.currDate
+    // const currDate = req.body.currDate
+    const yesterdayDate = '2022-04-20'
 
-    const sql = 'SELECT * FROM fypsystem.stockpriceprediction where stockrecordid = ((SELECT stockrecordid FROM fypsystem.stockpriceprediction where Stock = ? and Date = ?) - 1)'
-    
-    db.query(sql, [stockSymbol, currDate], (err, result) => {
+    const sql = "SELECT * FROM fypsystem.stockpriceprediction where Stock = ? and Date = ?"
+    // const sql = 'SELECT * FROM fypsystem.stockpriceprediction where stockrecordid = ((SELECT stockrecordid FROM fypsystem.stockpriceprediction where Stock = ? and Date = ?) - 1)'
+
+    db.query(sql, [stockSymbol, yesterdayDate], (err, result) => {
         if (err) {
             console.log(err)
         }
@@ -175,7 +202,7 @@ app.post('/stockpriceplot', (req, res) => { // request and response, res => send
     const startPlotDate = req.body.startPlotDate
     const endPlotDate = req.body.endPlotDate
 
-    const sql = 'SELECT Stock, Date, OPEN, HIGH, LOW, CLOSE FROM fypsystem.stockpriceprediction where Stock = ? and (Date BETWEEN ? AND ? )' 
+    const sql = 'SELECT Stock, Date, OPEN, HIGH, LOW, CLOSE FROM fypsystem.stockpriceprediction where Stock = ? and (Date BETWEEN ? AND ? ) ORDER BY Date asc' 
     
     db.query(sql, [stockSymbol, startPlotDate, endPlotDate], (err, result) => {
         if (err) {

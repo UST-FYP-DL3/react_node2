@@ -86,8 +86,8 @@ function Stocks(props) {
     
     // date format
     const SystemCurrTIME = '16:30:00'
-    const SystemCurrDATE = '2021-11-05' // one date later for difference between date in res.send and mysql
-    const SystemEndPredDATE = '2021-11-15'
+    const SystemCurrDATE = '2022-04-21' // one date later for difference between date in res.send and mysql
+    const SystemEndPredDATE = '2022-04-27'
     var currDate = new Date(SystemCurrDATE)
     // var yesterdayDate = new Date(SystemDATE)
     // yesterdayDate.setDate(currDate.getDate()-1)
@@ -160,8 +160,8 @@ function Stocks(props) {
         ); // get request, response contains everything send from the backend
     };
 
-    const [startPlotDate, setStartPlotDate] = useState(new Date('2020-12-31')) 
-    const [endPlotDate, setEndPlotDate] = useState(new Date('2021-11-15')) 
+    const [startPlotDate, setStartPlotDate] = useState(new Date('2022-01-01')) 
+    const [endPlotDate, setEndPlotDate] = useState(new Date('2022-05-06')) 
     const [plotData, setPlotData] = useState([])
 
     const getSotckPriceWithDates = (searchSymbolget, startPlotDateget, endPlotDateget) => {
@@ -442,8 +442,8 @@ function Stocks(props) {
         },
     };
 
-    const [startInputDate, setStartInputDate] = useState(new Date('2020-12-31'));
-    const [endInputDate, setEndInputDate] = useState(new Date('2021-11-15'));
+    const [startInputDate, setStartInputDate] = useState(new Date('2022-01-01'));
+    const [endInputDate, setEndInputDate] = useState(new Date('2022-05-06'));
 
     function clickDateSearch(searchSymbol) {
 
@@ -475,13 +475,13 @@ function Stocks(props) {
         </tr>
     )
 
-    const [startIndicatorDate, setStartIndicatorDate] = useState(new Date('2021-09-30')) 
-    const [endIndicatorDate, setEndIndicatorDate] = useState(new Date('2021-11-08')) 
+    const [startIndicatorDate, setStartIndicatorDate] = useState(new Date('2022-03-31')) 
+    const [endIndicatorDate, setEndIndicatorDate] = useState(new Date('2022-05-06')) 
     const [indicatorData, setIndicatorData] = useState([])
 
     // for select the date
-    const [startInputDateIndicator, setstartInputDateIndicator] = useState(new Date('2021-09-30'));
-    const [endInputDateIndicator, setendInputDateIndicator] = useState(new Date('2021-11-08'));
+    const [startInputDateIndicator, setstartInputDateIndicator] = useState(new Date('2022-03-31'));
+    const [endInputDateIndicator, setendInputDateIndicator] = useState(new Date('2022-05-06'));
 
     
     const getIndicatorWithDates = (searchSymbolget, startIndicatorDateget, endIndicatorDateget) => {
@@ -502,15 +502,10 @@ function Stocks(props) {
     };
     
     function clickIndicatorSearch(searchSymbol) {
-
         setStartIndicatorDate(startInputDateIndicator);
         setEndIndicatorDate(endInputDateIndicator);
-
         getIndicatorWithDates(searchSymbol, startInputDateIndicator, endInputDateIndicator);
-
     }
-
-
     
     // overall search
     function clickSymbolSearch(searchSymbol) {
@@ -641,8 +636,8 @@ function Stocks(props) {
         '</div>' } },
     ])
 
-    const [startRatingDate, setStartRatingDate] = useState(new Date('2021-09-30')) 
-    const [endRatingDate, setEndRatingDate] = useState(new Date('2021-11-08')) 
+    const [startRatingDate, setStartRatingDate] = useState(new Date('2021-06-01')) 
+    const [endRatingDate, setEndRatingDate] = useState(new Date('2022-05-06')) 
     const [ratingData, setRatingData] = useState([])
 
     const [colDefsRating, setcolDefsRating] = useState([
@@ -726,7 +721,7 @@ function Stocks(props) {
                             <DatePicker dateFormat="yyyy-MM-dd" selected={startInputDate} onChange={(date) => setStartInputDate(date)}/>
                         </div>
                         <div className='col-4'>
-                            <span>Choose End Date: (To 2021-11-15)</span>
+                            <span>Choose End Date: (To 2022-05-06)</span>
                             <DatePicker dateFormat="yyyy-MM-dd" selected={endInputDate} onChange={(date) => setEndInputDate(date)}/>
                         </div>
                         <div className='col-1'>
@@ -768,11 +763,11 @@ function Stocks(props) {
 
                     <Row className='justify-content-center'>
                         <div className='col-4'>
-                            <span>Choose Start Date: (From 2021-09-30)</span>
+                            <span>Choose Start Date: (From 2022-01-01)</span>
                             <DatePicker dateFormat="yyyy-MM-dd" selected={startInputDateIndicator} onChange={(date) => setstartInputDateIndicator(date)}/>
                         </div>
                         <div className='col-4'>
-                            <span>Choose End Date: (To 2021-11-15)</span>
+                            <span>Choose End Date: (To 2022-05-06)</span>
                             <DatePicker dateFormat="yyyy-MM-dd" selected={endInputDateIndicator} onChange={(date) => setendInputDateIndicator(date)}/>
                         </div>
                         <div className='col-1'>

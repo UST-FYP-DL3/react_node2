@@ -80,8 +80,8 @@ function Topnav() {
     // this is to get
     const [userInfo, setUserInfo] = useState(null);
 
-    const getUserInfo = () => {
-        Axios.get("http://localhost:3001/getuserinfo").then( 
+    const getUserInfo = (userIDget) => {
+        Axios.get(`http://localhost:3001/getuserinfo${userIDget}`).then( 
             (response) => {
                 console.log(response.data)
                 setUserInfo(response.data)
@@ -90,7 +90,7 @@ function Topnav() {
     }
 
     useEffect( () => {
-        getUserInfo();
+        getUserInfo(userID);
       }, []);
 
 

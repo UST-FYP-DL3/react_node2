@@ -15,8 +15,8 @@ const Setting = () => {
     // this is to get
     const [userInfo, setUserInfo] = useState(null);
 
-    const getUserInfo = () => {
-        Axios.get("http://localhost:3001/getuserinfo").then( 
+    const getUserInfo = (userIDget) => {
+        Axios.get(`http://localhost:3001/getuserinfo${userIDget}`).then( 
             (response) => {
                 console.log(response.data)
                 setUserInfo(response.data)
@@ -24,8 +24,10 @@ const Setting = () => {
         )
     }
 
+
+
     useEffect( () => {
-        getUserInfo();
+        getUserInfo(userID);
       }, []);
 
     // this is for update, not for get to shoe

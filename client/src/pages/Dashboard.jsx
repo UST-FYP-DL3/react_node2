@@ -90,8 +90,9 @@ const Dashboard = () => {
 
     const [userPerformanceData, setuserPerformanceData] = useState([])
 
-    const getuserperformance = () => {
-      Axios.get('http://localhost:3001/getuserperformance', {
+    const getuserperformance = (userIDget) => {
+      Axios.post('http://localhost:3001/getuserperformance', {
+        userID: userIDget,
         }).then(
           (response) => {
             console.log(response.data);
@@ -119,8 +120,16 @@ const Dashboard = () => {
                 curve: 'smooth'
             },
             xaxis: {
-                categories: userPerformanceData.map( (value, key) => value.Date ),
-                title: { text: "Date", }
+                categories: userPerformanceData.map( (value, key) => value.date ),
+                type: 'datetime',
+                title: { text: "Date", },
+                labels: {
+                    datetimeFormatter: {
+                      year: 'yyyy',
+                      month: 'MMM yyyy',
+                      day: 'dd MMM',
+                    }
+                },
             },
             yaxis: {
                 labels: {
@@ -132,32 +141,86 @@ const Dashboard = () => {
             },
             grid: {
                 show: false
-            }
+            },
+            annotations: {
+                yaxis: [{
+                  y: 0,
+                  borderColor: 'red',
+                  strokeDashArray: 0,
+                  label: {
+                    borderColor: 'red',
+                    offsetX: '-100%', // - string for starting at 0
+                    style: {
+                      color: '#fff',
+                      background: 'red',
+                    },
+                    text: '0%',
+                  }
+                }]
+            },
         }
     }
 
-    // const [summaryCard, setsummaryCard] = useState([
-    //     {
-    //         "icon": "bx bx-money-withdraw",
-    //         "count": userPerformanceData[42][0].current_balance,
-    //         "title": "Current Balance"
-    //     },
-    //     {
-    //         "icon": "bx bx-candles",
-    //         "count": userPerformanceData[42][0].weekly_profit,
-    //         "title": "Weekly Profit"
-    //     },
-    //     {
-    //         "icon": "bx bx-stats",
-    //         "count": userPerformanceData[42][0].total_asset,
-    //         "title": "Total Assets"
-    //     },
-    //     {
-    //         "icon": "bx bx-dollar-circle",
-    //         "count": userPerformanceData[42][0].cash,
-    //         "title": "Cash"
-    //     }
-    // ])
+    const [summaryData, setSummaryData] = useState([])
+    const [summaryCard, setsummaryCard] = useState([
+        {
+            "icon": "bx bx-money-withdraw",
+            "count": summaryData.length > 0? summaryData[0].current_balance.toFixed(2): null ,
+            "title": "Current Balance"
+        },
+        {
+            "icon": "bx bx-candles",
+            "count": summaryData.length > 0? summaryData[0].weekly_profit.toFixed(2) : null,
+            "title": "Weekly Profit"
+        },
+        {
+            "icon": "bx bx-stats",
+            "count": summaryData.length > 0? summaryData[0].total_asset.toFixed(2) : null,
+            "title": "Total Assets"
+        },
+        {
+            "icon": "bx bx-dollar-circle",
+            "count": summaryData.length > 0? summaryData[0].cash.toFixed(2) : null,
+            "title": "Cash"
+        }
+    ])
+
+    const getaccountsummary = (userIDget) => {
+      Axios.post('http://localhost:3001/getaccountsummary', {
+        userID: userIDget,
+        }).then(
+          (response) => {
+            console.log(response.data);
+            setSummaryData(response.data);
+            // console.log(currWeekRecomend);
+            // setcurrWeekBuyCost( response.data.map( (value, key) => (value.predicted_cost) ).reduce( (accumulator, currentValue) => {return accumulator+currentValue} ) )
+            setsummaryCard([
+                {
+                    "icon": "bx bx-money-withdraw",
+                    "count": response.data.length > 0? response.data[0].current_balance.toFixed(2) : null ,
+                    "title": "Current Balance"
+                },
+                {
+                    "icon": "bx bx-candles",
+                    "count": response.data.length > 0? response.data[0].weekly_profit.toFixed(2) : null,
+                    "title": "Weekly Profit"
+                },
+                {
+                    "icon": "bx bx-stats",
+                    "count": response.data.length > 0? response.data[0].total_asset.toFixed(2) : null,
+                    "title": "Total Assets"
+                },
+                {
+                    "icon": "bx bx-dollar-circle",
+                    "count": response.data.length > 0? response.data[0].cash.toFixed(2) : null,
+                    "title": "Cash"
+                }
+            ]);
+        }
+      )
+    };
+
+    
       
     
     /*
@@ -179,7 +242,8 @@ const Dashboard = () => {
     }*/
     useEffect( () => {
         getTradingRecording(userID);
-        getuserperformance();
+        getuserperformance(userID);
+        getaccountsummary(userID);
       }, []);
 
     return (
@@ -190,7 +254,7 @@ const Dashboard = () => {
                 <div className="col-5">
                     <div style ={{marginTop: "3vh"}} className="row">
                         {
-                            statusCards.map((item, index) => (
+                            summaryCard.map((item, index) => (
                                 <div className="col-6" key={index}>
                                     <StatusCard
                                         icon={item.icon}
