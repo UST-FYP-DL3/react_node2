@@ -481,7 +481,7 @@ export default function BasicTabs() {
   };
 
   const currCost = {
-    series: currWeekRecomend.map( (value, key) => (value.predicted_entry_price) ), // StockValueWk44, // userHoldings.map( (value, key) => (value.cost) ),
+    series: currWeekRecomend.map( (value, key) => (value.predicted_cost) ), // StockValueWk44, // userHoldings.map( (value, key) => (value.cost) ),
     chartOptions: {
       labels: currWeekRecomend.map( (value, key) => (value.stock_code) ), // StockNameWk44, // userHoldings.map( (value, key) => (value.stock) ),
       chart: {
@@ -505,7 +505,7 @@ export default function BasicTabs() {
   }
 
   const currValue = {
-    series: currWeekRecomend.map( (value, key) => (value.exit_price) ),
+    series: currWeekRecomend.map( (value, key) => (value.exit_value) ),
     chartOptions: {
       labels: currWeekRecomend.map( (value, key) => (value.stock_code) ),
       chart: {
@@ -530,7 +530,7 @@ export default function BasicTabs() {
 
   
   const predCost = {
-    series: nextWeekRecomend.map( (value, key) => (value.predicted_entry_price) ), // userHoldings.map( (value, key) => (value.cost) ),
+    series: nextWeekRecomend.map( (value, key) => (value.predicted_cost) ), // userHoldings.map( (value, key) => (value.cost) ),
     chartOptions: {
       labels: nextWeekRecomend.map( (value, key) => (value.stock_code) ), // userHoldings.map( (value, key) => (value.stock) ),
       chart: {
@@ -554,7 +554,7 @@ export default function BasicTabs() {
   }
 
   const predValue = {
-    series: nextWeekRecomend.map( (value, key) => (value.exit_price) ),
+    series: nextWeekRecomend.map( (value, key) => (value.exit_value) ),
     chartOptions: {
       labels: nextWeekRecomend.map( (value, key) => (value.stock_code) ),
       chart: {
