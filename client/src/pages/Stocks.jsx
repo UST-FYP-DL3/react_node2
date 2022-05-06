@@ -86,16 +86,21 @@ function Stocks(props) {
     
     // date format
     const SystemCurrTIME = '16:30:00'
-    const SystemCurrDATE = '2022-04-21' // one date later for difference between date in res.send and mysql
-    const SystemEndPredDATE = '2022-04-27'
+    const SystemCurrDATE = '2022-04-27' // one date later for difference between date in res.send and mysql
+    const SystemEndPredDATE = '2022-05-14'
     var currDate = new Date(SystemCurrDATE)
     // var yesterdayDate = new Date(SystemDATE)
     // yesterdayDate.setDate(currDate.getDate()-1)
     var endPredDate = new Date(SystemEndPredDATE);
+
+    const realCurrDATE = '2022-05-07'
+    var realToday = new Date(realCurrDATE)
     
     currDate = currDate.toISOString().split('T')[0]
     // yesterdayDate = yesterdayDate.toISOString().split('T')[0]
     endPredDate = endPredDate.toISOString().split('T')[0]
+
+    realToday = realToday.toISOString().split('T')[0]
 
     // console.log(currDate)
     // console.log(yesterdayDate)
@@ -161,7 +166,7 @@ function Stocks(props) {
     };
 
     const [startPlotDate, setStartPlotDate] = useState(new Date('2022-01-01')) 
-    const [endPlotDate, setEndPlotDate] = useState(new Date('2022-05-06')) 
+    const [endPlotDate, setEndPlotDate] = useState(new Date('2022-05-14')) 
     const [plotData, setPlotData] = useState([])
 
     const getSotckPriceWithDates = (searchSymbolget, startPlotDateget, endPlotDateget) => {
@@ -195,8 +200,8 @@ function Stocks(props) {
             shapes: [{
                 type: 'line',
                 name: 'Today',
-                x0: currDate,
-                x1: currDate,
+                x0: realToday,
+                x1: realToday,
                 y0: 0,
                 y1: 1,
                 yref: 'paper',
@@ -250,7 +255,7 @@ function Stocks(props) {
                 type: 'rect',
                 xref: 'x',
                 yref: 'paper',
-                x0: currDate,
+                x0: realToday,
                 y0: 0,
                 x1: endPredDate,
                 y1: 1,
@@ -260,8 +265,8 @@ function Stocks(props) {
             },
             {
                 type: 'line',
-                x0: currDate,
-                x1: currDate,
+                x0: realToday,
+                x1: realToday,
                 y0: 0,
                 y1: 1,
                 yref: 'paper',

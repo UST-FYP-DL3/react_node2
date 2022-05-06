@@ -395,18 +395,26 @@ function a11yProps(index) {
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
 
+  // const SystemCurrTIME = '16:30:00'
+  // const SystemCurrDATE = '2021-11-04' // one date later for difference between date in res.send and mysql
+  // const SystemEndPredDATE = '2021-11-15'
+  // var currDate = new Date(SystemCurrDATE)
+  // currDate = currDate.toISOString().split('T')[0]
+
   const SystemCurrTIME = '16:30:00'
-  const SystemCurrDATE = '2021-11-04' // one date later for difference between date in res.send and mysql
-  const SystemEndPredDATE = '2021-11-15'
+  const SystemCurrDATE = '2022-04-21' // one date later for difference between date in res.send and mysql
+  const SystemEndPredDATE = '2022-04-27'
   var currDate = new Date(SystemCurrDATE)
-  currDate = currDate.toISOString().split('T')[0]
+  // var yesterdayDate = new Date(SystemDATE)
+  // yesterdayDate.setDate(currDate.getDate()-1)
+  var endPredDate = new Date(SystemEndPredDATE);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const [currWeekNo, setCurrWeekNo] = useState(44)
-  const [nextWeekNo, setNextWeekNo] = useState(45)
+  const [currWeekNo, setCurrWeekNo] = useState(18)
+  const [nextWeekNo, setNextWeekNo] = useState(19)
 
   const [currWeekRecomend, setcurrWeekRecomend] = useState([]);
   const [nextWeekRecomend, setnextWeekRecomend] = useState([]);
@@ -619,23 +627,17 @@ export default function BasicTabs() {
     { field: 'Stock', sortable: true, filter: true, displayName: "Stock" },
     { field: 'AMCR US EQUITY', sortable: true, filter: true, displayName: "AMCR" },
     { field: 'OGN US EQUITY', sortable: true, filter: true, displayName: "OGN"  },
+    { field: 'T US EQUITY', sortable: true, filter: true, displayName: "T"  },
     { field: 'FOX US EQUITY', sortable: true, filter: true, displayName: "FOX"  },
     { field: 'JNPR US EQUITY', sortable: true, filter: true, displayName: "JNPR"  },
     { field: 'CAG US EQUITY', sortable: true, filter: true, displayName: "CAG"  },
     { field: 'NLOK US EQUITY', sortable: true, filter: true, displayName: "NLOK"  },
+    { field: 'NI US EQUITY', sortable: true, filter: true, displayName: "NI"  },
     { field: 'K US EQUITY', sortable: true, filter: true, displayName: "K"  },
     { field: 'CPB US EQUITY', sortable: true, filter: true, displayName: "CPB"  },
+    { field: 'FE US EQUITY', sortable: true, filter: true, displayName: "FE"  },
     { field: 'CTVA US EQUITY', sortable: true, filter: true, displayName: "CTVA"  },
     { field: 'PFE US EQUITY', sortable: true, filter: true, displayName: "PFE"  },
-    { field: 'HRL US EQUITY', sortable: true, filter: true, displayName: "HRL"  },
-    { field: 'VZ US EQUITY', sortable: true, filter: true, displayName: "VZ"  },
-    { field: 'KO US EQUITY', sortable: true, filter: true, displayName: "KO"  },
-    { field: 'GIS US EQUITY', sortable: true, filter: true, displayName: "GIS"  },
-    { field: 'CL US EQUITY', sortable: true, filter: true, displayName: "CL"  },
-    { field: 'BMY US EQUITY', sortable: true, filter: true, displayName: "BMY"  },
-    { field: 'ROL US EQUITY', sortable: true, filter: true, displayName: "ROL"  },
-    { field: 'IR US EQUITY', sortable: true, filter: true, displayName: "IR"  },
-    { field: 'KR US EQUITY', sortable: true, filter: true, displayName: "KR"  },
   ])
 
 
@@ -716,8 +718,8 @@ export default function BasicTabs() {
                 <p className="ms-2 text-muted">Actual Earning in this Week:</p>
                 <Box>
                 <div className='col-12 mt-1'>
-                <h4 style={{color: 'green'}}> +{((currWeekExitValue/currWeekBuyCost - 1)*100).toFixed(2)}%</h4>
-                    <h4 style={{color: 'green'}}> ${(currWeekExitValue - currWeekBuyCost).toFixed(2)}</h4>   
+                  <h4 style={{color: 'green'}}> +{((currWeekExitValue/currWeekBuyCost - 1)*100).toFixed(2)}%</h4>
+                  <h4 style={{color: 'green'}}> ${(currWeekExitValue - currWeekBuyCost).toFixed(2)}</h4>   
                 </div>
                 </Box>               
             </div>

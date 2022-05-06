@@ -105,7 +105,7 @@ const Dashboard = () => {
 
     const chartOptions = {
         series: [{
-            name: 'Growth Rate (in %) this year',
+            name: 'Growth Rate (in %)',
             data: userPerformanceData.map( (value, key) => value.growth_rate )
         }],
         options: {

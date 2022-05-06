@@ -125,7 +125,7 @@ app.get('/singlestockdetails:stocksymbol', (req, res) => { // request and respon
 app.post('/getuserperformance', (req, res) => { // standard for creating express when using request
     const userID = req.body.userID
     
-    const sql = "SELECT * FROM fypsystem.userperformancedata WHERE userID = ? AND date Between '2021-01-01' and '2021-11-07';"
+    const sql = "SELECT * FROM fypsystem.userperformancedata WHERE userID = ? AND date Between '2021-01-01' and '2024-05-02';"
 
     db.query(sql, [userID],
     (err, result) => {
@@ -202,7 +202,7 @@ app.post('/stockpriceplot', (req, res) => { // request and response, res => send
     const startPlotDate = req.body.startPlotDate
     const endPlotDate = req.body.endPlotDate
 
-    const sql = 'SELECT Stock, Date, OPEN, HIGH, LOW, CLOSE FROM fypsystem.stockpriceprediction where Stock = ? and (Date BETWEEN ? AND ? ) ORDER BY Date asc' 
+    const sql = 'SELECT Stock, Date, OPEN, HIGH, LOW, CLOSE FROM fypsystem.stockpriceprediction where Stock = ? and (Date BETWEEN ? AND ? ) ORDER BY Date ASC' 
     
     db.query(sql, [stockSymbol, startPlotDate, endPlotDate], (err, result) => {
         if (err) {
@@ -220,7 +220,7 @@ app.post('/stocktradingindicators', (req, res) => { // request and response, res
     const startIndicatorDate = req.body.startIndicatorDate
     const endIndicatorDate = req.body.endIndicatorDate
 
-    const sql = 'SELECT * FROM fypsystem.technicaldata where Stock = ? and (Date BETWEEN ? AND ?) ORDER BY Date DESC;' 
+    const sql = 'SELECT * FROM fypsystem.newtechnicaldata where Stock = ? and (Date BETWEEN ? AND ?) ORDER BY Date DESC;' 
     
     db.query(sql, [stockSymbol, startIndicatorDate, endIndicatorDate], (err, result) => {
         if (err) {
@@ -237,7 +237,7 @@ app.post('/stockanalystratings', (req, res) => { // request and response, res =>
     const startRatingDate = req.body.startRatingDate
     const endRatingDate = req.body.endRatingDate
 
-    const sql = 'SELECT * FROM fypsystem.analystdata where Stock = ? and (Date BETWEEN ? AND ?) ORDER BY Date DESC;' 
+    const sql = 'SELECT * FROM fypsystem.newanalystdata where Stock = ? and (Date BETWEEN ? AND ?) ORDER BY Date DESC;' 
     
     db.query(sql, [stockSymbol, startRatingDate, endRatingDate], (err, result) => {
         if (err) {
@@ -292,7 +292,7 @@ app.post('/getnextweeklyRecommendation', (req, res) => { // standard for creatin
 app.post('/gettradingrecord', (req, res) => { // standard for creating express when using request
     const userID = req.body.userID
     
-    const sql = "SELECT * FROM fypsystem.usertradingrecord where userID = ?"
+    const sql = "SELECT * FROM fypsystem.usertradingrecord where userID = ? ORDER BY entry_date DESC"
 
     db.query(sql, [userID], 
     (err, result) => {
@@ -309,7 +309,7 @@ app.post('/gettradingrecord', (req, res) => { // standard for creating express w
 
 app.get('/getnextweekcorrelation', (req, res) => { // standard for creating express when using request
     
-    const sql = "SELECT * FROM fypsystem.nextweekcorrelation"
+    const sql = "SELECT * FROM fypsystem.recommendedcorrtable"
 
     db.query(sql, 
     (err, result) => {
